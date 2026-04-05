@@ -1,0 +1,12 @@
+Task 1 & 2: Sym. Check & Support
+HOURGLASS + WESTMAN ATELIER -> Support: 10, Lift: 44.3809
+PAT MC GRATH + PAULA'S CHOICE -> Support: 5, Lift: 30.8443
+AMIKA + OUAI HAIRCARE -> Support: 7, Lift: 17.4486
+ILIA + KOSAS -> Support: 10, Lift: 13.6548
+PAULA'S CHOICE + SUPERGOOP -> Support: 5, Lift: 13.3996
+BY TERRY + HOURGLASS -> Support: 7, Lift: 13.0807
+DRUNK ELEPHANT + FRESH SAS -> Support: 5, Lift: 11.7310
+CACHAREL + DIESEL -> Support: 7, Lift: 11.4071
+MAKEUP BY MARIO + WESTMAN ATELIER -> Support: 5, Lift: 8.7937
+HOURGLASS + MAKEUP BY MARIO -> Support: 31, Lift: 8.5189
+GLOSSIER + ILIA -> Support: 6, Lift: 8.4214

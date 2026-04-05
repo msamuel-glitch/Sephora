@@ -1,0 +1,57 @@
+============================================================
+PHASE 4 — FEATURE ENGINEERING
+============================================================
+
+[0] Loading audit-labeled base...
+    Loaded 399105 rows, 40 columns
+    After eligibility filter: 385879 rows
+    Feature window (Jan-Sep): 259023 rows
+    Target window  (Oct-Dec): 126856 rows
+    Feature-window customers: 50805
+    Feature-window brands:    239
+
+[1] LAYER 1 — Core Affinity Signal
+  [1A] Basket co-occurrence...
+       Multi-brand baskets: 45446
+       Unique brand pairs found: 8357
+       Brand pairs with support >= 3: 3998
+  [1B] Customer-brand purchase matrix...
+       Matrix shape: (50805, 239)
+  [1C] Customer-level Layer 1 features...
+       Customer features computed: 50805 customers, 19 columns
+
+[2] LAYER 2 — Business Value Overlay
+  [2E] Generation-aware features...
+  [2D] Market migration scores...
+  [2F] Cold-start features...
+       Established: 141, Emerging: 98
+  [2G] High-frequency flag...
+       Velocity 25th pctl: 26.0 days
+       High-frequency customers: 6188
+  [2H] Sephora-native features...
+
+[3] LAYER 3 — Activation & Storytelling
+       Channel fit distribution:
+channel_activation_fit_score
+STORE       35650
+CRM_PUSH    11090
+APP_SITE     4065
+
+[4] Building dim_brand...
+       dim_brand: 239 brands, 19 columns
+
+[5] Finalizing dim_brand_pair with guardrails...
+       dim_brand_pair final: 3998 pairs, 8 columns
+       High price artifact flagged: 217
+       Trivial association flagged: 179
+
+[6] Finalizing dim_customer...
+       dim_customer final: 50805 customers, 41 columns
+
+[7] Saving output tables...
+       Saved dim_customer.csv
+       Saved dim_brand.csv
+       Saved dim_brand_pair.csv
+       fact_customer_brand_candidate deferred to scoring phase (requires candidate generation)
+
+[DONE] Total elapsed: 268.8s

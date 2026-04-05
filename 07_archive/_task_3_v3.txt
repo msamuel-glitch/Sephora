@@ -1,0 +1,17 @@
+Total adoptions >0 days: 89
+Median: 84.0
+  0-  9 days : 10
+ 10- 19 days : 6
+ 20- 29 days : 2
+ 30- 39 days : 4
+ 40- 49 days : 3
+ 50- 59 days : 5
+ 60- 69 days : 6
+ 70- 79 days : 7
+ 80- 89 days : 4
+ 90- 99 days : 5
+100-109 days : 2
+110-119 days : 4
+120-129 days : 6
+130-139 days : 3
+140-149 days : 2

@@ -1,0 +1,29 @@
+--- TASK 1 & 2: Support Counts and Directional Lift ---
+HOURGLASS & WESTMAN ATELIER | Missing direction
+PAT MC GRATH & PAULA'S CHOICE | Missing direction
+AMIKA & OUAI HAIRCARE | Missing direction
+ILIA & KOSAS | Missing direction
+PAULA'S CHOICE & SUPERGOOP | Missing direction
+BY TERRY & HOURGLASS | Missing direction
+DRUNK ELEPHANT & FRESH SAS | Missing direction
+CACHAREL & DIESEL | Missing direction
+MAKEUP BY MARIO & WESTMAN ATELIER | Missing direction
+HOURGLASS & MAKEUP BY MARIO | Missing direction
+GLOSSIER & ILIA | Missing direction
+
+--- TASK 3: Adoption Timing Distribution (between Anchor and Rec) ---
+Total adoptions analysed: 202
+Median days to adopt: 0.0
+Histogram (0-180 days):
+    0- 14 days : 126
+   15- 29 days : 5
+   30- 44 days : 4
+   45- 59 days : 8
+   60- 74 days : 7
+   75- 89 days : 10
+   90-104 days : 6
+  105-119 days : 5
+  120-134 days : 9
+  135-149 days : 2
+  150-164 days : 4
+  165-179 days : 3

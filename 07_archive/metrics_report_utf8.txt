@@ -1,0 +1,46 @@
+﻿QUESTION 1 ù FREQUENCY INFLECTION POINT
+Velocity Quartile Thresholds (Days): [  1.   26.   50.5  90.  270. ]
+
+Global Mean Explorer Index:
+      Q1       Q2       Q3       Q4
+0.634207 0.614702 0.531572 0.448925
+
+Mean Explorer Index by Generation:
+freq_quartile         Q1        Q2        Q3        Q4
+age_generation                                        
+UNKNOWN         0.576642  0.594347  0.535519  0.442772
+babyboomers     0.577922  0.551625  0.477676  0.398953
+gena            0.652183  0.629725  0.548647  0.475276
+genx            0.629098  0.612512  0.530627  0.428798
+geny            0.635701  0.614378  0.535263  0.454802
+genz            0.657391  0.629604  0.535135  0.464540
+----------------------------------------
+
+QUESTION 2 ù CRM ADVANCE SIGNAL TIMING
+Median Days to Adoption (Eligible vs Non):
+crm_push_eligibility_proxy
+0    140.0
+1     90.0
+----------------------------------------
+
+QUESTION 3 ù THE ACTUAL 11 BRAND PAIRS
+     anchor_brand recommended_brand  co_occurrence_lift  basket_complementarity_score dominant_axis      market_desc_pair                                                                                                                                                              pairing_story
+           KIEHLS           LANCOME              2.1594                           0.8      SKINCARE EXCLUSIVE + SELECTIVE             Customers buying KIEHLS show a 2.2x higher affinity for LANCOME in SKINCARE, making them prime cross-sell candidates within the EXCLUSIVE + SELECTIVE segment.
+           KIEHLS            LAUDER              1.9646                           0.8      SKINCARE EXCLUSIVE + SELECTIVE              Customers buying KIEHLS show a 2.0x higher affinity for LAUDER in SKINCARE, making them prime cross-sell candidates within the EXCLUSIVE + SELECTIVE segment.
+             DIOR            SISLEY              1.6343                           0.8     FRAGRANCE SELECTIVE + SELECTIVE               Customers buying DIOR show a 1.6x higher affinity for SISLEY in FRAGRANCE, making them prime cross-sell candidates within the SELECTIVE + SELECTIVE segment.
+           ARMANI            KIEHLS              1.6120                           0.8     FRAGRANCE SELECTIVE + EXCLUSIVE             Customers buying ARMANI show a 1.6x higher affinity for KIEHLS in FRAGRANCE, making them prime cross-sell candidates within the SELECTIVE + EXCLUSIVE segment.
+         GLOSSIER         KERASTASE              2.6241                           0.8       MAKE UP EXCLUSIVE + EXCLUSIVE          Customers buying GLOSSIER show a 2.6x higher affinity for KERASTASE in MAKE UP, making them prime cross-sell candidates within the EXCLUSIVE + EXCLUSIVE segment.
+          LANCOME      LEONOR GREYL              2.8639                           0.8     FRAGRANCE SELECTIVE + SELECTIVE      Customers buying LANCOME show a 2.9x higher affinity for LEONOR GREYL in FRAGRANCE, making them prime cross-sell candidates within the SELECTIVE + SELECTIVE segment.
+            AVEDA          GUERLAIN              1.9097                           0.8      HAIRCARE EXCLUSIVE + SELECTIVE             Customers buying AVEDA show a 1.9x higher affinity for GUERLAIN in HAIRCARE, making them prime cross-sell candidates within the EXCLUSIVE + SELECTIVE segment.
+           CHAMPO              DIOR              4.9592                           0.8      HAIRCARE EXCLUSIVE + SELECTIVE                Customers buying CHAMPO show a 5.0x higher affinity for DIOR in HAIRCARE, making them prime cross-sell candidates within the EXCLUSIVE + SELECTIVE segment.
+CHARLOTTE TILBURY         COLOR WOW              1.7068                           0.8       MAKE UP EXCLUSIVE + EXCLUSIVE Customers buying CHARLOTTE TILBURY show a 1.7x higher affinity for COLOR WOW in MAKE UP, making them prime cross-sell candidates within the EXCLUSIVE + EXCLUSIVE segment.
+          BENEFIT   BENEFIT SERVICE              3.9279                           0.6       MAKE UP    EXCLUSIVE + OTHERS        Customers buying BENEFIT show a 3.9x higher affinity for BENEFIT SERVICE in MAKE UP, making them prime cross-sell candidates within the EXCLUSIVE + OTHERS segment.
+----------------------------------------
+
+QUESTION 4 ù RECRUITMENT CHANNEL SHAP FINDING
+Adoption Share % by Market Family:
+mkt_fam              EXCLUSIVE    OTHERS  SELECTIVE    SEPHORA   UNKNOWN
+recruitment_channel                                                     
+estore               60.010347  2.793585  26.745991  10.398345  0.051733
+store                55.103785  4.273504  27.814408  12.783883  0.024420
+----------------------------------------

@@ -1,0 +1,1 @@
+['brand_a', 'brand_b', 'cooccurrence_count', 'brand_cooccurrence_lift', 'basket_complementarity_score', 'high_price_artifact_flag', 'trivial_association_flag', 'quantity_revenue_divergence', 'p_value', 'significance_test_used', 'is_significant']

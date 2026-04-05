@@ -1,0 +1,37 @@
+--- MODEL BAKE-OFF RESULTS ---
+Model 0 (Popularity): P@3=0.0402, R@10=0.5939
+Model 1 (Hybrid):     P@3=0.0052, R@10=0.1326, NDCG@5=0.0154
+Model 2 (LightGBM):   P@3=0.0526, R@10=0.6701, NDCG@5=0.1453
+Ensemble Routing:     P@3=0.0135 (95% CI: [0.0129, 0.0141])
+
+--- SHAP TOP 20 FEATURES (ACTUAL) ---
+total_brand_qty: 0.544916
+total_brand_customers: 0.536838
+total_brand_spend: 0.460252
+total_brand_transactions: 0.427072
+total_brands: 0.179417
+rfm_segment_snapshot: 0.178696
+loyalty_status_at_snapshot: 0.164656
+gen_brand_appeal_geny: 0.121407
+has_basket_pair: 0.105714
+recruitment_channel: 0.091277
+velocity_score: 0.077121
+gen_brand_appeal_genz: 0.071699
+gen_brand_appeal_gena: 0.066552
+rfm_trajectory: 0.065901
+launch_readiness_score: 0.065677
+avg_basket: 0.062082
+total_transactions: 0.058232
+loyalist_vs_explorer_index: 0.054049
+gen_brand_appeal_babyboomers: 0.050028
+app_recommendation_affinity_proxy: 0.046095
+
+--- 3-CUSTOMER COMPARISON ---
+Customer -9.22209e+18: Hybrid=['GRANDE COSMETICS', 'DERMALOGICA', 'AVEDA'] | ML=['GUERLAIN', 'DIOR', 'YVES ST LAURENT']
+Customer -9.22158e+18: Hybrid=['SEPHORA ACCESSORIES', 'ZOEVA', 'TANGLE TEEZER'] | ML=['J.P. GAULTIER', 'TOO FACED', 'CHARLOTTE TILBURY']
+Customer -9.09083e+18: Hybrid=['HI SMILE', 'PIXI', 'SLIP SILK PILLOWCASE LLC'] | ML=['BENEFIT', 'HUDA BEAUTY', 'RARE BEAUTY']
+
+--- ERROR ANALYSIS & SEGMENT PROFILING ---
+ML-only Winner Mean Explorer Index: 0.5818
+Hybrid-only Winner Mean Explorer Index: 0.6051
+Business Context: Hybrid engine scores lower than baseline because it is optimized for high-quality activation routing and diversity, not pure ranking of volume. ML excels at fine-grained predictive ranking on explorer segments.

@@ -1,0 +1,9220 @@
+﻿sso it created some thing like this however let me share a code of a website I loved the flow of the cinematic themes we could probably adapt:
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+cinematic-landing-hero.tsx
+
+
+// src/components/ui/cinematic-hero.tsx
+
+
+"use client";
+
+
+
+
+
+
+import React, { useEffect, useRef } from "react";
+
+
+import { gsap } from "gsap";
+
+
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+
+import { cn } from "@/lib/utils";
+
+
+
+
+
+
+if (typeof window !== "undefined") {
+
+
+ gsap.registerPlugin(ScrollTrigger);
+
+
+}
+
+
+
+
+
+
+const INJECTED_STYLES = `
+
+
+ .gsap-reveal { visibility: hidden; }
+
+
+
+
+
+
+ /* Environment Overlays */
+
+
+ .film-grain {
+
+
+     position: absolute; inset: 0; width: 100%; height: 100%;
+
+
+     pointer-events: none; z-index: 50; opacity: 0.05; mix-blend-mode: overlay;
+
+
+     background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+
+
+ }
+
+
+
+
+
+
+ .bg-grid-theme {
+
+
+     background-size: 60px 60px;
+
+
+     background-image: 
+
+
+         linear-gradient(to right, color-mix(in srgb, var(--color-foreground) 5%, transparent) 1px, transparent 1px),
+
+
+         linear-gradient(to bottom, color-mix(in srgb, var(--color-foreground) 5%, transparent) 1px, transparent 1px);
+
+
+     mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+
+
+     -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+
+
+ }
+
+
+
+
+
+
+ /* -------------------------------------------------------------------
+
+
+    PHYSICAL SKEUOMORPHIC MATERIALS (Restored 3D Depth)
+
+
+ ---------------------------------------------------------------------- */
+
+
+ 
+
+
+ /* OUTSIDE THE CARD: Theme-aware text (Shadow in Light Mode, Glow in Dark Mode) */
+
+
+ .text-3d-matte {
+
+
+     color: var(--color-foreground);
+
+
+     text-shadow: 
+
+
+         0 10px 30px color-mix(in srgb, var(--color-foreground) 20%, transparent), 
+
+
+         0 2px 4px color-mix(in srgb, var(--color-foreground) 10%, transparent);
+
+
+ }
+
+
+
+
+
+
+ .text-silver-matte {
+
+
+     background: linear-gradient(180deg, var(--color-foreground) 0%, color-mix(in srgb, var(--color-foreground) 40%, transparent) 100%);
+
+
+     -webkit-background-clip: text;
+
+
+     -webkit-text-fill-color: transparent;
+
+
+     background-clip: text;
+
+
+     transform: translateZ(0); /* Hardware acceleration to prevent WebKit clipping bug */
+
+
+     filter: 
+
+
+         drop-shadow(0px 10px 20px color-mix(in srgb, var(--color-foreground) 15%, transparent)) 
+
+
+         drop-shadow(0px 2px 4px color-mix(in srgb, var(--color-foreground) 10%, transparent));
+
+
+ }
+
+
+
+
+
+
+ /* INSIDE THE CARD: Hardcoded Silver/White for the dark background, deep rich shadows */
+
+
+ .text-card-silver-matte {
+
+
+     background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+
+
+     -webkit-background-clip: text;
+
+
+     -webkit-text-fill-color: transparent;
+
+
+     background-clip: text;
+
+
+     transform: translateZ(0);
+
+
+     filter: 
+
+
+         drop-shadow(0px 12px 24px rgba(0,0,0,0.8)) 
+
+
+         drop-shadow(0px 4px 8px rgba(0,0,0,0.6));
+
+
+ }
+
+
+
+
+
+
+ /* Deep Physical Card with Dynamic Mouse Lighting */
+
+
+ .premium-depth-card {
+
+
+     background: linear-gradient(145deg, #162C6D 0%, #0A101D 100%);
+
+
+     box-shadow: 
+
+
+         0 40px 100px -20px rgba(0, 0, 0, 0.9),
+
+
+         0 20px 40px -20px rgba(0, 0, 0, 0.8),
+
+
+         inset 0 1px 2px rgba(255, 255, 255, 0.2),
+
+
+         inset 0 -2px 4px rgba(0, 0, 0, 0.8);
+
+
+     border: 1px solid rgba(255, 255, 255, 0.04);
+
+
+     position: relative;
+
+
+ }
+
+
+
+
+
+
+ .card-sheen {
+
+
+     position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 50;
+
+
+     background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.06) 0%, transparent 40%);
+
+
+     mix-blend-mode: screen; transition: opacity 0.3s ease;
+
+
+ }
+
+
+
+
+
+
+ /* Realistic iPhone Mockup Hardware */
+
+
+ .iphone-bezel {
+
+
+     background-color: #111;
+
+
+     box-shadow: 
+
+
+         inset 0 0 0 2px #52525B, 
+
+
+         inset 0 0 0 7px #000, 
+
+
+         0 40px 80px -15px rgba(0,0,0,0.9),
+
+
+         0 15px 25px -5px rgba(0,0,0,0.7);
+
+
+     transform-style: preserve-3d;
+
+
+ }
+
+
+
+
+
+
+ .hardware-btn {
+
+
+     background: linear-gradient(90deg, #404040 0%, #171717 100%);
+
+
+     box-shadow: 
+
+
+         -2px 0 5px rgba(0,0,0,0.8),
+
+
+         inset -1px 0 1px rgba(255,255,255,0.15),
+
+
+         inset 1px 0 2px rgba(0,0,0,0.8);
+
+
+     border-left: 1px solid rgba(255,255,255,0.05);
+
+
+ }
+
+
+ 
+
+
+ .screen-glare {
+
+
+     background: linear-gradient(110deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 45%);
+
+
+ }
+
+
+
+
+
+
+ .widget-depth {
+
+
+     background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+
+
+     box-shadow: 
+
+
+         0 10px 20px rgba(0,0,0,0.3),
+
+
+         inset 0 1px 1px rgba(255,255,255,0.05),
+
+
+         inset 0 -1px 1px rgba(0,0,0,0.5);
+
+
+     border: 1px solid rgba(255,255,255,0.03);
+
+
+ }
+
+
+
+
+
+
+ .floating-ui-badge {
+
+
+     background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
+
+
+     backdrop-filter: blur(24px); 
+
+
+     -webkit-backdrop-filter: blur(24px);
+
+
+     box-shadow: 
+
+
+         0 0 0 1px rgba(255, 255, 255, 0.1),
+
+
+         0 25px 50px -12px rgba(0, 0, 0, 0.8),
+
+
+         inset 0 1px 1px rgba(255,255,255,0.2),
+
+
+         inset 0 -1px 1px rgba(0,0,0,0.5);
+
+
+ }
+
+
+
+
+
+
+ /* Physical Tactile Buttons */
+
+
+ .btn-modern-light, .btn-modern-dark {
+
+
+     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+
+ }
+
+
+ .btn-modern-light {
+
+
+     background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+
+
+     color: #0F172A;
+
+
+     box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.1), 0 12px 24px -4px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,1), inset 0 -3px 6px rgba(0,0,0,0.06);
+
+
+ }
+
+
+ .btn-modern-light:hover {
+
+
+     transform: translateY(-3px);
+
+
+     box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 6px 12px -2px rgba(0,0,0,0.15), 0 20px 32px -6px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,1), inset 0 -3px 6px rgba(0,0,0,0.06);
+
+
+ }
+
+
+ .btn-modern-light:active {
+
+
+     transform: translateY(1px);
+
+
+     background: linear-gradient(180deg, #F1F5F9 0%, #E2E8F0 100%);
+
+
+     box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.1), inset 0 3px 6px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(0,0,0,0.02);
+
+
+ }
+
+
+ .btn-modern-dark {
+
+
+     background: linear-gradient(180deg, #27272A 0%, #18181B 100%);
+
+
+     color: #FFFFFF;
+
+
+     box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.6), 0 12px 24px -4px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -3px 6px rgba(0,0,0,0.8);
+
+
+ }
+
+
+ .btn-modern-dark:hover {
+
+
+     transform: translateY(-3px);
+
+
+     background: linear-gradient(180deg, #3F3F46 0%, #27272A 100%);
+
+
+     box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 6px 12px -2px rgba(0,0,0,0.7), 0 20px 32px -6px rgba(0,0,0,1), inset 0 1px 1px rgba(255,255,255,0.2), inset 0 -3px 6px rgba(0,0,0,0.8);
+
+
+ }
+
+
+ .btn-modern-dark:active {
+
+
+     transform: translateY(1px);
+
+
+     background: #18181B;
+
+
+     box-shadow: 0 0 0 1px rgba(255,255,255,0.05), inset 0 3px 8px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(0,0,0,0.5);
+
+
+ }
+
+
+
+
+
+
+ .progress-ring {
+
+
+     transform: rotate(-90deg);
+
+
+     transform-origin: center;
+
+
+     stroke-dasharray: 402;
+
+
+     stroke-dashoffset: 402;
+
+
+     stroke-linecap: round;
+
+
+ }
+
+
+`;
+
+
+
+
+
+
+export interface CinematicHeroProps extends React.HTMLAttributes<HTMLDivElement> {
+
+
+ brandName?: string;
+
+
+ tagline1?: string;
+
+
+ tagline2?: string;
+
+
+ cardHeading?: string;
+
+
+ cardDescription?: React.ReactNode;
+
+
+ metricValue?: number;
+
+
+ metricLabel?: string;
+
+
+ ctaHeading?: string;
+
+
+ ctaDescription?: string;
+
+
+}
+
+
+
+
+
+
+export function CinematicHero({ 
+
+
+ brandName = "Sobers",
+
+
+ tagline1 = "Track the journey,",
+
+
+ tagline2 = "not just the days.",
+
+
+ cardHeading = "Accountability, redefined.",
+
+
+ cardDescription = <><span className="text-white font-semibold">Sobers</span> empowers sponsors and sponsees in 12-step recovery programs with structured accountability, precise sobriety tracking, and beautiful visual timelines.</>,
+
+
+ metricValue = 365,
+
+
+ metricLabel = "Days Sober",
+
+
+ ctaHeading = "Start your recovery.",
+
+
+ ctaDescription = "Join thousands of others in the 12-step program and take control of your timeline today.",
+
+
+ className, 
+
+
+ ...props 
+
+
+}: CinematicHeroProps) {
+
+
+ 
+
+
+ const containerRef = useRef<HTMLDivElement>(null);
+
+
+ const mainCardRef = useRef<HTMLDivElement>(null);
+
+
+ const mockupRef = useRef<HTMLDivElement>(null);
+
+
+ const requestRef = useRef<number>(0);
+
+
+
+
+
+
+ // 1. High-Performance Mouse Interaction Logic (Using requestAnimationFrame)
+
+
+ useEffect(() => {
+
+
+   const handleMouseMove = (e: MouseEvent) => {
+
+
+     if (window.scrollY > window.innerHeight * 2) return;
+
+
+
+
+
+
+     cancelAnimationFrame(requestRef.current);
+
+
+     
+
+
+     requestRef.current = requestAnimationFrame(() => {
+
+
+       if (mainCardRef.current && mockupRef.current) {
+
+
+         const rect = mainCardRef.current.getBoundingClientRect();
+
+
+         const mouseX = e.clientX - rect.left;
+
+
+         const mouseY = e.clientY - rect.top;
+
+
+         
+
+
+         mainCardRef.current.style.setProperty("--mouse-x", `${mouseX}px`);
+
+
+         mainCardRef.current.style.setProperty("--mouse-y", `${mouseY}px`);
+
+
+
+
+
+
+         const xVal = (e.clientX / window.innerWidth - 0.5) * 2;
+
+
+         const yVal = (e.clientY / window.innerHeight - 0.5) * 2;
+
+
+
+
+
+
+         gsap.to(mockupRef.current, {
+
+
+           rotationY: xVal * 12,
+
+
+           rotationX: -yVal * 12,
+
+
+           ease: "power3.out",
+
+
+           duration: 1.2,
+
+
+         });
+
+
+       }
+
+
+     });
+
+
+   };
+
+
+
+
+
+
+   window.addEventListener("mousemove", handleMouseMove);
+
+
+   return () => {
+
+
+     window.removeEventListener("mousemove", handleMouseMove);
+
+
+     cancelAnimationFrame(requestRef.current);
+
+
+   };
+
+
+ },[]);
+
+
+
+
+
+
+ // 2. Complex Cinematic Scroll Timeline
+
+
+ useEffect(() => {
+
+
+   const isMobile = window.innerWidth < 768;
+
+
+
+
+
+
+   const ctx = gsap.context(() => {
+
+
+     gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20 });
+
+
+     gsap.set(".text-days", { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" });
+
+
+     gsap.set(".main-card", { y: window.innerHeight + 200, autoAlpha: 1 });
+
+
+     gsap.set([".card-left-text", ".card-right-text", ".mockup-scroll-wrapper", ".floating-badge", ".phone-widget"], { autoAlpha: 0 });
+
+
+     gsap.set(".cta-wrapper", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
+
+
+
+
+
+
+     const introTl = gsap.timeline({ delay: 0.3 });
+
+
+     introTl
+
+
+       .to(".text-track", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
+
+
+       .to(".text-days", { duration: 1.4, clipPath: "inset(0 0% 0 0)", ease: "power4.inOut" }, "-=1.0");
+
+
+
+
+
+
+     const scrollTl = gsap.timeline({
+
+
+       scrollTrigger: {
+
+
+         trigger: containerRef.current,
+
+
+         start: "top top",
+
+
+         end: "+=7000",
+
+
+         pin: true,
+
+
+         scrub: 1,
+
+
+         anticipatePin: 1,
+
+
+       },
+
+
+     });
+
+
+
+
+
+
+     scrollTl
+
+
+       .to([".hero-text-wrapper", ".bg-grid-theme"], { scale: 1.15, filter: "blur(20px)", opacity: 0.2, ease: "power2.inOut", duration: 2 }, 0)
+
+
+       .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
+
+
+       .to(".main-card", { width: "100%", height: "100%", borderRadius: "0px", ease: "power3.inOut", duration: 1.5 })
+
+
+       .fromTo(".mockup-scroll-wrapper",
+
+
+         { y: 300, z: -500, rotationX: 50, rotationY: -30, autoAlpha: 0, scale: 0.6 },
+
+
+         { y: 0, z: 0, rotationX: 0, rotationY: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 2.5 }, "-=0.8"
+
+
+       )
+
+
+       .fromTo(".phone-widget", { y: 40, autoAlpha: 0, scale: 0.95 }, { y: 0, autoAlpha: 1, scale: 1, stagger: 0.15, ease: "back.out(1.2)", duration: 1.5 }, "-=1.5")
+
+
+       .to(".progress-ring", { strokeDashoffset: 60, duration: 2, ease: "power3.inOut" }, "-=1.2")
+
+
+       .to(".counter-val", { innerHTML: metricValue, snap: { innerHTML: 1 }, duration: 2, ease: "expo.out" }, "-=2.0")
+
+
+       .fromTo(".floating-badge", { y: 100, autoAlpha: 0, scale: 0.7, rotationZ: -10 }, { y: 0, autoAlpha: 1, scale: 1, rotationZ: 0, ease: "back.out(1.5)", duration: 1.5, stagger: 0.2 }, "-=2.0")
+
+
+       .fromTo(".card-left-text", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.5 }, "-=1.5")
+
+
+       .fromTo(".card-right-text", { x: 50, autoAlpha: 0, scale: 0.8 }, { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.5 }, "<")
+
+
+       .to({}, { duration: 2.5 })
+
+
+       .set(".hero-text-wrapper", { autoAlpha: 0 })
+
+
+       .set(".cta-wrapper", { autoAlpha: 1 }) 
+
+
+       .to({}, { duration: 1.5 })
+
+
+       .to([".mockup-scroll-wrapper", ".floating-badge", ".card-left-text", ".card-right-text"], {
+
+
+         scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1.2, stagger: 0.05,
+
+
+       })
+
+
+       // Responsive card pullback sizing
+
+
+       .to(".main-card", { 
+
+
+         width: isMobile ? "92vw" : "85vw", 
+
+
+         height: isMobile ? "92vh" : "85vh", 
+
+
+         borderRadius: isMobile ? "32px" : "40px", 
+
+
+         ease: "expo.inOut", 
+
+
+         duration: 1.8 
+
+
+       }, "pullback") 
+
+
+       .to(".cta-wrapper", { scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.8 }, "pullback")
+
+
+       .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.5 });
+
+
+
+
+
+
+   }, containerRef);
+
+
+
+
+
+
+   return () => ctx.revert();
+
+
+ },[metricValue]); 
+
+
+
+
+
+
+ return (
+
+
+   <div
+
+
+     ref={containerRef}
+
+
+     className={cn("relative w-screen h-screen overflow-hidden flex items-center justify-center bg-background text-foreground font-sans antialiased", className)}
+
+
+     style={{ perspective: "1500px" }}
+
+
+     {...props}
+
+
+   >
+
+
+     <style dangerouslySetInnerHTML={{ __html: INJECTED_STYLES }} />
+
+
+     <div className="film-grain" aria-hidden="true" />
+
+
+     <div className="bg-grid-theme absolute inset-0 z-0 pointer-events-none opacity-50" aria-hidden="true" />
+
+
+
+
+
+
+     {/* BACKGROUND LAYER: Hero Texts */}
+
+
+     <div className="hero-text-wrapper absolute z-10 flex flex-col items-center justify-center text-center w-screen px-4 will-change-transform transform-style-3d">
+
+
+       <h1 className="text-track gsap-reveal text-3d-matte text-5xl md:text-7xl lg:text-[6rem] font-bold tracking-tight mb-2">
+
+
+         {tagline1}
+
+
+       </h1>
+
+
+       <h1 className="text-days gsap-reveal text-silver-matte text-5xl md:text-7xl lg:text-[6rem] font-extrabold tracking-tighter">
+
+
+         {tagline2}
+
+
+       </h1>
+
+
+     </div>
+
+
+
+
+
+
+     {/* BACKGROUND LAYER 2: Tactile CTA Buttons */}
+
+
+     <div className="cta-wrapper absolute z-10 flex flex-col items-center justify-center text-center w-screen px-4 gsap-reveal pointer-events-auto will-change-transform">
+
+
+       <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-silver-matte">
+
+
+         {ctaHeading}
+
+
+       </h2>
+
+
+       <p className="text-muted-foreground text-lg md:text-xl mb-12 max-w-xl mx-auto font-light leading-relaxed">
+
+
+         {ctaDescription}
+
+
+       </p>
+
+
+       <div className="flex flex-col sm:flex-row gap-6">
+
+
+         <a href="#" aria-label="Download on the App Store" className="btn-modern-light flex items-center justify-center gap-3 px-8 py-4 rounded-[1.25rem] group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+
+
+           {/* Authentic Apple App Store Logo SVG */}
+
+
+           <svg className="w-8 h-8 transition-transform group-hover:scale-105" fill="currentColor" viewBox="0 0 384 512" aria-hidden="true">
+
+
+             <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+
+
+           </svg>
+
+
+           <div className="text-left">
+
+
+             <div className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase mb-[-2px]">Download on the</div>
+
+
+             <div className="text-xl font-bold leading-none tracking-tight">App Store</div>
+
+
+           </div>
+
+
+         </a>
+
+
+         <a href="#" aria-label="Get it on Google Play" className="btn-modern-dark flex items-center justify-center gap-3 px-8 py-4 rounded-[1.25rem] group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-background">
+
+
+           {/* Authentic Google Play Store Solid Logo SVG */}
+
+
+           <svg className="w-7 h-7 transition-transform group-hover:scale-105" fill="currentColor" viewBox="0 0 512 512" aria-hidden="true">
+
+
+              <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
+
+
+           </svg>
+
+
+           <div className="text-left">
+
+
+             <div className="text-[10px] font-bold tracking-wider text-neutral-400 uppercase mb-[-2px]">Get it on</div>
+
+
+             <div className="text-xl font-bold leading-none tracking-tight">Google Play</div>
+
+
+           </div>
+
+
+         </a>
+
+
+       </div>
+
+
+     </div>
+
+
+
+
+
+
+     {/* FOREGROUND LAYER: The Physical Deep Blue Card */}
+
+
+     <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none" style={{ perspective: "1500px" }}>
+
+
+       <div
+
+
+         ref={mainCardRef}
+
+
+         className="main-card premium-depth-card relative overflow-hidden gsap-reveal flex items-center justify-center pointer-events-auto w-[92vw] md:w-[85vw] h-[92vh] md:h-[85vh] rounded-[32px] md:rounded-[40px]"
+
+
+       >
+
+
+         <div className="card-sheen" aria-hidden="true" />
+
+
+
+
+
+
+         {/* DYNAMIC RESPONSIVE GRID: Flex-col on mobile to force order, Grid on desktop */}
+
+
+         <div className="relative w-full h-full max-w-7xl mx-auto px-4 lg:px-12 flex flex-col justify-evenly lg:grid lg:grid-cols-3 items-center lg:gap-8 z-10 py-6 lg:py-0">
+
+
+           
+
+
+           {/* 1. TOP (Mobile) / RIGHT (Desktop): BRAND NAME */}
+
+
+           <div className="card-right-text gsap-reveal order-1 lg:order-3 flex justify-center lg:justify-end z-20 w-full">
+
+
+             <h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:mt-0">
+
+
+               {brandName}
+
+
+             </h2>
+
+
+           </div>
+
+
+
+
+
+
+           {/* 2. MIDDLE (Mobile) / CENTER (Desktop): IPHONE MOCKUP */}
+
+
+           <div className="mockup-scroll-wrapper order-2 lg:order-2 relative w-full h-[380px] lg:h-[600px] flex items-center justify-center z-10" style={{ perspective: "1000px" }}>
+
+
+             
+
+
+             {/* Inner wrapper for safe CSS scaling that doesn't conflict with GSAP */}
+
+
+             <div className="relative w-full h-full flex items-center justify-center transform scale-[0.65] md:scale-85 lg:scale-100">
+
+
+               
+
+
+               {/* The iPhone Bezel */}
+
+
+               <div
+
+
+                 ref={mockupRef}
+
+
+                 className="relative w-[280px] h-[580px] rounded-[3rem] iphone-bezel flex flex-col will-change-transform transform-style-3d"
+
+
+               >
+
+
+                 {/* Physical Hardware Buttons */}
+
+
+                 <div className="absolute top-[120px] -left-[3px] w-[3px] h-[25px] hardware-btn rounded-l-md z-0" aria-hidden="true" />
+
+
+                 <div className="absolute top-[160px] -left-[3px] w-[3px] h-[45px] hardware-btn rounded-l-md z-0" aria-hidden="true" />
+
+
+                 <div className="absolute top-[220px] -left-[3px] w-[3px] h-[45px] hardware-btn rounded-l-md z-0" aria-hidden="true" />
+
+
+                 <div className="absolute top-[170px] -right-[3px] w-[3px] h-[70px] hardware-btn rounded-r-md z-0 scale-x-[-1]" aria-hidden="true" />
+
+
+
+
+
+
+                 {/* Inner Screen Container */}
+
+
+                 <div className="absolute inset-[7px] bg-[#050914] rounded-[2.5rem] overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,1)] text-white z-10">
+
+
+                   <div className="absolute inset-0 screen-glare z-40 pointer-events-none" aria-hidden="true" />
+
+
+
+
+
+
+                   {/* Dynamic Island Notch */}
+
+
+                   <div className="absolute top-[5px] left-1/2 -translate-x-1/2 w-[100px] h-[28px] bg-black rounded-full z-50 flex items-center justify-end px-3 shadow-[inset_0_-1px_2px_rgba(255,255,255,0.1)]">
+
+
+                     <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse" />
+
+
+                   </div>
+
+
+
+
+
+
+                   {/* App Interface */}
+
+
+                   <div className="relative w-full h-full pt-12 px-5 pb-8 flex flex-col">
+
+
+                     <div className="phone-widget flex justify-between items-center mb-8">
+
+
+                       <div className="flex flex-col">
+
+
+                         <span className="text-[10px] text-neutral-400 uppercase tracking-widest font-bold mb-1">Today</span>
+
+
+                         <span className="text-xl font-bold tracking-tight text-white drop-shadow-md">Journey</span>
+
+
+                       </div>
+
+
+                       <div className="w-9 h-9 rounded-full bg-white/5 text-neutral-200 flex items-center justify-center font-bold text-sm border border-white/10 shadow-lg shadow-black/50">JS</div>
+
+
+                     </div>
+
+
+
+
+
+
+                     <div className="phone-widget relative w-44 h-44 mx-auto flex items-center justify-center mb-8 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
+
+
+                       <svg className="absolute inset-0 w-full h-full" aria-hidden="true">
+
+
+                         <circle cx="88" cy="88" r="64" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="12" />
+
+
+                         <circle className="progress-ring" cx="88" cy="88" r="64" fill="none" stroke="#3B82F6" strokeWidth="12" />
+
+
+                       </svg>
+
+
+                       <div className="text-center z-10 flex flex-col items-center">
+
+
+                         <span className="counter-val text-4xl font-extrabold tracking-tighter text-white">0</span>
+
+
+                         <span className="text-[8px] text-blue-200/50 uppercase tracking-[0.1em] font-bold mt-0.5">{metricLabel}</span>
+
+
+                       </div>
+
+
+                     </div>
+
+
+
+
+
+
+                     <div className="space-y-3">
+
+
+                       <div className="phone-widget widget-depth rounded-2xl p-3 flex items-center">
+
+
+                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/5 flex items-center justify-center mr-3 border border-blue-400/20 shadow-inner">
+
+
+                           <svg className="w-4 h-4 text-blue-400 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+
+
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+
+                           </svg>
+
+
+                         </div>
+
+
+                         <div className="flex-1">
+
+
+                           <div className="h-2 w-20 bg-neutral-300 rounded-full mb-2 shadow-inner" />
+
+
+                           <div className="h-1.5 w-12 bg-neutral-600 rounded-full shadow-inner" />
+
+
+                         </div>
+
+
+                       </div>
+
+
+                       <div className="phone-widget widget-depth rounded-2xl p-3 flex items-center">
+
+
+                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/5 flex items-center justify-center mr-3 border border-emerald-400/20 shadow-inner">
+
+
+                           <svg className="w-4 h-4 text-emerald-400 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+
+
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+
+
+                           </svg>
+
+
+                         </div>
+
+
+                         <div className="flex-1">
+
+
+                           <div className="h-2 w-16 bg-neutral-300 rounded-full mb-2 shadow-inner" />
+
+
+                           <div className="h-1.5 w-24 bg-neutral-600 rounded-full shadow-inner" />
+
+
+                         </div>
+
+
+                       </div>
+
+
+                     </div>
+
+
+
+
+
+
+                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[4px] bg-white/20 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
+
+
+                   </div>
+
+
+                 </div>
+
+
+               </div>
+
+
+
+
+
+
+               {/* Floating Glass Badges */}
+
+
+               <div className="floating-badge absolute flex top-6 lg:top-12 left-[-15px] lg:left-[-80px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-3 lg:gap-4 z-30">
+
+
+                 <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-b from-blue-500/20 to-blue-900/10 flex items-center justify-center border border-blue-400/30 shadow-inner">
+
+
+                   <span className="text-base lg:text-xl drop-shadow-lg" aria-hidden="true">🔥</span>
+
+
+                 </div>
+
+
+                 <div>
+
+
+                   <p className="text-white text-xs lg:text-sm font-bold tracking-tight">1 Year Streak</p>
+
+
+                   <p className="text-blue-200/50 text-[10px] lg:text-xs font-medium">Milestone unlocked</p>
+
+
+                 </div>
+
+
+               </div>
+
+
+
+
+
+
+               <div className="floating-badge absolute flex bottom-12 lg:bottom-20 right-[-15px] lg:right-[-80px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-3 lg:gap-4 z-30">
+
+
+                 <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-b from-indigo-500/20 to-indigo-900/10 flex items-center justify-center border border-indigo-400/30 shadow-inner">
+
+
+                   <span className="text-base lg:text-lg drop-shadow-lg" aria-hidden="true">🤝</span>
+
+
+                 </div>
+
+
+                 <div>
+
+
+                   <p className="text-white text-xs lg:text-sm font-bold tracking-tight">Sponsor Update</p>
+
+
+                   <p className="text-blue-200/50 text-[10px] lg:text-xs font-medium">Shared successfully</p>
+
+
+                 </div>
+
+
+               </div>
+
+
+
+
+
+
+             </div>
+
+
+           </div>
+
+
+
+
+
+
+           {/* 3. BOTTOM (Mobile) / LEFT (Desktop): ACCOUNTABILITY TEXT */}
+
+
+           <div className="card-left-text gsap-reveal order-3 lg:order-1 flex flex-col justify-center text-center lg:text-left z-20 w-full lg:max-w-none px-4 lg:px-0">
+
+
+             <h3 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-0 lg:mb-5 tracking-tight">
+
+
+               {cardHeading}
+
+
+             </h3>
+
+
+             {/* HIDDEN ON MOBILE (added hidden md:block) */}
+
+
+             <p className="hidden md:block text-blue-100/70 text-sm md:text-base lg:text-lg font-normal leading-relaxed mx-auto lg:mx-0 max-w-sm lg:max-w-none">
+
+
+               {cardDescription}
+
+
+             </p>
+
+
+           </div>
+
+
+
+
+
+
+         </div>
+
+
+       </div>
+
+
+     </div>
+
+
+   </div>
+
+
+ );
+
+
+}
+
+
+
+
+
+
+demo.tsx
+
+
+import { CinematicHero } from "@/components/ui/cinematic-landing-hero";
+
+
+
+
+
+
+export default function CinematicHeroDemo() {
+
+
+ return (
+
+
+   <div className="overflow-x-hidden w-[100%] min-h-screen">
+
+
+     <CinematicHero />
+
+
+   </div>
+
+
+ );
+
+
+}
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+gsap
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+zoom-parallax.tsx
+
+
+'use client';
+
+
+
+
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+
+
+import { useRef } from 'react';
+
+
+
+
+
+
+interface Image {
+
+
+        src: string;
+
+
+        alt?: string;
+
+
+}
+
+
+
+
+
+
+interface ZoomParallaxProps {
+
+
+        /** Array of images to be displayed in the parallax effect max 7 images */
+
+
+        images: Image[];
+
+
+}
+
+
+
+
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+
+
+        const container = useRef(null);
+
+
+        const { scrollYProgress } = useScroll({
+
+
+                target: container,
+
+
+                offset: ['start start', 'end end'],
+
+
+        });
+
+
+
+
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
+
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+
+
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+
+
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+
+
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+
+
+
+
+        return (
+
+
+                <div ref={container} className="relative h-[300vh]">
+
+
+                        <div className="sticky top-0 h-screen overflow-hidden">
+
+
+                                {images.map(({ src, alt }, index) => {
+
+
+                                        const scale = scales[index % scales.length];
+
+
+
+
+
+
+                                        return (
+
+
+                                                <motion.div
+
+
+                                                        key={index}
+
+
+                                                        style={{ scale }}
+
+
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+
+
+                                                >
+
+
+                                                        <div className="relative h-[25vh] w-[25vw]">
+
+
+                                                                <img
+
+
+                                                                        src={src || '/placeholder.svg'}
+
+
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+
+
+                                                                        className="h-full w-full object-cover"
+
+
+                                                                />
+
+
+                                                        </div>
+
+
+                                                </motion.div>
+
+
+                                        );
+
+
+                                })}
+
+
+                        </div>
+
+
+                </div>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+demo.tsx
+
+
+'use client';
+
+
+import React from 'react';
+
+
+import { cn } from '@/lib/utils';
+
+
+import Lenis from '@studio-freight/lenis'
+
+
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+
+
+
+
+export default function DefaultDemo() {
+
+
+
+
+
+
+        React.useEffect( () => {
+
+
+       const lenis = new Lenis()
+
+
+      
+
+
+       function raf(time: number) {
+
+
+           lenis.raf(time)
+
+
+           requestAnimationFrame(raf)
+
+
+       }
+
+
+
+
+
+
+       requestAnimationFrame(raf)
+
+
+   },[])
+
+
+
+
+
+
+
+
+
+
+        const images = [
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Modern architecture building',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Urban cityscape at sunset',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Abstract geometric pattern',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Mountain landscape',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Minimalist design elements',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Ocean waves and beach',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Forest trees and sunlight',
+
+
+                },
+
+
+        ];
+
+
+
+
+
+
+        return (
+
+
+                <main className="min-h-screen w-full">
+
+
+                        <div className="relative flex h-[50vh] items-center justify-center">
+
+
+                                {/* Radial spotlight */}
+
+
+                                <div
+
+
+                                        aria-hidden="true"
+
+
+                                        className={cn(
+
+
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+
+
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+
+
+                                                'blur-[30px]',
+
+
+                                        )}
+
+
+                                />
+
+
+                                <h1 className="text-center text-4xl font-bold">
+
+
+                                        Scroll Down for Zoom Parallax
+
+
+                                </h1>
+
+
+                        </div>
+
+
+                        <ZoomParallax images={images} />
+
+
+                        <div className="h-[50vh]"/>
+
+
+                </main>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+framer-motion
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+zoom-parallax.tsx
+
+
+'use client';
+
+
+
+
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+
+
+import { useRef } from 'react';
+
+
+
+
+
+
+interface Image {
+
+
+        src: string;
+
+
+        alt?: string;
+
+
+}
+
+
+
+
+
+
+interface ZoomParallaxProps {
+
+
+        /** Array of images to be displayed in the parallax effect max 7 images */
+
+
+        images: Image[];
+
+
+}
+
+
+
+
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+
+
+        const container = useRef(null);
+
+
+        const { scrollYProgress } = useScroll({
+
+
+                target: container,
+
+
+                offset: ['start start', 'end end'],
+
+
+        });
+
+
+
+
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
+
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+
+
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+
+
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+
+
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+
+
+
+
+        return (
+
+
+                <div ref={container} className="relative h-[300vh]">
+
+
+                        <div className="sticky top-0 h-screen overflow-hidden">
+
+
+                                {images.map(({ src, alt }, index) => {
+
+
+                                        const scale = scales[index % scales.length];
+
+
+
+
+
+
+                                        return (
+
+
+                                                <motion.div
+
+
+                                                        key={index}
+
+
+                                                        style={{ scale }}
+
+
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+
+
+                                                >
+
+
+                                                        <div className="relative h-[25vh] w-[25vw]">
+
+
+                                                                <img
+
+
+                                                                        src={src || '/placeholder.svg'}
+
+
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+
+
+                                                                        className="h-full w-full object-cover"
+
+
+                                                                />
+
+
+                                                        </div>
+
+
+                                                </motion.div>
+
+
+                                        );
+
+
+                                })}
+
+
+                        </div>
+
+
+                </div>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+demo.tsx
+
+
+'use client';
+
+
+import React from 'react';
+
+
+import { cn } from '@/lib/utils';
+
+
+import Lenis from '@studio-freight/lenis'
+
+
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+
+
+
+
+export default function DefaultDemo() {
+
+
+
+
+
+
+        React.useEffect( () => {
+
+
+       const lenis = new Lenis()
+
+
+      
+
+
+       function raf(time: number) {
+
+
+           lenis.raf(time)
+
+
+           requestAnimationFrame(raf)
+
+
+       }
+
+
+
+
+
+
+       requestAnimationFrame(raf)
+
+
+   },[])
+
+
+
+
+
+
+
+
+
+
+        const images = [
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Modern architecture building',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Urban cityscape at sunset',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Abstract geometric pattern',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Mountain landscape',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Minimalist design elements',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Ocean waves and beach',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Forest trees and sunlight',
+
+
+                },
+
+
+        ];
+
+
+
+
+
+
+        return (
+
+
+                <main className="min-h-screen w-full">
+
+
+                        <div className="relative flex h-[50vh] items-center justify-center">
+
+
+                                {/* Radial spotlight */}
+
+
+                                <div
+
+
+                                        aria-hidden="true"
+
+
+                                        className={cn(
+
+
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+
+
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+
+
+                                                'blur-[30px]',
+
+
+                                        )}
+
+
+                                />
+
+
+                                <h1 className="text-center text-4xl font-bold">
+
+
+                                        Scroll Down for Zoom Parallax
+
+
+                                </h1>
+
+
+                        </div>
+
+
+                        <ZoomParallax images={images} />
+
+
+                        <div className="h-[50vh]"/>
+
+
+                </main>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+framer-motion
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+zoom-parallax.tsx
+
+
+'use client';
+
+
+
+
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+
+
+import { useRef } from 'react';
+
+
+
+
+
+
+interface Image {
+
+
+        src: string;
+
+
+        alt?: string;
+
+
+}
+
+
+
+
+
+
+interface ZoomParallaxProps {
+
+
+        /** Array of images to be displayed in the parallax effect max 7 images */
+
+
+        images: Image[];
+
+
+}
+
+
+
+
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+
+
+        const container = useRef(null);
+
+
+        const { scrollYProgress } = useScroll({
+
+
+                target: container,
+
+
+                offset: ['start start', 'end end'],
+
+
+        });
+
+
+
+
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
+
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+
+
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+
+
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+
+
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+
+
+
+
+        return (
+
+
+                <div ref={container} className="relative h-[300vh]">
+
+
+                        <div className="sticky top-0 h-screen overflow-hidden">
+
+
+                                {images.map(({ src, alt }, index) => {
+
+
+                                        const scale = scales[index % scales.length];
+
+
+
+
+
+
+                                        return (
+
+
+                                                <motion.div
+
+
+                                                        key={index}
+
+
+                                                        style={{ scale }}
+
+
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+
+
+                                                >
+
+
+                                                        <div className="relative h-[25vh] w-[25vw]">
+
+
+                                                                <img
+
+
+                                                                        src={src || '/placeholder.svg'}
+
+
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+
+
+                                                                        className="h-full w-full object-cover"
+
+
+                                                                />
+
+
+                                                        </div>
+
+
+                                                </motion.div>
+
+
+                                        );
+
+
+                                })}
+
+
+                        </div>
+
+
+                </div>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+demo.tsx
+
+
+'use client';
+
+
+import React from 'react';
+
+
+import { cn } from '@/lib/utils';
+
+
+import Lenis from '@studio-freight/lenis'
+
+
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+
+
+
+
+export default function DefaultDemo() {
+
+
+
+
+
+
+        React.useEffect( () => {
+
+
+       const lenis = new Lenis()
+
+
+      
+
+
+       function raf(time: number) {
+
+
+           lenis.raf(time)
+
+
+           requestAnimationFrame(raf)
+
+
+       }
+
+
+
+
+
+
+       requestAnimationFrame(raf)
+
+
+   },[])
+
+
+
+
+
+
+
+
+
+
+        const images = [
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Modern architecture building',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Urban cityscape at sunset',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Abstract geometric pattern',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Mountain landscape',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Minimalist design elements',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Ocean waves and beach',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Forest trees and sunlight',
+
+
+                },
+
+
+        ];
+
+
+
+
+
+
+        return (
+
+
+                <main className="min-h-screen w-full">
+
+
+                        <div className="relative flex h-[50vh] items-center justify-center">
+
+
+                                {/* Radial spotlight */}
+
+
+                                <div
+
+
+                                        aria-hidden="true"
+
+
+                                        className={cn(
+
+
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+
+
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+
+
+                                                'blur-[30px]',
+
+
+                                        )}
+
+
+                                />
+
+
+                                <h1 className="text-center text-4xl font-bold">
+
+
+                                        Scroll Down for Zoom Parallax
+
+
+                                </h1>
+
+
+                        </div>
+
+
+                        <ZoomParallax images={images} />
+
+
+                        <div className="h-[50vh]"/>
+
+
+                </main>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+framer-motion
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+zoom-parallax.tsx
+
+
+'use client';
+
+
+
+
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+
+
+import { useRef } from 'react';
+
+
+
+
+
+
+interface Image {
+
+
+        src: string;
+
+
+        alt?: string;
+
+
+}
+
+
+
+
+
+
+interface ZoomParallaxProps {
+
+
+        /** Array of images to be displayed in the parallax effect max 7 images */
+
+
+        images: Image[];
+
+
+}
+
+
+
+
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+
+
+        const container = useRef(null);
+
+
+        const { scrollYProgress } = useScroll({
+
+
+                target: container,
+
+
+                offset: ['start start', 'end end'],
+
+
+        });
+
+
+
+
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
+
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+
+
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+
+
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+
+
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+
+
+
+
+        return (
+
+
+                <div ref={container} className="relative h-[300vh]">
+
+
+                        <div className="sticky top-0 h-screen overflow-hidden">
+
+
+                                {images.map(({ src, alt }, index) => {
+
+
+                                        const scale = scales[index % scales.length];
+
+
+
+
+
+
+                                        return (
+
+
+                                                <motion.div
+
+
+                                                        key={index}
+
+
+                                                        style={{ scale }}
+
+
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+
+
+                                                >
+
+
+                                                        <div className="relative h-[25vh] w-[25vw]">
+
+
+                                                                <img
+
+
+                                                                        src={src || '/placeholder.svg'}
+
+
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+
+
+                                                                        className="h-full w-full object-cover"
+
+
+                                                                />
+
+
+                                                        </div>
+
+
+                                                </motion.div>
+
+
+                                        );
+
+
+                                })}
+
+
+                        </div>
+
+
+                </div>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+demo.tsx
+
+
+'use client';
+
+
+import React from 'react';
+
+
+import { cn } from '@/lib/utils';
+
+
+import Lenis from '@studio-freight/lenis'
+
+
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+
+
+
+
+export default function DefaultDemo() {
+
+
+
+
+
+
+        React.useEffect( () => {
+
+
+       const lenis = new Lenis()
+
+
+      
+
+
+       function raf(time: number) {
+
+
+           lenis.raf(time)
+
+
+           requestAnimationFrame(raf)
+
+
+       }
+
+
+
+
+
+
+       requestAnimationFrame(raf)
+
+
+   },[])
+
+
+
+
+
+
+
+
+
+
+        const images = [
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Modern architecture building',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Urban cityscape at sunset',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Abstract geometric pattern',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Mountain landscape',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Minimalist design elements',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Ocean waves and beach',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Forest trees and sunlight',
+
+
+                },
+
+
+        ];
+
+
+
+
+
+
+        return (
+
+
+                <main className="min-h-screen w-full">
+
+
+                        <div className="relative flex h-[50vh] items-center justify-center">
+
+
+                                {/* Radial spotlight */}
+
+
+                                <div
+
+
+                                        aria-hidden="true"
+
+
+                                        className={cn(
+
+
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+
+
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+
+
+                                                'blur-[30px]',
+
+
+                                        )}
+
+
+                                />
+
+
+                                <h1 className="text-center text-4xl font-bold">
+
+
+                                        Scroll Down for Zoom Parallax
+
+
+                                </h1>
+
+
+                        </div>
+
+
+                        <ZoomParallax images={images} />
+
+
+                        <div className="h-[50vh]"/>
+
+
+                </main>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+framer-motion
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+o it created some thing like this however let me share a code of a website I loved the flow of the cinematic themes we could probably adapt:
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+cinematic-landing-hero.tsx
+
+
+// src/components/ui/cinematic-hero.tsx
+
+
+"use client";
+
+
+
+
+
+
+import React, { useEffect, useRef } from "react";
+
+
+import { gsap } from "gsap";
+
+
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+
+import { cn } from "@/lib/utils";
+
+
+
+
+
+
+if (typeof window !== "undefined") {
+
+
+ gsap.registerPlugin(ScrollTrigger);
+
+
+}
+
+
+
+
+
+
+const INJECTED_STYLES = `
+
+
+ .gsap-reveal { visibility: hidden; }
+
+
+
+
+
+
+ /* Environment Overlays */
+
+
+ .film-grain {
+
+
+     position: absolute; inset: 0; width: 100%; height: 100%;
+
+
+     pointer-events: none; z-index: 50; opacity: 0.05; mix-blend-mode: overlay;
+
+
+     background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+
+
+ }
+
+
+
+
+
+
+ .bg-grid-theme {
+
+
+     background-size: 60px 60px;
+
+
+     background-image: 
+
+
+         linear-gradient(to right, color-mix(in srgb, var(--color-foreground) 5%, transparent) 1px, transparent 1px),
+
+
+         linear-gradient(to bottom, color-mix(in srgb, var(--color-foreground) 5%, transparent) 1px, transparent 1px);
+
+
+     mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+
+
+     -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+
+
+ }
+
+
+
+
+
+
+ /* -------------------------------------------------------------------
+
+
+    PHYSICAL SKEUOMORPHIC MATERIALS (Restored 3D Depth)
+
+
+ ---------------------------------------------------------------------- */
+
+
+ 
+
+
+ /* OUTSIDE THE CARD: Theme-aware text (Shadow in Light Mode, Glow in Dark Mode) */
+
+
+ .text-3d-matte {
+
+
+     color: var(--color-foreground);
+
+
+     text-shadow: 
+
+
+         0 10px 30px color-mix(in srgb, var(--color-foreground) 20%, transparent), 
+
+
+         0 2px 4px color-mix(in srgb, var(--color-foreground) 10%, transparent);
+
+
+ }
+
+
+
+
+
+
+ .text-silver-matte {
+
+
+     background: linear-gradient(180deg, var(--color-foreground) 0%, color-mix(in srgb, var(--color-foreground) 40%, transparent) 100%);
+
+
+     -webkit-background-clip: text;
+
+
+     -webkit-text-fill-color: transparent;
+
+
+     background-clip: text;
+
+
+     transform: translateZ(0); /* Hardware acceleration to prevent WebKit clipping bug */
+
+
+     filter: 
+
+
+         drop-shadow(0px 10px 20px color-mix(in srgb, var(--color-foreground) 15%, transparent)) 
+
+
+         drop-shadow(0px 2px 4px color-mix(in srgb, var(--color-foreground) 10%, transparent));
+
+
+ }
+
+
+
+
+
+
+ /* INSIDE THE CARD: Hardcoded Silver/White for the dark background, deep rich shadows */
+
+
+ .text-card-silver-matte {
+
+
+     background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+
+
+     -webkit-background-clip: text;
+
+
+     -webkit-text-fill-color: transparent;
+
+
+     background-clip: text;
+
+
+     transform: translateZ(0);
+
+
+     filter: 
+
+
+         drop-shadow(0px 12px 24px rgba(0,0,0,0.8)) 
+
+
+         drop-shadow(0px 4px 8px rgba(0,0,0,0.6));
+
+
+ }
+
+
+
+
+
+
+ /* Deep Physical Card with Dynamic Mouse Lighting */
+
+
+ .premium-depth-card {
+
+
+     background: linear-gradient(145deg, #162C6D 0%, #0A101D 100%);
+
+
+     box-shadow: 
+
+
+         0 40px 100px -20px rgba(0, 0, 0, 0.9),
+
+
+         0 20px 40px -20px rgba(0, 0, 0, 0.8),
+
+
+         inset 0 1px 2px rgba(255, 255, 255, 0.2),
+
+
+         inset 0 -2px 4px rgba(0, 0, 0, 0.8);
+
+
+     border: 1px solid rgba(255, 255, 255, 0.04);
+
+
+     position: relative;
+
+
+ }
+
+
+
+
+
+
+ .card-sheen {
+
+
+     position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 50;
+
+
+     background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.06) 0%, transparent 40%);
+
+
+     mix-blend-mode: screen; transition: opacity 0.3s ease;
+
+
+ }
+
+
+
+
+
+
+ /* Realistic iPhone Mockup Hardware */
+
+
+ .iphone-bezel {
+
+
+     background-color: #111;
+
+
+     box-shadow: 
+
+
+         inset 0 0 0 2px #52525B, 
+
+
+         inset 0 0 0 7px #000, 
+
+
+         0 40px 80px -15px rgba(0,0,0,0.9),
+
+
+         0 15px 25px -5px rgba(0,0,0,0.7);
+
+
+     transform-style: preserve-3d;
+
+
+ }
+
+
+
+
+
+
+ .hardware-btn {
+
+
+     background: linear-gradient(90deg, #404040 0%, #171717 100%);
+
+
+     box-shadow: 
+
+
+         -2px 0 5px rgba(0,0,0,0.8),
+
+
+         inset -1px 0 1px rgba(255,255,255,0.15),
+
+
+         inset 1px 0 2px rgba(0,0,0,0.8);
+
+
+     border-left: 1px solid rgba(255,255,255,0.05);
+
+
+ }
+
+
+ 
+
+
+ .screen-glare {
+
+
+     background: linear-gradient(110deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 45%);
+
+
+ }
+
+
+
+
+
+
+ .widget-depth {
+
+
+     background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+
+
+     box-shadow: 
+
+
+         0 10px 20px rgba(0,0,0,0.3),
+
+
+         inset 0 1px 1px rgba(255,255,255,0.05),
+
+
+         inset 0 -1px 1px rgba(0,0,0,0.5);
+
+
+     border: 1px solid rgba(255,255,255,0.03);
+
+
+ }
+
+
+
+
+
+
+ .floating-ui-badge {
+
+
+     background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.01) 100%);
+
+
+     backdrop-filter: blur(24px); 
+
+
+     -webkit-backdrop-filter: blur(24px);
+
+
+     box-shadow: 
+
+
+         0 0 0 1px rgba(255, 255, 255, 0.1),
+
+
+         0 25px 50px -12px rgba(0, 0, 0, 0.8),
+
+
+         inset 0 1px 1px rgba(255,255,255,0.2),
+
+
+         inset 0 -1px 1px rgba(0,0,0,0.5);
+
+
+ }
+
+
+
+
+
+
+ /* Physical Tactile Buttons */
+
+
+ .btn-modern-light, .btn-modern-dark {
+
+
+     transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+
+ }
+
+
+ .btn-modern-light {
+
+
+     background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+
+
+     color: #0F172A;
+
+
+     box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.1), 0 12px 24px -4px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,1), inset 0 -3px 6px rgba(0,0,0,0.06);
+
+
+ }
+
+
+ .btn-modern-light:hover {
+
+
+     transform: translateY(-3px);
+
+
+     box-shadow: 0 0 0 1px rgba(0,0,0,0.05), 0 6px 12px -2px rgba(0,0,0,0.15), 0 20px 32px -6px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,1), inset 0 -3px 6px rgba(0,0,0,0.06);
+
+
+ }
+
+
+ .btn-modern-light:active {
+
+
+     transform: translateY(1px);
+
+
+     background: linear-gradient(180deg, #F1F5F9 0%, #E2E8F0 100%);
+
+
+     box-shadow: 0 0 0 1px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.1), inset 0 3px 6px rgba(0,0,0,0.1), inset 0 0 0 1px rgba(0,0,0,0.02);
+
+
+ }
+
+
+ .btn-modern-dark {
+
+
+     background: linear-gradient(180deg, #27272A 0%, #18181B 100%);
+
+
+     color: #FFFFFF;
+
+
+     box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.6), 0 12px 24px -4px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.15), inset 0 -3px 6px rgba(0,0,0,0.8);
+
+
+ }
+
+
+ .btn-modern-dark:hover {
+
+
+     transform: translateY(-3px);
+
+
+     background: linear-gradient(180deg, #3F3F46 0%, #27272A 100%);
+
+
+     box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 6px 12px -2px rgba(0,0,0,0.7), 0 20px 32px -6px rgba(0,0,0,1), inset 0 1px 1px rgba(255,255,255,0.2), inset 0 -3px 6px rgba(0,0,0,0.8);
+
+
+ }
+
+
+ .btn-modern-dark:active {
+
+
+     transform: translateY(1px);
+
+
+     background: #18181B;
+
+
+     box-shadow: 0 0 0 1px rgba(255,255,255,0.05), inset 0 3px 8px rgba(0,0,0,0.9), inset 0 0 0 1px rgba(0,0,0,0.5);
+
+
+ }
+
+
+
+
+
+
+ .progress-ring {
+
+
+     transform: rotate(-90deg);
+
+
+     transform-origin: center;
+
+
+     stroke-dasharray: 402;
+
+
+     stroke-dashoffset: 402;
+
+
+     stroke-linecap: round;
+
+
+ }
+
+
+`;
+
+
+
+
+
+
+export interface CinematicHeroProps extends React.HTMLAttributes<HTMLDivElement> {
+
+
+ brandName?: string;
+
+
+ tagline1?: string;
+
+
+ tagline2?: string;
+
+
+ cardHeading?: string;
+
+
+ cardDescription?: React.ReactNode;
+
+
+ metricValue?: number;
+
+
+ metricLabel?: string;
+
+
+ ctaHeading?: string;
+
+
+ ctaDescription?: string;
+
+
+}
+
+
+
+
+
+
+export function CinematicHero({ 
+
+
+ brandName = "Sobers",
+
+
+ tagline1 = "Track the journey,",
+
+
+ tagline2 = "not just the days.",
+
+
+ cardHeading = "Accountability, redefined.",
+
+
+ cardDescription = <><span className="text-white font-semibold">Sobers</span> empowers sponsors and sponsees in 12-step recovery programs with structured accountability, precise sobriety tracking, and beautiful visual timelines.</>,
+
+
+ metricValue = 365,
+
+
+ metricLabel = "Days Sober",
+
+
+ ctaHeading = "Start your recovery.",
+
+
+ ctaDescription = "Join thousands of others in the 12-step program and take control of your timeline today.",
+
+
+ className, 
+
+
+ ...props 
+
+
+}: CinematicHeroProps) {
+
+
+ 
+
+
+ const containerRef = useRef<HTMLDivElement>(null);
+
+
+ const mainCardRef = useRef<HTMLDivElement>(null);
+
+
+ const mockupRef = useRef<HTMLDivElement>(null);
+
+
+ const requestRef = useRef<number>(0);
+
+
+
+
+
+
+ // 1. High-Performance Mouse Interaction Logic (Using requestAnimationFrame)
+
+
+ useEffect(() => {
+
+
+   const handleMouseMove = (e: MouseEvent) => {
+
+
+     if (window.scrollY > window.innerHeight * 2) return;
+
+
+
+
+
+
+     cancelAnimationFrame(requestRef.current);
+
+
+     
+
+
+     requestRef.current = requestAnimationFrame(() => {
+
+
+       if (mainCardRef.current && mockupRef.current) {
+
+
+         const rect = mainCardRef.current.getBoundingClientRect();
+
+
+         const mouseX = e.clientX - rect.left;
+
+
+         const mouseY = e.clientY - rect.top;
+
+
+         
+
+
+         mainCardRef.current.style.setProperty("--mouse-x", `${mouseX}px`);
+
+
+         mainCardRef.current.style.setProperty("--mouse-y", `${mouseY}px`);
+
+
+
+
+
+
+         const xVal = (e.clientX / window.innerWidth - 0.5) * 2;
+
+
+         const yVal = (e.clientY / window.innerHeight - 0.5) * 2;
+
+
+
+
+
+
+         gsap.to(mockupRef.current, {
+
+
+           rotationY: xVal * 12,
+
+
+           rotationX: -yVal * 12,
+
+
+           ease: "power3.out",
+
+
+           duration: 1.2,
+
+
+         });
+
+
+       }
+
+
+     });
+
+
+   };
+
+
+
+
+
+
+   window.addEventListener("mousemove", handleMouseMove);
+
+
+   return () => {
+
+
+     window.removeEventListener("mousemove", handleMouseMove);
+
+
+     cancelAnimationFrame(requestRef.current);
+
+
+   };
+
+
+ },[]);
+
+
+
+
+
+
+ // 2. Complex Cinematic Scroll Timeline
+
+
+ useEffect(() => {
+
+
+   const isMobile = window.innerWidth < 768;
+
+
+
+
+
+
+   const ctx = gsap.context(() => {
+
+
+     gsap.set(".text-track", { autoAlpha: 0, y: 60, scale: 0.85, filter: "blur(20px)", rotationX: -20 });
+
+
+     gsap.set(".text-days", { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" });
+
+
+     gsap.set(".main-card", { y: window.innerHeight + 200, autoAlpha: 1 });
+
+
+     gsap.set([".card-left-text", ".card-right-text", ".mockup-scroll-wrapper", ".floating-badge", ".phone-widget"], { autoAlpha: 0 });
+
+
+     gsap.set(".cta-wrapper", { autoAlpha: 0, scale: 0.8, filter: "blur(30px)" });
+
+
+
+
+
+
+     const introTl = gsap.timeline({ delay: 0.3 });
+
+
+     introTl
+
+
+       .to(".text-track", { duration: 1.8, autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)", rotationX: 0, ease: "expo.out" })
+
+
+       .to(".text-days", { duration: 1.4, clipPath: "inset(0 0% 0 0)", ease: "power4.inOut" }, "-=1.0");
+
+
+
+
+
+
+     const scrollTl = gsap.timeline({
+
+
+       scrollTrigger: {
+
+
+         trigger: containerRef.current,
+
+
+         start: "top top",
+
+
+         end: "+=7000",
+
+
+         pin: true,
+
+
+         scrub: 1,
+
+
+         anticipatePin: 1,
+
+
+       },
+
+
+     });
+
+
+
+
+
+
+     scrollTl
+
+
+       .to([".hero-text-wrapper", ".bg-grid-theme"], { scale: 1.15, filter: "blur(20px)", opacity: 0.2, ease: "power2.inOut", duration: 2 }, 0)
+
+
+       .to(".main-card", { y: 0, ease: "power3.inOut", duration: 2 }, 0)
+
+
+       .to(".main-card", { width: "100%", height: "100%", borderRadius: "0px", ease: "power3.inOut", duration: 1.5 })
+
+
+       .fromTo(".mockup-scroll-wrapper",
+
+
+         { y: 300, z: -500, rotationX: 50, rotationY: -30, autoAlpha: 0, scale: 0.6 },
+
+
+         { y: 0, z: 0, rotationX: 0, rotationY: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 2.5 }, "-=0.8"
+
+
+       )
+
+
+       .fromTo(".phone-widget", { y: 40, autoAlpha: 0, scale: 0.95 }, { y: 0, autoAlpha: 1, scale: 1, stagger: 0.15, ease: "back.out(1.2)", duration: 1.5 }, "-=1.5")
+
+
+       .to(".progress-ring", { strokeDashoffset: 60, duration: 2, ease: "power3.inOut" }, "-=1.2")
+
+
+       .to(".counter-val", { innerHTML: metricValue, snap: { innerHTML: 1 }, duration: 2, ease: "expo.out" }, "-=2.0")
+
+
+       .fromTo(".floating-badge", { y: 100, autoAlpha: 0, scale: 0.7, rotationZ: -10 }, { y: 0, autoAlpha: 1, scale: 1, rotationZ: 0, ease: "back.out(1.5)", duration: 1.5, stagger: 0.2 }, "-=2.0")
+
+
+       .fromTo(".card-left-text", { x: -50, autoAlpha: 0 }, { x: 0, autoAlpha: 1, ease: "power4.out", duration: 1.5 }, "-=1.5")
+
+
+       .fromTo(".card-right-text", { x: 50, autoAlpha: 0, scale: 0.8 }, { x: 0, autoAlpha: 1, scale: 1, ease: "expo.out", duration: 1.5 }, "<")
+
+
+       .to({}, { duration: 2.5 })
+
+
+       .set(".hero-text-wrapper", { autoAlpha: 0 })
+
+
+       .set(".cta-wrapper", { autoAlpha: 1 }) 
+
+
+       .to({}, { duration: 1.5 })
+
+
+       .to([".mockup-scroll-wrapper", ".floating-badge", ".card-left-text", ".card-right-text"], {
+
+
+         scale: 0.9, y: -40, z: -200, autoAlpha: 0, ease: "power3.in", duration: 1.2, stagger: 0.05,
+
+
+       })
+
+
+       // Responsive card pullback sizing
+
+
+       .to(".main-card", { 
+
+
+         width: isMobile ? "92vw" : "85vw", 
+
+
+         height: isMobile ? "92vh" : "85vh", 
+
+
+         borderRadius: isMobile ? "32px" : "40px", 
+
+
+         ease: "expo.inOut", 
+
+
+         duration: 1.8 
+
+
+       }, "pullback") 
+
+
+       .to(".cta-wrapper", { scale: 1, filter: "blur(0px)", ease: "expo.inOut", duration: 1.8 }, "pullback")
+
+
+       .to(".main-card", { y: -window.innerHeight - 300, ease: "power3.in", duration: 1.5 });
+
+
+
+
+
+
+   }, containerRef);
+
+
+
+
+
+
+   return () => ctx.revert();
+
+
+ },[metricValue]); 
+
+
+
+
+
+
+ return (
+
+
+   <div
+
+
+     ref={containerRef}
+
+
+     className={cn("relative w-screen h-screen overflow-hidden flex items-center justify-center bg-background text-foreground font-sans antialiased", className)}
+
+
+     style={{ perspective: "1500px" }}
+
+
+     {...props}
+
+
+   >
+
+
+     <style dangerouslySetInnerHTML={{ __html: INJECTED_STYLES }} />
+
+
+     <div className="film-grain" aria-hidden="true" />
+
+
+     <div className="bg-grid-theme absolute inset-0 z-0 pointer-events-none opacity-50" aria-hidden="true" />
+
+
+
+
+
+
+     {/* BACKGROUND LAYER: Hero Texts */}
+
+
+     <div className="hero-text-wrapper absolute z-10 flex flex-col items-center justify-center text-center w-screen px-4 will-change-transform transform-style-3d">
+
+
+       <h1 className="text-track gsap-reveal text-3d-matte text-5xl md:text-7xl lg:text-[6rem] font-bold tracking-tight mb-2">
+
+
+         {tagline1}
+
+
+       </h1>
+
+
+       <h1 className="text-days gsap-reveal text-silver-matte text-5xl md:text-7xl lg:text-[6rem] font-extrabold tracking-tighter">
+
+
+         {tagline2}
+
+
+       </h1>
+
+
+     </div>
+
+
+
+
+
+
+     {/* BACKGROUND LAYER 2: Tactile CTA Buttons */}
+
+
+     <div className="cta-wrapper absolute z-10 flex flex-col items-center justify-center text-center w-screen px-4 gsap-reveal pointer-events-auto will-change-transform">
+
+
+       <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight text-silver-matte">
+
+
+         {ctaHeading}
+
+
+       </h2>
+
+
+       <p className="text-muted-foreground text-lg md:text-xl mb-12 max-w-xl mx-auto font-light leading-relaxed">
+
+
+         {ctaDescription}
+
+
+       </p>
+
+
+       <div className="flex flex-col sm:flex-row gap-6">
+
+
+         <a href="#" aria-label="Download on the App Store" className="btn-modern-light flex items-center justify-center gap-3 px-8 py-4 rounded-[1.25rem] group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+
+
+           {/* Authentic Apple App Store Logo SVG */}
+
+
+           <svg className="w-8 h-8 transition-transform group-hover:scale-105" fill="currentColor" viewBox="0 0 384 512" aria-hidden="true">
+
+
+             <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+
+
+           </svg>
+
+
+           <div className="text-left">
+
+
+             <div className="text-[10px] font-bold tracking-wider text-neutral-500 uppercase mb-[-2px]">Download on the</div>
+
+
+             <div className="text-xl font-bold leading-none tracking-tight">App Store</div>
+
+
+           </div>
+
+
+         </a>
+
+
+         <a href="#" aria-label="Get it on Google Play" className="btn-modern-dark flex items-center justify-center gap-3 px-8 py-4 rounded-[1.25rem] group focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-background">
+
+
+           {/* Authentic Google Play Store Solid Logo SVG */}
+
+
+           <svg className="w-7 h-7 transition-transform group-hover:scale-105" fill="currentColor" viewBox="0 0 512 512" aria-hidden="true">
+
+
+              <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
+
+
+           </svg>
+
+
+           <div className="text-left">
+
+
+             <div className="text-[10px] font-bold tracking-wider text-neutral-400 uppercase mb-[-2px]">Get it on</div>
+
+
+             <div className="text-xl font-bold leading-none tracking-tight">Google Play</div>
+
+
+           </div>
+
+
+         </a>
+
+
+       </div>
+
+
+     </div>
+
+
+
+
+
+
+     {/* FOREGROUND LAYER: The Physical Deep Blue Card */}
+
+
+     <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none" style={{ perspective: "1500px" }}>
+
+
+       <div
+
+
+         ref={mainCardRef}
+
+
+         className="main-card premium-depth-card relative overflow-hidden gsap-reveal flex items-center justify-center pointer-events-auto w-[92vw] md:w-[85vw] h-[92vh] md:h-[85vh] rounded-[32px] md:rounded-[40px]"
+
+
+       >
+
+
+         <div className="card-sheen" aria-hidden="true" />
+
+
+
+
+
+
+         {/* DYNAMIC RESPONSIVE GRID: Flex-col on mobile to force order, Grid on desktop */}
+
+
+         <div className="relative w-full h-full max-w-7xl mx-auto px-4 lg:px-12 flex flex-col justify-evenly lg:grid lg:grid-cols-3 items-center lg:gap-8 z-10 py-6 lg:py-0">
+
+
+           
+
+
+           {/* 1. TOP (Mobile) / RIGHT (Desktop): BRAND NAME */}
+
+
+           <div className="card-right-text gsap-reveal order-1 lg:order-3 flex justify-center lg:justify-end z-20 w-full">
+
+
+             <h2 className="text-6xl md:text-[6rem] lg:text-[8rem] font-black uppercase tracking-tighter text-card-silver-matte lg:mt-0">
+
+
+               {brandName}
+
+
+             </h2>
+
+
+           </div>
+
+
+
+
+
+
+           {/* 2. MIDDLE (Mobile) / CENTER (Desktop): IPHONE MOCKUP */}
+
+
+           <div className="mockup-scroll-wrapper order-2 lg:order-2 relative w-full h-[380px] lg:h-[600px] flex items-center justify-center z-10" style={{ perspective: "1000px" }}>
+
+
+             
+
+
+             {/* Inner wrapper for safe CSS scaling that doesn't conflict with GSAP */}
+
+
+             <div className="relative w-full h-full flex items-center justify-center transform scale-[0.65] md:scale-85 lg:scale-100">
+
+
+               
+
+
+               {/* The iPhone Bezel */}
+
+
+               <div
+
+
+                 ref={mockupRef}
+
+
+                 className="relative w-[280px] h-[580px] rounded-[3rem] iphone-bezel flex flex-col will-change-transform transform-style-3d"
+
+
+               >
+
+
+                 {/* Physical Hardware Buttons */}
+
+
+                 <div className="absolute top-[120px] -left-[3px] w-[3px] h-[25px] hardware-btn rounded-l-md z-0" aria-hidden="true" />
+
+
+                 <div className="absolute top-[160px] -left-[3px] w-[3px] h-[45px] hardware-btn rounded-l-md z-0" aria-hidden="true" />
+
+
+                 <div className="absolute top-[220px] -left-[3px] w-[3px] h-[45px] hardware-btn rounded-l-md z-0" aria-hidden="true" />
+
+
+                 <div className="absolute top-[170px] -right-[3px] w-[3px] h-[70px] hardware-btn rounded-r-md z-0 scale-x-[-1]" aria-hidden="true" />
+
+
+
+
+
+
+                 {/* Inner Screen Container */}
+
+
+                 <div className="absolute inset-[7px] bg-[#050914] rounded-[2.5rem] overflow-hidden shadow-[inset_0_0_15px_rgba(0,0,0,1)] text-white z-10">
+
+
+                   <div className="absolute inset-0 screen-glare z-40 pointer-events-none" aria-hidden="true" />
+
+
+
+
+
+
+                   {/* Dynamic Island Notch */}
+
+
+                   <div className="absolute top-[5px] left-1/2 -translate-x-1/2 w-[100px] h-[28px] bg-black rounded-full z-50 flex items-center justify-end px-3 shadow-[inset_0_-1px_2px_rgba(255,255,255,0.1)]">
+
+
+                     <div className="w-1.5 h-1.5 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] animate-pulse" />
+
+
+                   </div>
+
+
+
+
+
+
+                   {/* App Interface */}
+
+
+                   <div className="relative w-full h-full pt-12 px-5 pb-8 flex flex-col">
+
+
+                     <div className="phone-widget flex justify-between items-center mb-8">
+
+
+                       <div className="flex flex-col">
+
+
+                         <span className="text-[10px] text-neutral-400 uppercase tracking-widest font-bold mb-1">Today</span>
+
+
+                         <span className="text-xl font-bold tracking-tight text-white drop-shadow-md">Journey</span>
+
+
+                       </div>
+
+
+                       <div className="w-9 h-9 rounded-full bg-white/5 text-neutral-200 flex items-center justify-center font-bold text-sm border border-white/10 shadow-lg shadow-black/50">JS</div>
+
+
+                     </div>
+
+
+
+
+
+
+                     <div className="phone-widget relative w-44 h-44 mx-auto flex items-center justify-center mb-8 drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)]">
+
+
+                       <svg className="absolute inset-0 w-full h-full" aria-hidden="true">
+
+
+                         <circle cx="88" cy="88" r="64" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="12" />
+
+
+                         <circle className="progress-ring" cx="88" cy="88" r="64" fill="none" stroke="#3B82F6" strokeWidth="12" />
+
+
+                       </svg>
+
+
+                       <div className="text-center z-10 flex flex-col items-center">
+
+
+                         <span className="counter-val text-4xl font-extrabold tracking-tighter text-white">0</span>
+
+
+                         <span className="text-[8px] text-blue-200/50 uppercase tracking-[0.1em] font-bold mt-0.5">{metricLabel}</span>
+
+
+                       </div>
+
+
+                     </div>
+
+
+
+
+
+
+                     <div className="space-y-3">
+
+
+                       <div className="phone-widget widget-depth rounded-2xl p-3 flex items-center">
+
+
+                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-blue-600/5 flex items-center justify-center mr-3 border border-blue-400/20 shadow-inner">
+
+
+                           <svg className="w-4 h-4 text-blue-400 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+
+
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+
+
+                           </svg>
+
+
+                         </div>
+
+
+                         <div className="flex-1">
+
+
+                           <div className="h-2 w-20 bg-neutral-300 rounded-full mb-2 shadow-inner" />
+
+
+                           <div className="h-1.5 w-12 bg-neutral-600 rounded-full shadow-inner" />
+
+
+                         </div>
+
+
+                       </div>
+
+
+                       <div className="phone-widget widget-depth rounded-2xl p-3 flex items-center">
+
+
+                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/5 flex items-center justify-center mr-3 border border-emerald-400/20 shadow-inner">
+
+
+                           <svg className="w-4 h-4 text-emerald-400 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+
+
+                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+
+
+                           </svg>
+
+
+                         </div>
+
+
+                         <div className="flex-1">
+
+
+                           <div className="h-2 w-16 bg-neutral-300 rounded-full mb-2 shadow-inner" />
+
+
+                           <div className="h-1.5 w-24 bg-neutral-600 rounded-full shadow-inner" />
+
+
+                         </div>
+
+
+                       </div>
+
+
+                     </div>
+
+
+
+
+
+
+                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[120px] h-[4px] bg-white/20 rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
+
+
+                   </div>
+
+
+                 </div>
+
+
+               </div>
+
+
+
+
+
+
+               {/* Floating Glass Badges */}
+
+
+               <div className="floating-badge absolute flex top-6 lg:top-12 left-[-15px] lg:left-[-80px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-3 lg:gap-4 z-30">
+
+
+                 <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-b from-blue-500/20 to-blue-900/10 flex items-center justify-center border border-blue-400/30 shadow-inner">
+
+
+                   <span className="text-base lg:text-xl drop-shadow-lg" aria-hidden="true">🔥</span>
+
+
+                 </div>
+
+
+                 <div>
+
+
+                   <p className="text-white text-xs lg:text-sm font-bold tracking-tight">1 Year Streak</p>
+
+
+                   <p className="text-blue-200/50 text-[10px] lg:text-xs font-medium">Milestone unlocked</p>
+
+
+                 </div>
+
+
+               </div>
+
+
+
+
+
+
+               <div className="floating-badge absolute flex bottom-12 lg:bottom-20 right-[-15px] lg:right-[-80px] floating-ui-badge rounded-xl lg:rounded-2xl p-3 lg:p-4 items-center gap-3 lg:gap-4 z-30">
+
+
+                 <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-gradient-to-b from-indigo-500/20 to-indigo-900/10 flex items-center justify-center border border-indigo-400/30 shadow-inner">
+
+
+                   <span className="text-base lg:text-lg drop-shadow-lg" aria-hidden="true">🤝</span>
+
+
+                 </div>
+
+
+                 <div>
+
+
+                   <p className="text-white text-xs lg:text-sm font-bold tracking-tight">Sponsor Update</p>
+
+
+                   <p className="text-blue-200/50 text-[10px] lg:text-xs font-medium">Shared successfully</p>
+
+
+                 </div>
+
+
+               </div>
+
+
+
+
+
+
+             </div>
+
+
+           </div>
+
+
+
+
+
+
+           {/* 3. BOTTOM (Mobile) / LEFT (Desktop): ACCOUNTABILITY TEXT */}
+
+
+           <div className="card-left-text gsap-reveal order-3 lg:order-1 flex flex-col justify-center text-center lg:text-left z-20 w-full lg:max-w-none px-4 lg:px-0">
+
+
+             <h3 className="text-white text-2xl md:text-3xl lg:text-4xl font-bold mb-0 lg:mb-5 tracking-tight">
+
+
+               {cardHeading}
+
+
+             </h3>
+
+
+             {/* HIDDEN ON MOBILE (added hidden md:block) */}
+
+
+             <p className="hidden md:block text-blue-100/70 text-sm md:text-base lg:text-lg font-normal leading-relaxed mx-auto lg:mx-0 max-w-sm lg:max-w-none">
+
+
+               {cardDescription}
+
+
+             </p>
+
+
+           </div>
+
+
+
+
+
+
+         </div>
+
+
+       </div>
+
+
+     </div>
+
+
+   </div>
+
+
+ );
+
+
+}
+
+
+
+
+
+
+demo.tsx
+
+
+import { CinematicHero } from "@/components/ui/cinematic-landing-hero";
+
+
+
+
+
+
+export default function CinematicHeroDemo() {
+
+
+ return (
+
+
+   <div className="overflow-x-hidden w-[100%] min-h-screen">
+
+
+     <CinematicHero />
+
+
+   </div>
+
+
+ );
+
+
+}
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+gsap
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+zoom-parallax.tsx
+
+
+'use client';
+
+
+
+
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+
+
+import { useRef } from 'react';
+
+
+
+
+
+
+interface Image {
+
+
+        src: string;
+
+
+        alt?: string;
+
+
+}
+
+
+
+
+
+
+interface ZoomParallaxProps {
+
+
+        /** Array of images to be displayed in the parallax effect max 7 images */
+
+
+        images: Image[];
+
+
+}
+
+
+
+
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+
+
+        const container = useRef(null);
+
+
+        const { scrollYProgress } = useScroll({
+
+
+                target: container,
+
+
+                offset: ['start start', 'end end'],
+
+
+        });
+
+
+
+
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
+
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+
+
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+
+
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+
+
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+
+
+
+
+        return (
+
+
+                <div ref={container} className="relative h-[300vh]">
+
+
+                        <div className="sticky top-0 h-screen overflow-hidden">
+
+
+                                {images.map(({ src, alt }, index) => {
+
+
+                                        const scale = scales[index % scales.length];
+
+
+
+
+
+
+                                        return (
+
+
+                                                <motion.div
+
+
+                                                        key={index}
+
+
+                                                        style={{ scale }}
+
+
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+
+
+                                                >
+
+
+                                                        <div className="relative h-[25vh] w-[25vw]">
+
+
+                                                                <img
+
+
+                                                                        src={src || '/placeholder.svg'}
+
+
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+
+
+                                                                        className="h-full w-full object-cover"
+
+
+                                                                />
+
+
+                                                        </div>
+
+
+                                                </motion.div>
+
+
+                                        );
+
+
+                                })}
+
+
+                        </div>
+
+
+                </div>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+demo.tsx
+
+
+'use client';
+
+
+import React from 'react';
+
+
+import { cn } from '@/lib/utils';
+
+
+import Lenis from '@studio-freight/lenis'
+
+
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+
+
+
+
+export default function DefaultDemo() {
+
+
+
+
+
+
+        React.useEffect( () => {
+
+
+       const lenis = new Lenis()
+
+
+      
+
+
+       function raf(time: number) {
+
+
+           lenis.raf(time)
+
+
+           requestAnimationFrame(raf)
+
+
+       }
+
+
+
+
+
+
+       requestAnimationFrame(raf)
+
+
+   },[])
+
+
+
+
+
+
+
+
+
+
+        const images = [
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Modern architecture building',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Urban cityscape at sunset',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Abstract geometric pattern',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Mountain landscape',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Minimalist design elements',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Ocean waves and beach',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Forest trees and sunlight',
+
+
+                },
+
+
+        ];
+
+
+
+
+
+
+        return (
+
+
+                <main className="min-h-screen w-full">
+
+
+                        <div className="relative flex h-[50vh] items-center justify-center">
+
+
+                                {/* Radial spotlight */}
+
+
+                                <div
+
+
+                                        aria-hidden="true"
+
+
+                                        className={cn(
+
+
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+
+
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+
+
+                                                'blur-[30px]',
+
+
+                                        )}
+
+
+                                />
+
+
+                                <h1 className="text-center text-4xl font-bold">
+
+
+                                        Scroll Down for Zoom Parallax
+
+
+                                </h1>
+
+
+                        </div>
+
+
+                        <ZoomParallax images={images} />
+
+
+                        <div className="h-[50vh]"/>
+
+
+                </main>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+framer-motion
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+zoom-parallax.tsx
+
+
+'use client';
+
+
+
+
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+
+
+import { useRef } from 'react';
+
+
+
+
+
+
+interface Image {
+
+
+        src: string;
+
+
+        alt?: string;
+
+
+}
+
+
+
+
+
+
+interface ZoomParallaxProps {
+
+
+        /** Array of images to be displayed in the parallax effect max 7 images */
+
+
+        images: Image[];
+
+
+}
+
+
+
+
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+
+
+        const container = useRef(null);
+
+
+        const { scrollYProgress } = useScroll({
+
+
+                target: container,
+
+
+                offset: ['start start', 'end end'],
+
+
+        });
+
+
+
+
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
+
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+
+
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+
+
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+
+
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+
+
+
+
+        return (
+
+
+                <div ref={container} className="relative h-[300vh]">
+
+
+                        <div className="sticky top-0 h-screen overflow-hidden">
+
+
+                                {images.map(({ src, alt }, index) => {
+
+
+                                        const scale = scales[index % scales.length];
+
+
+
+
+
+
+                                        return (
+
+
+                                                <motion.div
+
+
+                                                        key={index}
+
+
+                                                        style={{ scale }}
+
+
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+
+
+                                                >
+
+
+                                                        <div className="relative h-[25vh] w-[25vw]">
+
+
+                                                                <img
+
+
+                                                                        src={src || '/placeholder.svg'}
+
+
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+
+
+                                                                        className="h-full w-full object-cover"
+
+
+                                                                />
+
+
+                                                        </div>
+
+
+                                                </motion.div>
+
+
+                                        );
+
+
+                                })}
+
+
+                        </div>
+
+
+                </div>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+demo.tsx
+
+
+'use client';
+
+
+import React from 'react';
+
+
+import { cn } from '@/lib/utils';
+
+
+import Lenis from '@studio-freight/lenis'
+
+
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+
+
+
+
+export default function DefaultDemo() {
+
+
+
+
+
+
+        React.useEffect( () => {
+
+
+       const lenis = new Lenis()
+
+
+      
+
+
+       function raf(time: number) {
+
+
+           lenis.raf(time)
+
+
+           requestAnimationFrame(raf)
+
+
+       }
+
+
+
+
+
+
+       requestAnimationFrame(raf)
+
+
+   },[])
+
+
+
+
+
+
+
+
+
+
+        const images = [
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Modern architecture building',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Urban cityscape at sunset',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Abstract geometric pattern',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Mountain landscape',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Minimalist design elements',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Ocean waves and beach',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Forest trees and sunlight',
+
+
+                },
+
+
+        ];
+
+
+
+
+
+
+        return (
+
+
+                <main className="min-h-screen w-full">
+
+
+                        <div className="relative flex h-[50vh] items-center justify-center">
+
+
+                                {/* Radial spotlight */}
+
+
+                                <div
+
+
+                                        aria-hidden="true"
+
+
+                                        className={cn(
+
+
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+
+
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+
+
+                                                'blur-[30px]',
+
+
+                                        )}
+
+
+                                />
+
+
+                                <h1 className="text-center text-4xl font-bold">
+
+
+                                        Scroll Down for Zoom Parallax
+
+
+                                </h1>
+
+
+                        </div>
+
+
+                        <ZoomParallax images={images} />
+
+
+                        <div className="h-[50vh]"/>
+
+
+                </main>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+framer-motion
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+zoom-parallax.tsx
+
+
+'use client';
+
+
+
+
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+
+
+import { useRef } from 'react';
+
+
+
+
+
+
+interface Image {
+
+
+        src: string;
+
+
+        alt?: string;
+
+
+}
+
+
+
+
+
+
+interface ZoomParallaxProps {
+
+
+        /** Array of images to be displayed in the parallax effect max 7 images */
+
+
+        images: Image[];
+
+
+}
+
+
+
+
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+
+
+        const container = useRef(null);
+
+
+        const { scrollYProgress } = useScroll({
+
+
+                target: container,
+
+
+                offset: ['start start', 'end end'],
+
+
+        });
+
+
+
+
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
+
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+
+
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+
+
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+
+
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+
+
+
+
+        return (
+
+
+                <div ref={container} className="relative h-[300vh]">
+
+
+                        <div className="sticky top-0 h-screen overflow-hidden">
+
+
+                                {images.map(({ src, alt }, index) => {
+
+
+                                        const scale = scales[index % scales.length];
+
+
+
+
+
+
+                                        return (
+
+
+                                                <motion.div
+
+
+                                                        key={index}
+
+
+                                                        style={{ scale }}
+
+
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+
+
+                                                >
+
+
+                                                        <div className="relative h-[25vh] w-[25vw]">
+
+
+                                                                <img
+
+
+                                                                        src={src || '/placeholder.svg'}
+
+
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+
+
+                                                                        className="h-full w-full object-cover"
+
+
+                                                                />
+
+
+                                                        </div>
+
+
+                                                </motion.div>
+
+
+                                        );
+
+
+                                })}
+
+
+                        </div>
+
+
+                </div>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+demo.tsx
+
+
+'use client';
+
+
+import React from 'react';
+
+
+import { cn } from '@/lib/utils';
+
+
+import Lenis from '@studio-freight/lenis'
+
+
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+
+
+
+
+export default function DefaultDemo() {
+
+
+
+
+
+
+        React.useEffect( () => {
+
+
+       const lenis = new Lenis()
+
+
+      
+
+
+       function raf(time: number) {
+
+
+           lenis.raf(time)
+
+
+           requestAnimationFrame(raf)
+
+
+       }
+
+
+
+
+
+
+       requestAnimationFrame(raf)
+
+
+   },[])
+
+
+
+
+
+
+
+
+
+
+        const images = [
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Modern architecture building',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Urban cityscape at sunset',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Abstract geometric pattern',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Mountain landscape',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Minimalist design elements',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Ocean waves and beach',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Forest trees and sunlight',
+
+
+                },
+
+
+        ];
+
+
+
+
+
+
+        return (
+
+
+                <main className="min-h-screen w-full">
+
+
+                        <div className="relative flex h-[50vh] items-center justify-center">
+
+
+                                {/* Radial spotlight */}
+
+
+                                <div
+
+
+                                        aria-hidden="true"
+
+
+                                        className={cn(
+
+
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+
+
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+
+
+                                                'blur-[30px]',
+
+
+                                        )}
+
+
+                                />
+
+
+                                <h1 className="text-center text-4xl font-bold">
+
+
+                                        Scroll Down for Zoom Parallax
+
+
+                                </h1>
+
+
+                        </div>
+
+
+                        <ZoomParallax images={images} />
+
+
+                        <div className="h-[50vh]"/>
+
+
+                </main>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+framer-motion
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+
+
+
+
+The codebase should support:
+
+
+- shadcn project structure  
+
+
+- Tailwind CSS
+
+
+- Typescript
+
+
+
+
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+
+
+
+
+Determine the default path for components and styles. 
+
+
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+
+
+Copy-paste this component to /components/ui folder:
+
+
+```tsx
+
+
+zoom-parallax.tsx
+
+
+'use client';
+
+
+
+
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+
+
+import { useRef } from 'react';
+
+
+
+
+
+
+interface Image {
+
+
+        src: string;
+
+
+        alt?: string;
+
+
+}
+
+
+
+
+
+
+interface ZoomParallaxProps {
+
+
+        /** Array of images to be displayed in the parallax effect max 7 images */
+
+
+        images: Image[];
+
+
+}
+
+
+
+
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+
+
+        const container = useRef(null);
+
+
+        const { scrollYProgress } = useScroll({
+
+
+                target: container,
+
+
+                offset: ['start start', 'end end'],
+
+
+        });
+
+
+
+
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+
+
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+
+
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+
+
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+
+
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+
+
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+
+
+
+
+        return (
+
+
+                <div ref={container} className="relative h-[300vh]">
+
+
+                        <div className="sticky top-0 h-screen overflow-hidden">
+
+
+                                {images.map(({ src, alt }, index) => {
+
+
+                                        const scale = scales[index % scales.length];
+
+
+
+
+
+
+                                        return (
+
+
+                                                <motion.div
+
+
+                                                        key={index}
+
+
+                                                        style={{ scale }}
+
+
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+
+
+                                                >
+
+
+                                                        <div className="relative h-[25vh] w-[25vw]">
+
+
+                                                                <img
+
+
+                                                                        src={src || '/placeholder.svg'}
+
+
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+
+
+                                                                        className="h-full w-full object-cover"
+
+
+                                                                />
+
+
+                                                        </div>
+
+
+                                                </motion.div>
+
+
+                                        );
+
+
+                                })}
+
+
+                        </div>
+
+
+                </div>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+demo.tsx
+
+
+'use client';
+
+
+import React from 'react';
+
+
+import { cn } from '@/lib/utils';
+
+
+import Lenis from '@studio-freight/lenis'
+
+
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+
+
+
+
+export default function DefaultDemo() {
+
+
+
+
+
+
+        React.useEffect( () => {
+
+
+       const lenis = new Lenis()
+
+
+      
+
+
+       function raf(time: number) {
+
+
+           lenis.raf(time)
+
+
+           requestAnimationFrame(raf)
+
+
+       }
+
+
+
+
+
+
+       requestAnimationFrame(raf)
+
+
+   },[])
+
+
+
+
+
+
+
+
+
+
+        const images = [
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Modern architecture building',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Urban cityscape at sunset',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Abstract geometric pattern',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Mountain landscape',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Minimalist design elements',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Ocean waves and beach',
+
+
+                },
+
+
+                {
+
+
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+
+
+                        alt: 'Forest trees and sunlight',
+
+
+                },
+
+
+        ];
+
+
+
+
+
+
+        return (
+
+
+                <main className="min-h-screen w-full">
+
+
+                        <div className="relative flex h-[50vh] items-center justify-center">
+
+
+                                {/* Radial spotlight */}
+
+
+                                <div
+
+
+                                        aria-hidden="true"
+
+
+                                        className={cn(
+
+
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+
+
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+
+
+                                                'blur-[30px]',
+
+
+                                        )}
+
+
+                                />
+
+
+                                <h1 className="text-center text-4xl font-bold">
+
+
+                                        Scroll Down for Zoom Parallax
+
+
+                                </h1>
+
+
+                        </div>
+
+
+                        <ZoomParallax images={images} />
+
+
+                        <div className="h-[50vh]"/>
+
+
+                </main>
+
+
+        );
+
+
+}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+Install NPM dependencies:
+
+
+```bash
+
+
+framer-motion
+
+
+```
+
+
+
+
+
+
+Implementation Guidelines
+
+
+1. Analyze the component structure and identify all required dependencies
+
+
+2. Review the component's argumens and state
+
+
+3. Identify any required context providers or hooks and install them
+
+
+4. Questions to Ask
+
+
+- What data/props will be passed to this component?
+
+
+- Are there any specific state management requirements?
+
+
+- Are there any required assets (images, icons, etc.)?
+
+
+- What is the expected responsive behavior?
+
+
+- What is the best place to use this component in the app?
+
+
+
+
+
+
+Steps to integrate
+
+
+0. Copy paste all the code above in the correct directories
+
+
+1. Install external dependencies
+
+
+2. Fill image assets with Unsplash stock images you know exist
+
+
+3. Use lucide-react icons for svgs or logos if component requires them
+
+
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+zoom-parallax.tsx
+'use client';
+
+
+import { useScroll, useTransform, motion } from 'framer-motion';
+import { useRef } from 'react';
+
+
+interface Image {
+        src: string;
+        alt?: string;
+}
+
+
+interface ZoomParallaxProps {
+        /** Array of images to be displayed in the parallax effect max 7 images */
+        images: Image[];
+}
+
+
+export function ZoomParallax({ images }: ZoomParallaxProps) {
+        const container = useRef(null);
+        const { scrollYProgress } = useScroll({
+                target: container,
+                offset: ['start start', 'end end'],
+        });
+
+
+        const scale4 = useTransform(scrollYProgress, [0, 1], [1, 4]);
+        const scale5 = useTransform(scrollYProgress, [0, 1], [1, 5]);
+        const scale6 = useTransform(scrollYProgress, [0, 1], [1, 6]);
+        const scale8 = useTransform(scrollYProgress, [0, 1], [1, 8]);
+        const scale9 = useTransform(scrollYProgress, [0, 1], [1, 9]);
+
+
+        const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
+
+
+        return (
+                <div ref={container} className="relative h-[300vh]">
+                        <div className="sticky top-0 h-screen overflow-hidden">
+                                {images.map(({ src, alt }, index) => {
+                                        const scale = scales[index % scales.length];
+
+
+                                        return (
+                                                <motion.div
+                                                        key={index}
+                                                        style={{ scale }}
+                                                        className={`absolute top-0 flex h-full w-full items-center justify-center ${index === 1 ? '[&>div]:!-top-[30vh] [&>div]:!left-[5vw] [&>div]:!h-[30vh] [&>div]:!w-[35vw]' : ''} ${index === 2 ? '[&>div]:!-top-[10vh] [&>div]:!-left-[25vw] [&>div]:!h-[45vh] [&>div]:!w-[20vw]' : ''} ${index === 3 ? '[&>div]:!left-[27.5vw] [&>div]:!h-[25vh] [&>div]:!w-[25vw]' : ''} ${index === 4 ? '[&>div]:!top-[27.5vh] [&>div]:!left-[5vw] [&>div]:!h-[25vh] [&>div]:!w-[20vw]' : ''} ${index === 5 ? '[&>div]:!top-[27.5vh] [&>div]:!-left-[22.5vw] [&>div]:!h-[25vh] [&>div]:!w-[30vw]' : ''} ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''} `}
+                                                >
+                                                        <div className="relative h-[25vh] w-[25vw]">
+                                                                <img
+                                                                        src={src || '/placeholder.svg'}
+                                                                        alt={alt || `Parallax image ${index + 1}`}
+                                                                        className="h-full w-full object-cover"
+                                                                />
+                                                        </div>
+                                                </motion.div>
+                                        );
+                                })}
+                        </div>
+                </div>
+        );
+}
+
+
+
+
+demo.tsx
+'use client';
+import React from 'react';
+import { cn } from '@/lib/utils';
+import Lenis from '@studio-freight/lenis'
+import { ZoomParallax } from "@/components/ui/zoom-parallax";
+
+
+export default function DefaultDemo() {
+
+
+        React.useEffect( () => {
+        const lenis = new Lenis()
+       
+        function raf(time: number) {
+            lenis.raf(time)
+            requestAnimationFrame(raf)
+        }
+
+
+        requestAnimationFrame(raf)
+    },[])
+
+
+
+
+        const images = [
+                {
+                        src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+                        alt: 'Modern architecture building',
+                },
+                {
+                        src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+                        alt: 'Urban cityscape at sunset',
+                },
+                {
+                        src: 'https://images.unsplash.com/photo-1557683316-973673baf926?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+                        alt: 'Abstract geometric pattern',
+                },
+                {
+                        src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+                        alt: 'Mountain landscape',
+                },
+                {
+                        src: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop&crop=entropy&auto=format&q=80',
+                        alt: 'Minimalist design elements',
+                },
+                {
+                        src: 'https://images.unsplash.com/photo-1439066615861-d1af74d74000?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+                        alt: 'Ocean waves and beach',
+                },
+                {
+                        src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1280&h=720&fit=crop&crop=entropy&auto=format&q=80',
+                        alt: 'Forest trees and sunlight',
+                },
+        ];
+
+
+        return (
+                <main className="min-h-screen w-full">
+                        <div className="relative flex h-[50vh] items-center justify-center">
+                                {/* Radial spotlight */}
+                                <div
+                                        aria-hidden="true"
+                                        className={cn(
+                                                'pointer-events-none absolute -top-1/2 left-1/2 h-[120vmin] w-[120vmin] -translate-x-1/2 rounded-full',
+                                                'bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]',
+                                                'blur-[30px]',
+                                        )}
+                                />
+                                <h1 className="text-center text-4xl font-bold">
+                                        Scroll Down for Zoom Parallax
+                                </h1>
+                        </div>
+                        <ZoomParallax images={images} />
+                        <div className="h-[50vh]"/>
+                </main>
+        );
+}
+
+
+```
+
+
+Install NPM dependencies:
+```bash
+framer-motion
+```
+
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+cpu-architecture.tsx
+import { cn } from "@/lib/utils";
+import React from "react";
+
+
+export interface CpuArchitectureSvgProps {
+  className?: string;
+  width?: string;
+  height?: string;
+  text?: string;
+  showCpuConnections?: boolean;
+  lineMarkerSize?: number;
+  animateText?: boolean;
+  animateLines?: boolean;
+  animateMarkers?: boolean;
+}
+
+
+const CpuArchitecture = ({
+  className,
+  width = "100%",
+  height = "100%",
+  text = "CPU",
+  showCpuConnections = true,
+  animateText = true,
+  lineMarkerSize = 18,
+  animateLines = true,
+  animateMarkers = true,
+}: CpuArchitectureSvgProps) => {
+  return (
+    <svg
+      className={cn("text-muted", className)}
+      width={width}
+      height={height}
+      viewBox="0 0 200 100"
+    >
+      {/* Paths */}
+      <g
+        stroke="currentColor"
+        fill="none"
+        strokeWidth="0.3"
+        strokeDasharray="100 100"
+        pathLength="100"
+        markerStart="url(#cpu-circle-marker)"
+      >
+        {/* 1st */}
+        <path
+          strokeDasharray="100 100"
+          pathLength="100"
+          d="M 10 20 h 79.5 q 5 0 5 5 v 30"
+        />
+        {/* 2nd */}
+        <path
+          strokeDasharray="100 100"
+          pathLength="100"
+          d="M 180 10 h -69.7 q -5 0 -5 5 v 30"
+        />
+        {/* 3rd */}
+        <path d="M 130 20 v 21.8 q 0 5 -5 5 h -10" />
+        {/* 4th */}
+        <path d="M 170 80 v -21.8 q 0 -5 -5 -5 h -50" />
+        {/* 5th */}
+        <path
+          strokeDasharray="100 100"
+          pathLength="100"
+          d="M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -20"
+        />
+        {/* 6th */}
+        <path d="M 94.8 95 v -36" />
+        {/* 7th */}
+        <path d="M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 14" />
+        {/* 8th */}
+        <path d="M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 20" />
+        {/* Animation For Path Starting */}
+        {animateLines && (
+          <animate
+            attributeName="stroke-dashoffset"
+            from="100"
+            to="0"
+            dur="1s"
+            fill="freeze"
+            calcMode="spline"
+            keySplines="0.25,0.1,0.5,1"
+            keyTimes="0; 1"
+          />
+        )}
+      </g>
+
+
+      {/* 1. Blue Light */}
+      <g mask="url(#cpu-mask-1)">
+        <circle
+          className="cpu-architecture cpu-line-1"
+          cx="0"
+          cy="0"
+          r="8"
+          fill="url(#cpu-blue-grad)"
+        />
+      </g>
+      {/* 2. Yellow Light */}
+      <g mask="url(#cpu-mask-2)">
+        <circle
+          className="cpu-architecture cpu-line-2"
+          cx="0"
+          cy="0"
+          r="8"
+          fill="url(#cpu-yellow-grad)"
+        />
+      </g>
+      {/* 3. Pinkish Light */}
+      <g mask="url(#cpu-mask-3)">
+        <circle
+          className="cpu-architecture cpu-line-3"
+          cx="0"
+          cy="0"
+          r="8"
+          fill="url(#cpu-pinkish-grad)"
+        />
+      </g>
+      {/* 4. White Light */}
+      <g mask="url(#cpu-mask-4)">
+        <circle
+          className="cpu-architecture cpu-line-4"
+          cx="0"
+          cy="0"
+          r="8"
+          fill="url(#cpu-white-grad)"
+        />
+      </g>
+      {/* 5. Green Light */}
+      <g mask="url(#cpu-mask-5)">
+        <circle
+          className="cpu-architecture cpu-line-5"
+          cx="0"
+          cy="0"
+          r="8"
+          fill="url(#cpu-green-grad)"
+        />
+      </g>
+      {/* 6. Orange Light */}
+      <g mask="url(#cpu-mask-6)">
+        <circle
+          className="cpu-architecture cpu-line-6"
+          cx="0"
+          cy="0"
+          r="8"
+          fill="url(#cpu-orange-grad)"
+        />
+      </g>
+      {/* 7. Cyan Light */}
+      <g mask="url(#cpu-mask-7)">
+        <circle
+          className="cpu-architecture cpu-line-7"
+          cx="0"
+          cy="0"
+          r="8"
+          fill="url(#cpu-cyan-grad)"
+        />
+      </g>
+      {/* 8. Rose Light */}
+      <g mask="url(#cpu-mask-8)">
+        <circle
+          className="cpu-architecture cpu-line-8"
+          cx="0"
+          cy="0"
+          r="8"
+          fill="url(#cpu-rose-grad)"
+        />
+      </g>
+      {/* CPU Box */}
+      <g>
+        {/* Cpu connections */}
+        {showCpuConnections && (
+          <g fill="url(#cpu-connection-gradient)">
+            <rect x="93" y="37" width="2.5" height="5" rx="0.7" />
+            <rect x="104" y="37" width="2.5" height="5" rx="0.7" />
+            <rect
+              x="116.3"
+              y="44"
+              width="2.5"
+              height="5"
+              rx="0.7"
+              transform="rotate(90 116.25 45.5)"
+            />
+            <rect
+              x="122.8"
+              y="44"
+              width="2.5"
+              height="5"
+              rx="0.7"
+              transform="rotate(90 116.25 45.5)"
+            />
+            <rect
+              x="104"
+              y="16"
+              width="2.5"
+              height="5"
+              rx="0.7"
+              transform="rotate(180 105.25 39.5)"
+            />
+            <rect
+              x="114.5"
+              y="16"
+              width="2.5"
+              height="5"
+              rx="0.7"
+              transform="rotate(180 105.25 39.5)"
+            />
+            <rect
+              x="80"
+              y="-13.6"
+              width="2.5"
+              height="5"
+              rx="0.7"
+              transform="rotate(270 115.25 19.5)"
+            />
+            <rect
+              x="87"
+              y="-13.6"
+              width="2.5"
+              height="5"
+              rx="0.7"
+              transform="rotate(270 115.25 19.5)"
+            />
+          </g>
+        )}
+        {/* Main CPU Rectangle */}
+        <rect
+          x="85"
+          y="40"
+          width="30"
+          height="20"
+          rx="2"
+          fill="#181818"
+          filter="url(#cpu-light-shadow)"
+        />
+        {/* CPU Text */}
+        <text
+          x="92"
+          y="52.5"
+          fontSize="7"
+          fill={animateText ? "url(#cpu-text-gradient)" : "white"}
+          fontWeight="600"
+          letterSpacing="0.05em"
+        >
+          {text}
+        </text>
+      </g>
+      {/* Masks */}
+      <defs>
+        <mask id="cpu-mask-1">
+          <path
+            d="M 10 20 h 79.5 q 5 0 5 5 v 24"
+            strokeWidth="0.5"
+            stroke="white"
+          />
+        </mask>
+        <mask id="cpu-mask-2">
+          <path
+            d="M 180 10 h -69.7 q -5 0 -5 5 v 24"
+            strokeWidth="0.5"
+            stroke="white"
+          />
+        </mask>
+        <mask id="cpu-mask-3">
+          <path
+            d="M 130 20 v 21.8 q 0 5 -5 5 h -10"
+            strokeWidth="0.5"
+            stroke="white"
+          />
+        </mask>
+        <mask id="cpu-mask-4">
+          <path
+            d="M 170 80 v -21.8 q 0 -5 -5 -5 h -50"
+            strokeWidth="0.5"
+            stroke="white"
+          />
+        </mask>
+        <mask id="cpu-mask-5">
+          <path
+            d="M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -20"
+            strokeWidth="0.5"
+            stroke="white"
+          />
+        </mask>
+        <mask id="cpu-mask-6">
+          <path d="M 94.8 95 v -36" strokeWidth="0.5" stroke="white" />
+        </mask>
+        <mask id="cpu-mask-7">
+          <path
+            d="M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 14"
+            strokeWidth="0.5"
+            stroke="white"
+          />
+        </mask>
+        <mask id="cpu-mask-8">
+          <path
+            d="M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 20"
+            strokeWidth="0.5"
+            stroke="white"
+          />
+        </mask>
+        {/* Gradients */}
+        <radialGradient id="cpu-blue-grad" fx="1">
+          <stop offset="0%" stopColor="#00E8ED" />
+          <stop offset="50%" stopColor="#08F" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <radialGradient id="cpu-yellow-grad" fx="1">
+          <stop offset="0%" stopColor="#FFD800" />
+          <stop offset="50%" stopColor="#FFD800" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <radialGradient id="cpu-pinkish-grad" fx="1">
+          <stop offset="0%" stopColor="#830CD1" />
+          <stop offset="50%" stopColor="#FF008B" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <radialGradient id="cpu-white-grad" fx="1">
+          <stop offset="0%" stopColor="white" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <radialGradient id="cpu-green-grad" fx="1">
+          <stop offset="0%" stopColor="#22c55e" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <radialGradient id="cpu-orange-grad" fx="1">
+          <stop offset="0%" stopColor="#f97316" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <radialGradient id="cpu-cyan-grad" fx="1">
+          <stop offset="0%" stopColor="#06b6d4" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <radialGradient id="cpu-rose-grad" fx="1">
+          <stop offset="0%" stopColor="#f43f5e" />
+          <stop offset="100%" stopColor="transparent" />
+        </radialGradient>
+        <filter
+          id="cpu-light-shadow"
+          x="-50%"
+          y="-50%"
+          width="200%"
+          height="200%"
+        >
+          <feDropShadow
+            dx="1.5"
+            dy="1.5"
+            stdDeviation="1"
+            floodColor="black"
+            floodOpacity="0.1"
+          />
+        </filter>
+        <marker
+          id="cpu-circle-marker"
+          viewBox="0 0 10 10"
+          refX="5"
+          refY="5"
+          markerWidth={lineMarkerSize}
+          markerHeight={lineMarkerSize}
+        >
+          <circle
+            id="innerMarkerCircle"
+            cx="5"
+            cy="5"
+            r="2"
+            fill="black"
+            stroke="#232323"
+            strokeWidth="0.5"
+          >
+            {animateMarkers && (
+              <animate attributeName="r" values="0; 3; 2" dur="0.5s" />
+            )}
+          </circle>
+        </marker>
+        {/* Cpu connection gradient */}
+        <linearGradient
+          id="cpu-connection-gradient"
+          x1="0"
+          y1="0"
+          x2="0"
+          y2="1"
+        >
+          <stop offset="0%" stopColor="#4F4F4F" />
+          <stop offset="60%" stopColor="#121214" />
+        </linearGradient>
+        {/* Add CPU Text Gradient */}
+        <linearGradient id="cpu-text-gradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#666666">
+            <animate
+              attributeName="offset"
+              values="-2; -1; 0"
+              dur="5s"
+              repeatCount="indefinite"
+              calcMode="spline"
+              keyTimes="0; 0.5; 1"
+              keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"
+            />
+          </stop>
+          <stop offset="25%" stopColor="white">
+            <animate
+              attributeName="offset"
+              values="-1; 0; 1"
+              dur="5s"
+              repeatCount="indefinite"
+              calcMode="spline"
+              keyTimes="0; 0.5; 1"
+              keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"
+            />
+          </stop>
+          <stop offset="50%" stopColor="#666666">
+            <animate
+              attributeName="offset"
+              values="0; 1; 2;"
+              dur="5s"
+              repeatCount="indefinite"
+              calcMode="spline"
+              keyTimes="0; 0.5; 1"
+              keySplines="0.4 0 0.2 1; 0.4 0 0.2 1"
+            />
+          </stop>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
+
+
+export { CpuArchitecture };
+
+
+
+
+demo.tsx
+"use client";
+
+
+import { CpuArchitecture } from "@/components/ui/cpu-architecture"
+
+
+export const Page = () => {
+  return (
+    <div className="p-4 rounded-xl bg-accent/20">
+      <CpuArchitecture />
+    </div>
+  );
+};
+
+
+```
+
+
+Extend existing globals.css with this code:
+```css
+.cpu-architecture {
+  offset-anchor: 10px 0px;
+  animation: animation-path;
+  animation-iteration-count: infinite;
+  animation-timing-function: cubic-bezier(0.75, -0.01, 0, 0.99);
+}
+
+
+.cpu-line-1 {
+  offset-path: path("M 10 20 h 79.5 q 5 0 5 5 v 30");
+  animation-duration: 5s;
+  animation-delay: 1s;
+}
+
+
+.cpu-line-2 {
+  offset-path: path("M 180 10 h -69.7 q -5 0 -5 5 v 40");
+  animation-delay: 6s;
+  animation-duration: 2s;
+}
+
+
+.cpu-line-3 {
+  offset-path: path("M 130 20 v 21.8 q 0 5 -5 5 h -25");
+  animation-delay: 4s;
+  animation-duration: 6s;
+}
+
+
+.cpu-line-4 {
+  offset-path: path("M 170 80 v -21.8 q 0 -5 -5 -5 h -65");
+  animation-delay: 3s;
+  animation-duration: 3s;
+}
+
+
+.cpu-line-5 {
+  offset-path: path(
+    "M 135 65 h 15 q 5 0 5 5 v 10 q 0 5 -5 5 h -39.8 q -5 0 -5 -5 v -35"
+  );
+  animation-delay: 9s;
+  animation-duration: 4s;
+}
+
+
+.cpu-line-6 {
+  offset-path: path("M 94.8 95 v -46");
+  animation-delay: 3s;
+  animation-duration: 7s;
+}
+
+
+.cpu-line-7 {
+  offset-path: path(
+    "M 88 88 v -15 q 0 -5 -5 -5 h -10 q -5 0 -5 -5 v -5 q 0 -5 5 -5 h 28"
+  );
+  animation-delay: 4s;
+  animation-duration: 4s;
+}
+
+
+.cpu-line-8 {
+  offset-path: path("M 30 30 h 25 q 5 0 5 5 v 6.5 q 0 5 5 5 h 35");
+  animation-delay: 3s;
+  animation-duration: 3s;
+}
+
+
+@keyframes animation-path {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+
+```
+
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them
+
+
+You are given a task to integrate an existing React component in the codebase
+
+
+The codebase should support:
+- shadcn project structure  
+- Tailwind CSS
+- Typescript
+
+
+If it doesn't, provide instructions on how to setup project via shadcn CLI, install Tailwind or Typescript.
+
+
+Determine the default path for components and styles. 
+If default path for components is not /components/ui, provide instructions on why it's important to create this folder
+Copy-paste this component to /components/ui folder:
+```tsx
+radial-orbital-timeline.tsx
+"use client";
+import { useState, useEffect, useRef } from "react";
+import { ArrowRight, Link, Zap } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+
+interface TimelineItem {
+  id: number;
+  title: string;
+  date: string;
+  content: string;
+  category: string;
+  icon: React.ElementType;
+  relatedIds: number[];
+  status: "completed" | "in-progress" | "pending";
+  energy: number;
+}
+
+
+interface RadialOrbitalTimelineProps {
+  timelineData: TimelineItem[];
+}
+
+
+export default function RadialOrbitalTimeline({
+  timelineData,
+}: RadialOrbitalTimelineProps) {
+  const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>(
+    {}
+  );
+  const [viewMode, setViewMode] = useState<"orbital">("orbital");
+  const [rotationAngle, setRotationAngle] = useState<number>(0);
+  const [autoRotate, setAutoRotate] = useState<boolean>(true);
+  const [pulseEffect, setPulseEffect] = useState<Record<number, boolean>>({});
+  const [centerOffset, setCenterOffset] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const [activeNodeId, setActiveNodeId] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const orbitRef = useRef<HTMLDivElement>(null);
+  const nodeRefs = useRef<Record<number, HTMLDivElement | null>>({});
+
+
+  const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === containerRef.current || e.target === orbitRef.current) {
+      setExpandedItems({});
+      setActiveNodeId(null);
+      setPulseEffect({});
+      setAutoRotate(true);
+    }
+  };
+
+
+  const toggleItem = (id: number) => {
+    setExpandedItems((prev) => {
+      const newState = { ...prev };
+      Object.keys(newState).forEach((key) => {
+        if (parseInt(key) !== id) {
+          newState[parseInt(key)] = false;
+        }
+      });
+
+
+      newState[id] = !prev[id];
+
+
+      if (!prev[id]) {
+        setActiveNodeId(id);
+        setAutoRotate(false);
+
+
+        const relatedItems = getRelatedItems(id);
+        const newPulseEffect: Record<number, boolean> = {};
+        relatedItems.forEach((relId) => {
+          newPulseEffect[relId] = true;
+        });
+        setPulseEffect(newPulseEffect);
+
+
+        centerViewOnNode(id);
+      } else {
+        setActiveNodeId(null);
+        setAutoRotate(true);
+        setPulseEffect({});
+      }
+
+
+      return newState;
+    });
+  };
+
+
+  useEffect(() => {
+    let rotationTimer: NodeJS.Timeout;
+
+
+    if (autoRotate && viewMode === "orbital") {
+      rotationTimer = setInterval(() => {
+        setRotationAngle((prev) => {
+          const newAngle = (prev + 0.3) % 360;
+          return Number(newAngle.toFixed(3));
+        });
+      }, 50);
+    }
+
+
+    return () => {
+      if (rotationTimer) {
+        clearInterval(rotationTimer);
+      }
+    };
+  }, [autoRotate, viewMode]);
+
+
+  const centerViewOnNode = (nodeId: number) => {
+    if (viewMode !== "orbital" || !nodeRefs.current[nodeId]) return;
+
+
+    const nodeIndex = timelineData.findIndex((item) => item.id === nodeId);
+    const totalNodes = timelineData.length;
+    const targetAngle = (nodeIndex / totalNodes) * 360;
+
+
+    setRotationAngle(270 - targetAngle);
+  };
+
+
+  const calculateNodePosition = (index: number, total: number) => {
+    const angle = ((index / total) * 360 + rotationAngle) % 360;
+    const radius = 200;
+    const radian = (angle * Math.PI) / 180;
+
+
+    const x = radius * Math.cos(radian) + centerOffset.x;
+    const y = radius * Math.sin(radian) + centerOffset.y;
+
+
+    const zIndex = Math.round(100 + 50 * Math.cos(radian));
+    const opacity = Math.max(
+      0.4,
+      Math.min(1, 0.4 + 0.6 * ((1 + Math.sin(radian)) / 2))
+    );
+
+
+    return { x, y, angle, zIndex, opacity };
+  };
+
+
+  const getRelatedItems = (itemId: number): number[] => {
+    const currentItem = timelineData.find((item) => item.id === itemId);
+    return currentItem ? currentItem.relatedIds : [];
+  };
+
+
+  const isRelatedToActive = (itemId: number): boolean => {
+    if (!activeNodeId) return false;
+    const relatedItems = getRelatedItems(activeNodeId);
+    return relatedItems.includes(itemId);
+  };
+
+
+  const getStatusStyles = (status: TimelineItem["status"]): string => {
+    switch (status) {
+      case "completed":
+        return "text-white bg-black border-white";
+      case "in-progress":
+        return "text-black bg-white border-black";
+      case "pending":
+        return "text-white bg-black/40 border-white/50";
+      default:
+        return "text-white bg-black/40 border-white/50";
+    }
+  };
+
+
+  return (
+    <div
+      className="w-full h-screen flex flex-col items-center justify-center bg-black overflow-hidden"
+      ref={containerRef}
+      onClick={handleContainerClick}
+    >
+      <div className="relative w-full max-w-4xl h-full flex items-center justify-center">
+        <div
+          className="absolute w-full h-full flex items-center justify-center"
+          ref={orbitRef}
+          style={{
+            perspective: "1000px",
+            transform: `translate(${centerOffset.x}px, ${centerOffset.y}px)`,
+          }}
+        >
+          <div className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 via-blue-500 to-teal-500 animate-pulse flex items-center justify-center z-10">
+            <div className="absolute w-20 h-20 rounded-full border border-white/20 animate-ping opacity-70"></div>
+            <div
+              className="absolute w-24 h-24 rounded-full border border-white/10 animate-ping opacity-50"
+              style={{ animationDelay: "0.5s" }}
+            ></div>
+            <div className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-md"></div>
+          </div>
+
+
+          <div className="absolute w-96 h-96 rounded-full border border-white/10"></div>
+
+
+          {timelineData.map((item, index) => {
+            const position = calculateNodePosition(index, timelineData.length);
+            const isExpanded = expandedItems[item.id];
+            const isRelated = isRelatedToActive(item.id);
+            const isPulsing = pulseEffect[item.id];
+            const Icon = item.icon;
+
+
+            const nodeStyle = {
+              transform: `translate(${position.x}px, ${position.y}px)`,
+              zIndex: isExpanded ? 200 : position.zIndex,
+              opacity: isExpanded ? 1 : position.opacity,
+            };
+
+
+            return (
+              <div
+                key={item.id}
+                ref={(el) => (nodeRefs.current[item.id] = el)}
+                className="absolute transition-all duration-700 cursor-pointer"
+                style={nodeStyle}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleItem(item.id);
+                }}
+              >
+                <div
+                  className={`absolute rounded-full -inset-1 ${
+                    isPulsing ? "animate-pulse duration-1000" : ""
+                  }`}
+                  style={{
+                    background: `radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%)`,
+                    width: `${item.energy * 0.5 + 40}px`,
+                    height: `${item.energy * 0.5 + 40}px`,
+                    left: `-${(item.energy * 0.5 + 40 - 40) / 2}px`,
+                    top: `-${(item.energy * 0.5 + 40 - 40) / 2}px`,
+                  }}
+                ></div>
+
+
+                <div
+                  className={`
+                  w-10 h-10 rounded-full flex items-center justify-center
+                  ${
+                    isExpanded
+                      ? "bg-white text-black"
+                      : isRelated
+                      ? "bg-white/50 text-black"
+                      : "bg-black text-white"
+                  }
+                  border-2 
+                  ${
+                    isExpanded
+                      ? "border-white shadow-lg shadow-white/30"
+                      : isRelated
+                      ? "border-white animate-pulse"
+                      : "border-white/40"
+                  }
+                  transition-all duration-300 transform
+                  ${isExpanded ? "scale-150" : ""}
+                `}
+                >
+                  <Icon size={16} />
+                </div>
+
+
+                <div
+                  className={`
+                  absolute top-12  whitespace-nowrap
+                  text-xs font-semibold tracking-wider
+                  transition-all duration-300
+                  ${isExpanded ? "text-white scale-125" : "text-white/70"}
+                `}
+                >
+                  {item.title}
+                </div>
+
+
+                {isExpanded && (
+                  <Card className="absolute top-20 left-1/2 -translate-x-1/2 w-64 bg-black/90 backdrop-blur-lg border-white/30 shadow-xl shadow-white/10 overflow-visible">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-white/50"></div>
+                    <CardHeader className="pb-2">
+                      <div className="flex justify-between items-center">
+                        <Badge
+                          className={`px-2 text-xs ${getStatusStyles(
+                            item.status
+                          )}`}
+                        >
+                          {item.status === "completed"
+                            ? "COMPLETE"
+                            : item.status === "in-progress"
+                            ? "IN PROGRESS"
+                            : "PENDING"}
+                        </Badge>
+                        <span className="text-xs font-mono text-white/50">
+                          {item.date}
+                        </span>
+                      </div>
+                      <CardTitle className="text-sm mt-2">
+                        {item.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-xs text-white/80">
+                      <p>{item.content}</p>
+
+
+                      <div className="mt-4 pt-3 border-t border-white/10">
+                        <div className="flex justify-between items-center text-xs mb-1">
+                          <span className="flex items-center">
+                            <Zap size={10} className="mr-1" />
+                            Energy Level
+                          </span>
+                          <span className="font-mono">{item.energy}%</span>
+                        </div>
+                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                            style={{ width: `${item.energy}%` }}
+                          ></div>
+                        </div>
+                      </div>
+
+
+                      {item.relatedIds.length > 0 && (
+                        <div className="mt-4 pt-3 border-t border-white/10">
+                          <div className="flex items-center mb-2">
+                            <Link size={10} className="text-white/70 mr-1" />
+                            <h4 className="text-xs uppercase tracking-wider font-medium text-white/70">
+                              Connected Nodes
+                            </h4>
+                          </div>
+                          <div className="flex flex-wrap gap-1">
+                            {item.relatedIds.map((relatedId) => {
+                              const relatedItem = timelineData.find(
+                                (i) => i.id === relatedId
+                              );
+                              return (
+                                <Button
+                                  key={relatedId}
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex items-center h-6 px-2 py-0 text-xs rounded-none border-white/20 bg-transparent hover:bg-white/10 text-white/80 hover:text-white transition-all"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleItem(relatedId);
+                                  }}
+                                >
+                                  {relatedItem?.title}
+                                  <ArrowRight
+                                    size={8}
+                                    className="ml-1 text-white/60"
+                                  />
+                                </Button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+demo.tsx
+"use client";
+
+
+import { Calendar, Code, FileText, User, Clock } from "lucide-react";
+import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline";
+
+
+const timelineData = [
+  {
+    id: 1,
+    title: "Planning",
+    date: "Jan 2024",
+    content: "Project planning and requirements gathering phase.",
+    category: "Planning",
+    icon: Calendar,
+    relatedIds: [2],
+    status: "completed" as const,
+    energy: 100,
+  },
+  {
+    id: 2,
+    title: "Design",
+    date: "Feb 2024",
+    content: "UI/UX design and system architecture.",
+    category: "Design",
+    icon: FileText,
+    relatedIds: [1, 3],
+    status: "completed" as const,
+    energy: 90,
+  },
+  {
+    id: 3,
+    title: "Development",
+    date: "Mar 2024",
+    content: "Core features implementation and testing.",
+    category: "Development",
+    icon: Code,
+    relatedIds: [2, 4],
+    status: "in-progress" as const,
+    energy: 60,
+  },
+  {
+    id: 4,
+    title: "Testing",
+    date: "Apr 2024",
+    content: "User testing and bug fixes.",
+    category: "Testing",
+    icon: User,
+    relatedIds: [3, 5],
+    status: "pending" as const,
+    energy: 30,
+  },
+  {
+    id: 5,
+    title: "Release",
+    date: "May 2024",
+    content: "Final deployment and release.",
+    category: "Release",
+    icon: Clock,
+    relatedIds: [4],
+    status: "pending" as const,
+    energy: 10,
+  },
+];
+
+
+export function RadialOrbitalTimelineDemo() {
+  return (
+    <>
+      <RadialOrbitalTimeline timelineData={timelineData} />
+    </>
+  );
+}
+
+
+export default {
+  RadialOrbitalTimelineDemo,
+};
+
+
+```
+
+
+Copy-paste these files for dependencies:
+```tsx
+shadcn/badge
+import * as React from "react"
+import { cva, type VariantProps } from "class-variance-authority"
+
+
+import { cn } from "@/lib/utils"
+
+
+const badgeVariants = cva(
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  {
+    variants: {
+      variant: {
+        default:
+          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+        secondary:
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        destructive:
+          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+        outline: "text-foreground",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  },
+)
+
+
+export interface BadgeProps
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof badgeVariants> {}
+
+
+function Badge({ className, variant, ...props }: BadgeProps) {
+  return (
+    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+  )
+}
+
+
+export { Badge, badgeVariants }
+
+
+```
+```tsx
+shadcn/button
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
+
+
+import { cn } from "@/lib/utils"
+
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+)
+
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean
+}
+
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button"
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  },
+)
+Button.displayName = "Button"
+
+
+export { Button, buttonVariants }
+
+
+```
+```tsx
+shadcn/card
+import * as React from "react"
+
+
+import { cn } from "@/lib/utils"
+
+
+const Card = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      className,
+    )}
+    {...props}
+  />
+))
+Card.displayName = "Card"
+
+
+const CardHeader = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    {...props}
+  />
+))
+CardHeader.displayName = "CardHeader"
+
+
+const CardTitle = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={cn(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className,
+    )}
+    {...props}
+  />
+))
+CardTitle.displayName = "CardTitle"
+
+
+const CardDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={cn("text-sm text-muted-foreground", className)}
+    {...props}
+  />
+))
+CardDescription.displayName = "CardDescription"
+
+
+const CardContent = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+))
+CardContent.displayName = "CardContent"
+
+
+const CardFooter = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn("flex items-center p-6 pt-0", className)}
+    {...props}
+  />
+))
+CardFooter.displayName = "CardFooter"
+
+
+export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+
+
+```
+
+
+Install NPM dependencies:
+```bash
+lucide-react, class-variance-authority, @radix-ui/react-slot
+```
+
+
+Extend existing globals.css with this code:
+```css
+@import "tailwindcss"
+
+
+/* Animation for the pulsing effect */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+
+/* Animation for the ping effect */
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+
+/* Custom animations for the orbital timeline */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+
+/* Transitions */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+.duration-300 {
+  transition-duration: 300ms;
+}
+
+
+.duration-700 {
+  transition-duration: 700ms;
+}
+
+
+.duration-1000 {
+  transition-duration: 1000ms;
+}
+
+
+/* Backdrop blur */
+.backdrop-blur-lg {
+  backdrop-filter: blur(16px);
+}
+
+
+/* Custom gradients */
+.bg-gradient-orbital {
+  background: linear-gradient(to bottom right, #6366f1, #3b82f6, #14b8a6);
+}
+
+
+/* Z-index utilities */
+.z-10 {
+  z-index: 10;
+}
+
+
+.z-50 {
+  z-index: 50;
+}
+
+
+/* Custom shadows */
+.shadow-orbital {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+
+/* Custom transforms */
+.scale-125 {
+  transform: scale(1.25);
+}
+
+
+.scale-150 {
+  transform: scale(1.5);
+}
+
+
+/* Custom opacity values */
+.opacity-70 {
+  opacity: 0.7;
+}
+
+
+.opacity-50 {
+  opacity: 0.5;
+}
+
+
+/* Custom border opacity */
+.border-white\/10 {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+
+.border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+
+.border-white\/30 {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+
+.border-white\/40 {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+
+/* Custom background opacity */
+.bg-black\/90 {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+
+.bg-white\/50 {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+.bg-white\/80 {
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+
+/* Custom text opacity */
+.text-white\/70 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+
+.text-white\/80 {
+  color: rgba(255, 255, 255, 0.8);
+} 
+```
+
+
+Implementation Guidelines
+ 1. Analyze the component structure and identify all required dependencies
+ 2. Review the component's argumens and state
+ 3. Identify any required context providers or hooks and install them
+ 4. Questions to Ask
+ - What data/props will be passed to this component?
+ - Are there any specific state management requirements?
+ - Are there any required assets (images, icons, etc.)?
+ - What is the expected responsive behavior?
+ - What is the best place to use this component in the app?
+
+
+Steps to integrate
+ 0. Copy paste all the code above in the correct directories
+ 1. Install external dependencies
+ 2. Fill image assets with Unsplash stock images you know exist
+ 3. Use lucide-react icons for svgs or logos if component requires them

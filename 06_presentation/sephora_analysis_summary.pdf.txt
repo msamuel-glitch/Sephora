@@ -1,0 +1,240 @@
+Sephora Customer Intelligence
+Deep-Dive Analysis Summary
+Brand performance · Product axis analysis · Generation profiles · Gender insights · Loyalty rates · Behavioural
+transition rules · Predictive targeting table
+Why this analysis?
+The starting point was a transactional dataset of 399,997 purchase lines from Sephora France, covering 64,469 unique loyalty
+cardholders across 2024-2025. The business question was simple but ambitious: for any given customer, predict what they will
+buy next — what product, from which brand, through which channel, and at what value. Rather than building a single
+black-box model, we chose a step-by-step approach that keeps every insight explainable and directly actionable for CRM and paid
+media teams. The five steps below each answer a distinct question and build on the previous one.
+1
+Revenue & Brand Performance by Generation
+What we did. After filtering returns and customers with unknown generation labels, we retained 267,153 purchase lines across four
+generations. We aggregated total revenue, average basket and transaction count per generation, then ranked brands by revenue
+within each generation group.
+Fig 1. Total revenue and average basket per generation.
+Fig 2. Top 5 brands by generation — total revenue (k€).
+Key findings.
+Gen Z generates the highest total revenue (€2.73M) but Baby Boomers have the highest average basket (€46.11 vs €28-32 for other
+generations). The same purchase behaviour produces 35-60% more value when performed by an older customer.
+
+Baby Boomers are the only generation where SEPHORA is not the top brand — DIOR leads at 12.4% market share, followed by
+GUERLAIN and CHANEL. Their top 10 is composed exclusively of luxury heritage houses (Hermès, Sisley, Clarins, Lancôme).
+Gen A shows the most digital-native brand mix: HUDA BEAUTY ranks #2 (6.8%) ahead of DIOR (5.1%), and Charlotte Tilbury enters
+the top 5. These are brands built on social media virality rather than heritage prestige.
+SEPHORA collection acts as a universal bridge across all generations — it is the #1 brand in every generation except Baby Boomers,
+functioning as an entry-level or rebound product between premium brand purchases.
+2
+Product Axis Analysis by Generation & Gender
+What we did. We broke down revenue, transaction count and average basket by product axis (MAKE UP, FRAGRANCE,
+SKINCARE, HAIRCARE) for each generation, then introduced gender as an additional dimension. Gender encodes as 1 = male, 2 =
+female in the dataset. With only 4,440 male customers (6% of the base) versus 38,577 female, the male segment is small but
+extremely high-value per transaction.
+Fig 3. Revenue by product axis and generation (k€).
+Fig 4. FRAGRANCE average basket by generation and gender (€).
+Key findings.
+FRAGRANCE is the most profitable axis in every single generation, with an average basket 3-4x higher than MAKE UP. Yet it
+represents only 12% of Gen A purchases — a massive untapped opportunity. Every customer converted to FRAGRANCE triples the
+transaction value.
+Male customers spend €52.44 on average per visit — the highest in the dataset — driven by FRAGRANCE which accounts for 69% of
+male revenue (€95.98 avg basket). Despite representing only 6% of customers, they are the most profitable per transaction.
+Female customers dominate volume (251,874 transactions) but concentrate on MAKE UP (€24.25 avg basket). The gap between
+FRAGRANCE (€83) and MAKE UP (€24) for women represents the single largest value-creation opportunity in the dataset.
+The male path to Sephora is direct: men enter via FRAGRANCE and stay there. The female path is indirect: women enter via MAKE
+UP, cross to SKINCARE, and only gradually discover FRAGRANCE. Understanding this difference fundamentally changes how to
+design acquisition campaigns for each gender.
+3
+Customer Loyalty & Retention by Generation
+
+What we did. We aggregated all purchases at the customer level and computed retention rate (% of customers with 2 or more
+distinct ticket visits), average number of tickets, average lifespan (days between first and last purchase), and brand diversity (number
+of distinct brands purchased). This step was critical to understand not just who buys, but who comes back — and why the most loyal
+customers are not always the most profitable per visit.
+Fig 5. Customer retention rate by generation (% with 2+ purchases).
+Retention metrics by generation.
+Generatio
+n
+Clients
+Retentio
+n
+Avg
+tickets
+Lifespan
+Avg
+brands
+Total spend/client
+Gen A
+12,286
+60.7% #
+3.37
+120 days
+3.60
+€189.60
+Gen Z
+12,913
+57.9%
+3.15
+113 days
+3.44
+€208.06
+Gen Y
+11,368
+55.5%
+2.94
+106 days
+3.20
+€199.75
+Boomers
+6,374
+50.2%
+2.42
+90 days
+2.50
+€203.31
+Key findings.
+Gen A is the most loyal generation (60.7%) despite having the lowest average basket (€28). They visit more often, explore more
+brands (3.60 on average), and stay engaged longer (120 days). This is a "discovery" profile — Sephora is their exploration
+playground.
+Baby Boomers have the lowest retention (50.2%) but spend the most per visit (€46). Critically, 3,176 Boomer customers visited only
+once. Each of these represents an immediate reactivation opportunity with a guaranteed €46+ basket — the highest ROI reactivation
+segment in the dataset.
+Brand diversity correlates strongly with retention: Gen A explores 3.60 brands, Boomers only 2.50. The insight is counterintuitive —
+loyalty is not built by selling more of one brand, but by introducing customers to new ones. Multi-brand exploration drives repeat visits.
+4
+Transition Rules — What Do Customers Buy Next?
+Why this step. Knowing who customers are and what they buy is not enough. The real business value lies in predicting the next
+purchase before it happens. We built this by sorting each customer's purchases chronologically and using a shift(-1) operation to pair
+each purchase (N) with the following one (N+1). This created 224,212 observed transitions — each one a ground-truth example of
+"this profile bought X, then bought Y."
+How we turned transitions into rules. Rather than training a single model (which gave only 52% accuracy on axis prediction), we
+computed conditional probability tables — for each combination of gender × generation × current axis × current brand × channel, we
+calculated: (1) the most likely next axis, (2) the top 3 next brands, (3) the most likely next channel, and (4) the expected next basket
+value. Applying a minimum of 20 transitions per group for statistical reliability, we produced 894 actionable behavioural rules.
+Sample rules — read as: "IF this profile buys X, THEN they buy..."
+Gende
+r
+Gen.
+Current axis · Brand
+Chan
+.
+Next axis
+Prob.
+Next brand
+#1
+Exp. basket
+Female
+Gen
+Z
+MAKE UP · SEPHORA
+store
+MAKE UP
+70.4%
+SEPHORA
+€24.24
+Female
+Gen
+Z
+FRAGRANCE · DIOR
+store
+FRAGRA
+NCE
+45%
+DIOR
+€55+
+
+Female
+Boom
+ers
+FRAGRANCE ·
+HERMÈS
+store
+FRAGRA
+NCE
+50.2%
+HERMÈS
+€68.41
+Male
+Gen
+Z
+FRAGRANCE ·
+CHANEL
+store
+FRAGRA
+NCE
+~65%
+CHANEL
+€90.12
+Male
+Gen
+Y
+FRAGRANCE ·
+GUERLAIN
+store
+FRAGRA
+NCE
+~68%
+YSL
+€86.48
+Female
+Gen
+A
+MAKE UP · HUDA
+BEAUTY
+store
+MAKE UP
+69.9%
+SEPHORA
+€29.42
+Key findings.
+SEPHORA is the universal rebound brand — it appears as the #1 next brand in 100% of rules. This is not loyalty to the own-brand: it is
+a bridge behaviour between two premium brand purchases. Customers use SEPHORA products to fill the gap between two DIOR or
+CHANEL buys.
+The current brand changes the expected next basket but not the next axis. Whether a Gen Z woman buys SEPHORA (€24) or HUDA
+BEAUTY (€30), she still goes back to MAKE UP 70% of the time. Brand and category are two independent levers that must be
+optimised separately.
+HUDA BEAUTY Gen Z MAKE UP has the strongest same-axis loop (71.4%) of any non-Fragrance rule. These customers are the
+most brand-loyal outside FRAGRANCE — ideal for replenishment campaign automation.
+Chanel FRAGRANCE Gen Y is perfectly balanced: 38% go back to FRAGRANCE, 38% go to MAKE UP. This is the ideal intervention
+moment — a push toward FRAGRANCE consolidates the high-value behaviour, while a MAKE UP push generates a €55 cross-sell.
+5
+The Targeting Table — 894 Rules, One Row per Profile
+Why this final step. The goal was never to produce a model score. It was to produce a targeting table that any CRM or paid media
+platform can ingest directly: one rule per row, each row telling the campaign team exactly which customer profile to target, with what
+product and brand, through which channel, and at what expected revenue. This table is sortable by expected basket value —
+meaning budget can be allocated from the highest-ROI profiles downward.
+Fig 6. Top 10 rules by expected next basket (€). All are FRAGRANCE → FRAGRANCE transitions. Blue = male profile, pink = female profile.
+Key findings.
+The top 10 most valuable rules are all FRAGRANCE → FRAGRANCE — without exception. A customer already in FRAGRANCE
+stays in FRAGRANCE with 50-70% probability and generates €86-103 on their next visit. This confirms the strategic priority: protect
+FRAGRANCE customers, do not try to convert them to other categories.
+6 of the top 10 rules are male profiles despite men being only 6% of the customer base. Male FRAGRANCE buyers are the most
+consistently high-value segment. J.P. Gaultier and Chanel Gen Z men generate €90+ expected next basket — comparable to Boomer
+women buying heritage prestige.
+REMINISCENCE female Boomers top the ranking at €102.87 — a niche brand with exceptional repeat loyalty. These customers never
+switch brands and generate the highest expected basket in the entire dataset. A personalised VIP programme with exclusive
+REMINISCENCE access would have immediate ROI.
+
+The Lancôme → DIOR male Gen Y rule (€87.83) is the only cross-brand rule in the top 10. It is the most actionable cross-sell in the
+dataset: a man who just bought Lancôme FRAGRANCE is statistically the most likely next DIOR buyer. A targeted DIOR campaign
+post-Lancôme purchase is a high-confidence, high-value campaign.
+Conclusion — Three universal rules
+#
+Rule
+Implication
+1
+FRAGRANCE is the universal
+value lever
+Every customer converted to FRAGRANCE triples transaction value. The priority is not acquisition
+— it is FRAGRANCE conversion.
+2
+Store is the dominant channel
+(86-94%)
+Digital advertising must drive store footfall, not online conversion. In-store activation (samples,
+pop-ups, events) is the highest-ROI touchpoint.
+3
+Brand diversity drives loyalty
+Customers who explore more brands return more often. Discovery mechanics (samples, brand
+introductions) are retention tools.
+Dataset: BDD#7_Database_Albert_School_Sephora.csv · 399,997 rows · 34 columns · Stack: Python / pandas / scikit-learn · Output: 894-rule targeting
+table (CSV)

@@ -1,0 +1,40 @@
+Loading raw dataset...
+Exact row duplicates permanently dropped: 892
+ID columns cast to string.
+
+--- ANOMALY FLAG COUNTS ---
+flag_negative_sales: 5210
+flag_zero_sales: 8008
+flag_negative_quantity: 4979
+flag_zero_quantity: 5676
+flag_discount_gt_sales: 14571
+
+Initial Missing brand: 5283
+Initial Missing Market_Desc: 5461
+
+--- RECOVERY RESULTS ---
+Recovered brand values: 0
+Recovered Market_Desc values: 0
+Remaining brand values filled with UNKNOWN: 5283
+Remaining Market_Desc filled with UNKNOWN: 5461
+
+--- TICKET + PRODUCT DUPES PROFILING ---
+Total rows involved in such duplicates: 104
+Sample of duplicates (to inspect if repeated scan vs split line):
+       anonymized_Ticket_ID  materialCode  salesVatEUR  quantity  discountEUR
+321066          -1.2012e+18        735292      -138.75        -1       -46.25
+321067          -1.2012e+18        735292       129.50         1        55.50
+37526          -1.52891e+18        633707        16.20         1         1.80
+118449         -1.52891e+18        633707        16.20         1         1.80
+122604          -1.5434e+18        734683        21.15         1         2.35
+140694          -1.5434e+18        734683        17.62         1         5.88
+57354          -1.80306e+18         99999         0.00         0         0.00
+140742         -1.80306e+18         99999         0.00         0         0.00
+362829         -2.33054e+18        725478         5.99         1         0.00
+381539         -2.33054e+18        725478         5.99         1         0.00
+
+--- ELIGIBILITY PROPOSAL ---
+Total rows in dataset after duplicate drop: 399105
+Rows excluded by 'eligible_for_affinity_v1' rule: 13226
+
+Saved labeled dataset to c:\Users\Hp\OneDrive - Université Paris Sciences et Lettres\BDD-Projects\BDD\Sephora\03_data_working\sephora_audit_labeled_base.csv

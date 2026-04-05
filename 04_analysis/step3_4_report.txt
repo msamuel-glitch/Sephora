@@ -1,0 +1,144 @@
+============================================================
+Step 3: High-frequency Setup & Step 4: Scoring Engine
+============================================================
+
+[0] Loading data...
+
+[3] High-Frequency Customer Profiling
+
+--- HIGH FREQUENCY PROFILE: GENA ---
+Count: 1383 customers
+Top Axes by Spend:
+  MAKE UP: 47.8%
+  FRAGRANCE: 23.9%
+  SKINCARE: 19.5%
+Brand-Family Split:
+  EXCLUSIVE: 55.8%
+  SELECTIVE: 28.5%
+  SEPHORA: 13.2%
+  OTHERS: 2.4%
+  UNKNOWN: 0.0%
+Explorer Index: Median=0.72, 75th pctl=0.84
+Activation Fit:
+  CRM_PUSH: 91.3%
+  STORE: 7.7%
+  APP_SITE: 1.0%
+
+--- HIGH FREQUENCY PROFILE: GENZ ---
+Count: 1425 customers
+Top Axes by Spend:
+  MAKE UP: 43.6%
+  FRAGRANCE: 27.2%
+  SKINCARE: 20.1%
+Brand-Family Split:
+  EXCLUSIVE: 47.7%
+  SELECTIVE: 37.8%
+  SEPHORA: 11.9%
+  OTHERS: 2.5%
+  UNKNOWN: 0.0%
+Explorer Index: Median=0.73, 75th pctl=0.83
+Activation Fit:
+  CRM_PUSH: 91.6%
+  STORE: 7.2%
+  APP_SITE: 1.2%
+
+--- HIGH FREQUENCY PROFILE: GENY ---
+Count: 1200 customers
+Top Axes by Spend:
+  MAKE UP: 38.8%
+  FRAGRANCE: 30.7%
+  SKINCARE: 22.1%
+Brand-Family Split:
+  SELECTIVE: 44.1%
+  EXCLUSIVE: 40.3%
+  SEPHORA: 12.2%
+  OTHERS: 3.5%
+  UNKNOWN: 0.0%
+Explorer Index: Median=0.70, 75th pctl=0.82
+Activation Fit:
+  CRM_PUSH: 89.9%
+  STORE: 9.2%
+  APP_SITE: 0.8%
+
+--- HIGH FREQUENCY PROFILE: GENX ---
+Count: 1243 customers
+Top Axes by Spend:
+  MAKE UP: 39.5%
+  FRAGRANCE: 30.4%
+  SKINCARE: 21.6%
+Brand-Family Split:
+  SELECTIVE: 47.4%
+  EXCLUSIVE: 38.2%
+  SEPHORA: 11.2%
+  OTHERS: 3.2%
+  UNKNOWN: 0.0%
+Explorer Index: Median=0.70, 75th pctl=0.81
+Activation Fit:
+  CRM_PUSH: 89.9%
+  STORE: 9.1%
+  APP_SITE: 1.0%
+
+--- HIGH FREQUENCY PROFILE: BABYBOOMERS ---
+Count: 465 customers
+Top Axes by Spend:
+  FRAGRANCE: 32.2%
+  MAKE UP: 30.9%
+  SKINCARE: 29.9%
+Brand-Family Split:
+  SELECTIVE: 65.2%
+  EXCLUSIVE: 22.8%
+  SEPHORA: 9.5%
+  OTHERS: 2.5%
+  UNKNOWN: 0.0%
+Explorer Index: Median=0.64, 75th pctl=0.77
+Activation Fit:
+  CRM_PUSH: 84.9%
+  STORE: 14.4%
+  APP_SITE: 0.6%
+
+--- HIGH FREQUENCY PROFILE: UNKNOWN ---
+Count: 472 customers
+Top Axes by Spend:
+  MAKE UP: 41.8%
+  FRAGRANCE: 28.0%
+  SKINCARE: 21.2%
+Brand-Family Split:
+  EXCLUSIVE: 47.6%
+  SELECTIVE: 41.5%
+  SEPHORA: 9.8%
+  OTHERS: 1.0%
+  UNKNOWN: 0.0%
+Explorer Index: Median=0.63, 75th pctl=0.76
+Activation Fit:
+  CRM_PUSH: 87.1%
+  STORE: 10.0%
+  APP_SITE: 3.0%
+
+[4] Composite Scoring Engine (Scenario Test)
+Evaluating scenarios against 36271 active target-window customers...
+
+Scenario: MARGIN
+  Recs Made (Top 3): 60463 across 20181 customers
+  Brand-Level Hit Rate (Precision@3): 1.07% (644 correct recommendations)
+  Customer-Level Hit Rate (Adopted $\ge$ 1): 3.10% (626 customers)
+
+Scenario: BALANCED
+  Recs Made (Top 3): 60463 across 20181 customers
+  Brand-Level Hit Rate (Precision@3): 1.12% (677 correct recommendations)
+  Customer-Level Hit Rate (Adopted $\ge$ 1): 3.27% (659 customers)
+
+Scenario: DISCOVERY
+  Recs Made (Top 3): 60463 across 20181 customers
+  Brand-Level Hit Rate (Precision@3): 0.99% (600 correct recommendations)
+  Customer-Level Hit Rate (Adopted $\ge$ 1): 2.89% (583 customers)
+
+Empirical Winner: BALANCED (highest customer conversion rate)
+
+[DONE] Execution elapsed: 36.2s
+
+--- Estimated Business Value ---
+Adopters Mean Basket (Target Window): EUR 84.02
+Non-Adopters Mean Basket (Target Window): EUR 72.53
+Estimated Incremental Delta: EUR 11.49 per positive conversion
+Total Scaled Addressable Opportunity: EUR 583,570
+Methodology: Comparison of Oct-Dec average basket value for customers in the candidate pool who converted vs those who did not.

@@ -1,0 +1,48 @@
+ROW COUNT: 399997
+COLUMN COUNT: 34
+
+COLUMNS AND TYPES:
+- anonymized_card_code: float64 (Missing: 0 / 0.00%)
+- countryIsoCode: object (Missing: 0 / 0.00%)
+- status: int64 (Missing: 0 / 0.00%)
+- RFM_Segment_ID: int64 (Missing: 0 / 0.00%)
+- age: int64 (Missing: 0 / 0.00%)
+- gender: int64 (Missing: 0 / 0.00%)
+- anonymized_Ticket_ID: float64 (Missing: 0 / 0.00%)
+- transactionDate: object (Missing: 0 / 0.00%)
+- salesVatEUR: float64 (Missing: 0 / 0.00%)
+- discountEUR: float64 (Missing: 0 / 0.00%)
+- quantity: int64 (Missing: 0 / 0.00%)
+- store_code_name: object (Missing: 0 / 0.00%)
+- store_city: object (Missing: 0 / 0.00%)
+- channel: object (Missing: 0 / 0.00%)
+- store_type_app: object (Missing: 0 / 0.00%)
+- materialCode: int64 (Missing: 0 / 0.00%)
+- Axe_Desc: object (Missing: 0 / 0.00%)
+- Market_Desc: object (Missing: 6346 / 1.59%)
+- brand: object (Missing: 6168 / 1.54%)
+- materialCode_first_purchase: object (Missing: 296274 / 74.07%)
+- Axe_Desc_first_purchase: object (Missing: 296274 / 74.07%)
+- Market_Desc_first_purchase: object (Missing: 296305 / 74.08%)
+- brand_first_purchase: object (Missing: 296274 / 74.07%)
+- subscription_date: object (Missing: 5646 / 1.41%)
+- customer_city: object (Missing: 15838 / 3.96%)
+- first_purchase_dt: object (Missing: 296274 / 74.07%)
+- anonymized_first_purchase_id: float64 (Missing: 296274 / 74.07%)
+- channel_recruitment: object (Missing: 296274 / 74.07%)
+- subscription_store_code: float64 (Missing: 296276 / 74.07%)
+- salesVatEUR_first_purchase: float64 (Missing: 296274 / 74.07%)
+- discountEUR_first_purchase: float64 (Missing: 296274 / 74.07%)
+- quantity_first_purchase: float64 (Missing: 296274 / 74.07%)
+- age_category: object (Missing: 112027 / 28.01%)
+- age_generation: object (Missing: 117306 / 29.33%)
+
+OBVIOUS MISSING-VALUE PATTERNS:
+Columns with >50% missing data: ['materialCode_first_purchase', 'Axe_Desc_first_purchase', 'Market_Desc_first_purchase', 'brand_first_purchase', 'first_purchase_dt', 'anonymized_first_purchase_id', 'channel_recruitment', 'subscription_store_code', 'salesVatEUR_first_purchase', 'discountEUR_first_purchase', 'quantity_first_purchase']
+Columns with some missing data (<=50%): ['Market_Desc', 'brand', 'subscription_date', 'customer_city', 'age_category', 'age_generation']
+Columns with NO missing data: 17 columns
+
+SAMPLE (First 2 rows, first 10 columns):
+   anonymized_card_code countryIsoCode  status  RFM_Segment_ID  age  gender  anonymized_Ticket_ID transactionDate  salesVatEUR  discountEUR
+0         -8.170680e+18             MC       4               1    0       2         -2.739890e+18      11/29/2025        449.0        100.0
+1         -8.170680e+18             MC       4               1    0       2         -4.494570e+18      11/29/2025         45.6         11.4

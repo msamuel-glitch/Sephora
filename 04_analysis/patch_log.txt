@@ -1,0 +1,42 @@
+============================================================
+PHASE 4 PATCH — Blocking Fixes
+============================================================
+
+[LOAD] Loading all tables...
+
+[FIX 1] Patching MAEK UP → MAKE UP
+  Audit base: 115677 rows patched
+  dim_brand: 39 brands patched
+  dim_customer first_purchase_axis_imprint: 1650 patched
+  Re-deriving axis-dependent features...
+  Re-computing basket_complementarity_score...
+  FIX 1 COMPLETE.
+
+[FIX 2] Inferring age_generation from age
+  Before inference: 16041 customers with null age_generation
+  Inferred from age: 9769 customers
+  Remaining UNKNOWN (age=0): 6272 customers
+  Generation distribution after patch:
+age_generation
+genz           10727
+genx            9769
+gena            9631
+geny            9461
+UNKNOWN         6272
+babyboomers     4945
+
+  Generation source distribution:
+generation_source
+original             34764
+inferred_from_age     9769
+unknown_age           6272
+  Re-computing generation-conditioned features...
+  FIX 2 COMPLETE.
+
+[SAVE] Writing corrected tables...
+  sephora_audit_labeled_base.csv updated (MAEK UP fix)
+  dim_customer.csv updated (50805 rows, 42 cols)
+  dim_brand.csv updated
+  dim_brand_pair.csv updated
+
+[DONE] Patch elapsed: 22.3s

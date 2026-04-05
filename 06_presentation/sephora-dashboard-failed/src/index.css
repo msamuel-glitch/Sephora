@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@400&family=DM+Sans:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-sephora-black: #0A0A0A;
+  --color-sephora-red: #E2001A;
+  --color-sephora-white: #FAFAFA;
+  --color-sephora-warm: #F2EBE0;
+  --color-sephora-cream: #F0EBE3;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: auto; }
+body { font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; background: #0A0A0A; color: #FAFAFA; }
+::selection { background: #E2001A; color: #fff; }
+
+.font-display { font-family: 'Cormorant Garamond', serif; }
+.font-body { font-family: 'DM Sans', sans-serif; }
+.font-data { font-family: 'DM Mono', monospace; }
+
+.sephora-stripe {
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 29px, rgba(0,0,0,0.018) 29px, rgba(0,0,0,0.018) 30px);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #E2001A 0%, #ff4d6a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+}
+
+.dark-card {
+  background: #141414;
+  border: 1px solid #2A2A2A;
+}
+
+.recharts-tooltip-wrapper .recharts-default-tooltip {
+  background: #0A0A0A !important;
+  border: 1px solid #E2001A !important;
+  border-radius: 4px !important;
+  font-family: 'DM Mono', monospace !important;
+  font-size: 0.75rem !important;
+}

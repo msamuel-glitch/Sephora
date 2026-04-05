@@ -1,0 +1,2321 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Sephora Brand Affinity — France 2025</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@400&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/splitting/1.0.6/splitting.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/splitting/1.0.6/splitting.min.css">
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <style>
+        /* ══════════════════════════════════════════════
+   ROOT
+══════════════════════════════════════════════ */
+        :root {
+            --w1-bg: #0A0A0A;
+            --w1-text: #F0EBE3;
+            --w1-accent: #E2001A;
+            --w1-dim: rgba(240, 235, 227, 0.45);
+            --w2-bg: #FAFAFA;
+            --w2-text: #0A0A0A;
+            --w2-dim: #666666;
+            --w3-bg: #F2EBE0;
+            --w3-text: #1A1512;
+            --w3-dim: #7A6E64;
+            --accent: #E2001A;
+            --ff-d: 'Cormorant Garamond', serif;
+            --ff-b: 'DM Sans', sans-serif;
+            --ff-m: 'DM Mono', monospace;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            overflow-x: hidden;
+            background: var(--w1-bg);
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* ══════════════════════════════════════════════
+   FIXED UI
+══════════════════════════════════════════════ */
+        #pb {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--accent);
+            z-index: 9999;
+            width: 0%;
+        }
+
+        #sc {
+            position: fixed;
+            right: 2.2vw;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            letter-spacing: .2em;
+            z-index: 9990;
+            writing-mode: vertical-rl;
+            transition: color .4s;
+            color: var(--accent);
+        }
+
+        /* ══════════════════════════════════════════════
+   WORLD CLASSES
+══════════════════════════════════════════════ */
+        .w1 {
+            background: var(--w1-bg);
+            color: var(--w1-text);
+        }
+
+        .w2 {
+            background: var(--w2-bg);
+            color: var(--w2-text);
+        }
+
+        .w3 {
+            background: var(--w3-bg);
+            color: var(--w3-text);
+        }
+
+        section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ══════════════════════════════════════════════
+   STRIPE TEXTURE (World 1)
+══════════════════════════════════════════════ */
+        .stripe-bg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image: repeating-linear-gradient(45deg,
+                    transparent 0px, transparent 58px,
+                    rgba(255, 255, 255, 0.035) 58px, rgba(255, 255, 255, 0.035) 60px);
+            will-change: transform;
+        }
+
+        .ghost-word {
+            position: absolute;
+            pointer-events: none;
+            font-family: var(--ff-d);
+            font-weight: 300;
+            color: rgba(240, 235, 227, 0.028);
+            white-space: nowrap;
+            user-select: none;
+            will-change: transform;
+            z-index: 0;
+        }
+
+        .cz {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Kinetic chars */
+        .kin .char {
+            display: inline-block;
+            transform: translateY(110%);
+        }
+
+        /* Word reveal */
+        .wr .word {
+            display: inline-block;
+            margin-right: .28em;
+        }
+
+        .w1 .wr .word {
+            color: rgba(240, 235, 227, 0.1);
+        }
+
+        .w2 .wr .word,
+        .w3 .wr .word {
+            color: rgba(10, 10, 10, 0.18);
+        }
+
+        /* ══════════════════════════════════════════════
+   TYPOGRAPHY SCALE
+   Rule: massive OR tiny. Nothing comfortable.
+══════════════════════════════════════════════ */
+        .t-display {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(4rem, 9vw, 11rem);
+            line-height: .9;
+            letter-spacing: -.025em;
+            font-style: italic;
+        }
+
+        .t-bleed {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(9rem, 22vw, 28rem);
+            line-height: .85;
+            letter-spacing: -.03em;
+            color: #fff;
+        }
+
+        .t-stat {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(9rem, 20vw, 24rem);
+            line-height: .85;
+            letter-spacing: -.03em;
+            color: var(--accent);
+        }
+
+        .t-pair {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(3.5rem, 8vw, 10rem);
+            line-height: .9;
+            letter-spacing: -.025em;
+        }
+
+        .t-label {
+            font-family: var(--ff-m);
+            font-size: .62rem;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+        }
+
+        .t-body {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: clamp(.95rem, 1.1vw, 1.05rem);
+            line-height: 1.82;
+            max-width: 42ch;
+        }
+
+        .t-sub {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: clamp(1rem, 1.3vw, 1.15rem);
+            line-height: 1.7;
+            max-width: 38ch;
+        }
+
+        .t-close {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(2rem, 4vw, 4.5rem);
+            line-height: 1.1;
+            letter-spacing: -.01em;
+            text-align: center;
+        }
+
+        .mono-dim {
+            font-family: var(--ff-m);
+            font-size: .62rem;
+            letter-spacing: .12em;
+            opacity: .45;
+        }
+
+        /* Red accent label bar */
+        .sec-label {
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            letter-spacing: .3em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            padding-left: 1.2rem;
+            border-left: 2px solid var(--accent);
+        }
+
+        .bline {
+            border-left: 2px solid var(--accent);
+            padding: 1.25rem 1.75rem;
+            margin: 2.5rem 0;
+            font-size: .9rem;
+            line-height: 1.75;
+            max-width: 52ch;
+            font-family: var(--ff-b);
+            font-weight: 300;
+        }
+
+        .w2 .bline {
+            color: var(--w2-dim);
+        }
+
+        .w1 .bline {
+            color: rgba(240, 235, 227, 0.45);
+            border-color: rgba(226, 0, 26, .4);
+        }
+
+        .w3 .bline {
+            color: var(--w3-dim);
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 1 — HERO
+══════════════════════════════════════════════ */
+        #s1 {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 38% 62%;
+            align-items: end;
+            padding-bottom: 10vh;
+            background: var(--w1-bg);
+        }
+
+        .s1-left {
+            padding: 0 0 0 8vw;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            z-index: 1;
+        }
+
+        .s1-right {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            padding-right: 0;
+        }
+
+        .hero-num {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(9rem, 22vw, 28rem);
+            line-height: .85;
+            letter-spacing: -.04em;
+            color: #FFFFFF;
+            white-space: nowrap;
+            margin-right: -3vw;
+            /* bleed right */
+        }
+
+        .hero-line {
+            height: 1px;
+            background: var(--accent);
+            width: 0;
+            margin: .8rem 0 1.2rem;
+        }
+
+        .hero-desc {
+            font-family: var(--ff-m);
+            font-size: .65rem;
+            color: rgba(240, 235, 227, 0.38);
+            letter-spacing: .1em;
+            line-height: 1.6;
+        }
+
+        .scroll-cue {
+            position: absolute;
+            bottom: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            letter-spacing: .3em;
+            color: rgba(240, 235, 227, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .6rem;
+            animation: scpulse 2.5s ease infinite;
+        }
+
+        .scroll-cue::after {
+            content: '';
+            width: 1px;
+            height: 32px;
+            background: rgba(226, 0, 26, .5);
+            animation: scline 2.5s ease infinite;
+        }
+
+        @keyframes scpulse {
+
+            0%,
+            100% {
+                opacity: .3
+            }
+
+            50% {
+                opacity: .9
+            }
+        }
+
+        @keyframes scline {
+
+            0%,
+            100% {
+                transform: scaleY(0);
+                transform-origin: top
+            }
+
+            50% {
+                transform: scaleY(1);
+                transform-origin: top
+            }
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 1.5 — TRANSITION PIN
+══════════════════════════════════════════════ */
+        #s15 {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--w1-bg);
+            gap: 2.5rem;
+        }
+
+        .s15-quote {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(3rem, 7vw, 8rem);
+            color: #FFFFFF;
+            line-height: 1.05;
+            text-align: center;
+            max-width: 16ch;
+            letter-spacing: -.02em;
+        }
+
+        .s15-quote .char {
+            display: inline-block;
+            transform: translateY(110%);
+        }
+
+        .s15-until {
+            font-family: var(--ff-m);
+            font-size: .65rem;
+            color: var(--accent);
+            letter-spacing: .35em;
+            opacity: 0;
+            margin-top: 1rem;
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 2 — TIMELINE
+══════════════════════════════════════════════ */
+        #s2 {
+            min-height: 160vh;
+            padding: 14vh 8vw;
+        }
+
+        .s2-head {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(4rem, 8vw, 9rem);
+            line-height: .9;
+            color: #0A0A0A;
+            max-width: 12ch;
+            margin-bottom: 4vh;
+            letter-spacing: -.025em;
+        }
+
+        .s2-head .char {
+            display: inline-block;
+            transform: translateY(110%);
+        }
+
+        .s2-deck {
+            text-align: right;
+            max-width: 38ch;
+            margin-left: auto;
+            margin-bottom: 6vh;
+            color: var(--w2-dim);
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: clamp(1rem, 1.3vw, 1.15rem);
+            line-height: 1.72;
+        }
+
+        .tl {
+            margin: 2rem 0 4rem;
+            max-width: 58ch;
+        }
+
+        .tl-step {
+            opacity: 0;
+            display: grid;
+            grid-template-columns: 2.5rem 1fr;
+            gap: 1.5rem;
+            padding: 3vh 0;
+            border-left: none;
+            align-items: start;
+        }
+
+        .tl-num {
+            font-family: var(--ff-m);
+            font-size: .58rem;
+            color: #BBBBBB;
+            padding-top: .2rem;
+            letter-spacing: .1em;
+        }
+
+        .tl-text {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+            line-height: 1.55;
+            border-left: 1px solid rgba(0, 0, 0, 0.12);
+            padding-left: 1.75rem;
+        }
+
+        .tl-step.accent .tl-text {
+            border-left: 3px solid var(--accent);
+            padding-left: 1.5rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .tl-step.note .tl-text {
+            font-family: var(--ff-m);
+            font-size: .72rem;
+            color: #AAAAAA;
+            font-style: italic;
+            border-left-color: rgba(0, 0, 0, 0.07);
+        }
+
+        .tl-rule {
+            width: 100%;
+            height: 1px;
+            background: rgba(0, 0, 0, 0.07);
+            margin: 1rem 0;
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 3 — BRAND PAIRS
+   Each pair = full viewport
+══════════════════════════════════════════════ */
+        #s3-intro {
+            padding: 10vh 8vw 6vh;
+            background: var(--w2-bg);
+        }
+
+        .pair-viewport {
+            min-height: 100vh;
+            position: relative;
+            display: grid;
+            grid-template-rows: 15% 60% 25%;
+            background: var(--w2-bg);
+            overflow: hidden;
+        }
+
+        /* Watermark lift number */
+        .pair-wm {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            z-index: 0;
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(20rem, 45vw, 65rem);
+            color: rgba(0, 0, 0, 0.028);
+            line-height: 1;
+            user-select: none;
+            will-change: transform;
+            letter-spacing: -.04em;
+        }
+
+        .pair-top {
+            display: flex;
+            align-items: flex-end;
+            padding: 4vh 8vw 0;
+            position: relative;
+            z-index: 1;
+            justify-content: space-between;
+        }
+
+        .pair-mid {
+            display: grid;
+            grid-template-columns: 1fr max-content 1fr;
+            align-items: center;
+            padding: 0 8vw;
+            position: relative;
+            z-index: 1;
+            gap: 2vw;
+        }
+
+        .pair-anchor {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(3rem, 8vw, 10rem);
+            line-height: .88;
+            letter-spacing: -.025em;
+            color: #0A0A0A;
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .pair-arr {
+            font-size: clamp(3rem, 5vw, 6rem);
+            color: var(--accent);
+            text-align: center;
+            opacity: 0;
+            transform: scale(.5);
+            line-height: 1;
+        }
+
+        .pair-rec {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(3rem, 8vw, 10rem);
+            line-height: .88;
+            letter-spacing: -.025em;
+            color: var(--accent);
+            text-align: right;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        .pair-bot {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: end;
+            padding: 0 8vw 5vh;
+            position: relative;
+            z-index: 1;
+            gap: 2vw;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .pair-lift-num {
+            font-family: var(--ff-m);
+            font-size: clamp(2.5rem, 5vw, 5.5rem);
+            color: #0A0A0A;
+            line-height: 1;
+            letter-spacing: -.02em;
+        }
+
+        .pair-lift-num span {
+            color: var(--accent);
+        }
+
+        .pair-basket {
+            font-family: var(--ff-m);
+            font-size: .72rem;
+            color: #999999;
+            padding-top: 1rem;
+            letter-spacing: .05em;
+        }
+
+        .pair-exp-col {
+            text-align: right;
+            padding-top: 1rem;
+        }
+
+        .pair-cat {
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            color: #BBBBBB;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: .4rem;
+        }
+
+        .pair-exp-txt {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: .88rem;
+            color: var(--w2-dim);
+            max-width: 28ch;
+            margin-left: auto;
+            line-height: 1.6;
+        }
+
+        .pair-pill {
+            position: absolute;
+            top: 4.5vh;
+            right: 8vw;
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            color: var(--accent);
+            border: 1px solid rgba(226, 0, 26, .4);
+            padding: .22rem .7rem;
+            border-radius: 2px;
+            letter-spacing: .08em;
+            z-index: 2;
+        }
+
+        .pair-div {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        #s3-close {
+            padding: 10vh 8vw;
+            background: var(--w2-bg);
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 4 — CUSTOMER
+══════════════════════════════════════════════ */
+        #s4 {
+            padding: 10vh 8vw;
+            background: var(--w3-bg);
+        }
+
+        .find-block {
+            margin-bottom: 14vh;
+        }
+
+        .find-num {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(9rem, 20vw, 24rem);
+            line-height: .85;
+            color: var(--accent);
+            letter-spacing: -.04em;
+            margin-left: -.03em;
+            /* subtle bleed */
+        }
+
+        .find-label {
+            font-family: var(--ff-m);
+            font-size: .62rem;
+            letter-spacing: .28em;
+            text-transform: uppercase;
+            color: var(--w3-dim);
+            margin: .8rem 0 1.5rem;
+        }
+
+        /* Bar chart redesign */
+        .barchart {
+            margin: 2.5rem 0;
+            max-width: 100%;
+        }
+
+        .bcg-label {
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            margin: 1.5rem 0 .8rem;
+        }
+
+        .bcg-label.red {
+            color: var(--accent);
+        }
+
+        .bcg-label.grey {
+            color: #888;
+        }
+
+        .bc-threshold {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1.2rem 0;
+        }
+
+        .bc-threshold-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(226, 0, 26, .25);
+        }
+
+        .bc-threshold-label {
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            color: var(--accent);
+            letter-spacing: .15em;
+            white-space: nowrap;
+        }
+
+        .bc-row {
+            display: grid;
+            grid-template-columns: 90px 1fr 44px;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: .7rem;
+        }
+
+        .bc-lbl {
+            font-family: var(--ff-m);
+            font-size: .68rem;
+            text-align: right;
+            color: var(--w3-dim);
+        }
+
+        .bc-track {
+            height: 48px;
+            background: rgba(26, 21, 18, .07);
+            border-radius: 0;
+            overflow: hidden;
+        }
+
+        .bc-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 0;
+        }
+
+        .bc-val {
+            font-family: var(--ff-m);
+            font-size: .72rem;
+            color: var(--w3-text);
+        }
+
+        /* Donut */
+        .donut-w {
+            width: 240px;
+            height: 240px;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .donut-r {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent) 0deg 324deg, rgba(26, 21, 18, .12) 324deg 360deg);
+        }
+
+        .donut-h {
+            position: absolute;
+            inset: 22%;
+            border-radius: 50%;
+            background: var(--w3-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .2rem;
+        }
+
+        .donut-h-num {
+            font-family: var(--ff-m);
+            font-size: 1.3rem;
+            color: var(--w3-text);
+        }
+
+        .donut-h-lbl {
+            font-family: var(--ff-m);
+            font-size: .55rem;
+            color: var(--w3-dim);
+            letter-spacing: .1em;
+        }
+
+        /* Day chart */
+        .daychart {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+            height: 160px;
+            margin: 2rem 0;
+            max-width: 48ch;
+        }
+
+        .day-bar-w {
+            position: relative;
+            flex: 1;
+            min-width: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .day-bar-fill {
+            width: 100%;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .day-bar-lbl {
+            font-family: var(--ff-m);
+            font-size: .55rem;
+            color: var(--w3-dim);
+            margin-top: 6px;
+            white-space: nowrap;
+        }
+
+        .day-bar-top {
+            font-family: var(--ff-m);
+            font-size: .58rem;
+            color: var(--accent);
+            letter-spacing: .1em;
+            position: absolute;
+            top: -22px;
+            white-space: nowrap;
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 5 — ENGINE (horizontal)
+══════════════════════════════════════════════ */
+        .s5-intro {
+            padding: 12vh 8vw;
+            background: var(--w1-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .horiz-wrap {
+            position: relative;
+            overflow: hidden;
+            background: var(--w1-bg);
+        }
+
+        .horiz-inner {
+            display: flex;
+            width: 400vw;
+            will-change: transform;
+        }
+
+        .h-panel {
+            width: 100vw;
+            min-height: 100vh;
+            padding: 10vh 8vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--w1-text);
+            position: relative;
+            overflow: hidden;
+            background: var(--w1-bg);
+        }
+
+        .h-panel-num {
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            color: var(--accent);
+            letter-spacing: .3em;
+            margin-bottom: 2.5rem;
+        }
+
+        .h-panel h3 {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(4rem, 8vw, 9rem);
+            line-height: .9;
+            color: #FFFFFF;
+            letter-spacing: -.025em;
+            margin-bottom: 1rem;
+        }
+
+        .h-panel-sub {
+            font-family: var(--ff-m);
+            font-size: .65rem;
+            color: var(--accent);
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+        }
+
+        .h-panel-text {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: clamp(1rem, 1.2vw, 1.1rem);
+            color: rgba(240, 235, 227, 0.52);
+            max-width: 38ch;
+            line-height: 1.82;
+        }
+
+        .h-ghost {
+            position: absolute;
+            bottom: 6vh;
+            right: 6vw;
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(18rem, 38vw, 50rem);
+            color: rgba(255, 255, 255, .022);
+            line-height: 1;
+            user-select: none;
+            pointer-events: none;
+            letter-spacing: -.04em;
+        }
+
+        /* After horizontal — model results */
+        .s5-results {
+            padding: 12vh 8vw;
+            background: var(--w1-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            margin: 3rem 0;
+            max-width: 62ch;
+        }
+
+        .mb-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: .5rem;
+        }
+
+        .mb-name {
+            font-family: var(--ff-m);
+            font-size: .65rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: rgba(240, 235, 227, 0.4);
+        }
+
+        .mb-pct {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(3rem, 6vw, 7rem);
+            line-height: .9;
+            color: var(--w1-text);
+        }
+
+        .mb-track {
+            height: 8px;
+            background: rgba(255, 255, 255, .06);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .mb-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+        }
+
+        .mb-desc {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: .85rem;
+            color: rgba(240, 235, 227, .38);
+            margin-top: .6rem;
+            line-height: 1.6;
+            max-width: 52ch;
+        }
+
+        /* SHAP */
+        .shap-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin: 2.5rem 0;
+            max-width: 65ch;
+        }
+
+        .shap-col h4 {
+            font-family: var(--ff-m);
+            font-size: .62rem;
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            padding-bottom: .7rem;
+            border-bottom: 1px solid;
+        }
+
+        .shap-col ul {
+            list-style: none;
+        }
+
+        .shap-col li {
+            font-family: var(--ff-m);
+            font-size: .7rem;
+            padding: .45rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            line-height: 1.5;
+            color: var(--w1-text);
+        }
+
+        .shap-col li .t {
+            color: rgba(240, 235, 227, .3);
+            font-size: .6rem;
+            display: block;
+            margin-top: .1rem;
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 6 — MARKET
+══════════════════════════════════════════════ */
+        #s6 {
+            padding: 10vh 8vw;
+            background: var(--w2-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #s6 .stripe-bg {
+            opacity: .3;
+        }
+
+        .mkt-brand {
+            opacity: 0;
+            transform: translateY(30px);
+            padding: 3.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, .07);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: auto auto auto auto;
+            gap: .4rem 3rem;
+        }
+
+        .mkt-brand:last-of-type {
+            border-bottom: none;
+        }
+
+        .mb-nm {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(2.5rem, 5vw, 5.5rem);
+            line-height: .9;
+            letter-spacing: -.025em;
+            grid-column: 1;
+            grid-row: 1;
+            align-self: end;
+        }
+
+        .mb-seg {
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            border: 1px solid rgba(0, 0, 0, .18);
+            padding: .25rem .65rem;
+            letter-spacing: .1em;
+            grid-column: 2;
+            grid-row: 1;
+            align-self: end;
+            color: var(--w2-dim);
+        }
+
+        .mb-cnt {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(5rem, 10vw, 11rem);
+            line-height: .85;
+            color: var(--accent);
+            letter-spacing: -.04em;
+            grid-column: 1;
+            grid-row: 2;
+            margin-top: .3rem;
+        }
+
+        .mb-dsc {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: .88rem;
+            color: var(--w2-dim);
+            max-width: 48ch;
+            line-height: 1.62;
+            grid-column: 1;
+            grid-row: 3;
+        }
+
+        .mb-pct {
+            font-family: var(--ff-m);
+            font-size: .75rem;
+            color: var(--w2-dim);
+            grid-column: 1;
+            grid-row: 4;
+            margin-top: .3rem;
+        }
+
+        .rep-note {
+            font-family: var(--ff-m);
+            font-size: .62rem;
+            color: var(--w2-dim);
+            opacity: .55;
+            margin: .5rem 0 2.5rem;
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 7 — PROTECTION
+══════════════════════════════════════════════ */
+        #s7 {
+            padding: 10vh 8vw;
+            background: var(--w1-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ax-card {
+            opacity: 0;
+            transform: translateY(30px);
+            padding: 2.75rem;
+            margin-bottom: 1.25rem;
+            max-width: 58ch;
+            border-radius: 2px;
+        }
+
+        .ax-dark {
+            background: rgba(255, 255, 255, .025);
+            border: 1px solid rgba(255, 255, 255, .065);
+        }
+
+        .ax-accent {
+            background: rgba(226, 0, 26, .03);
+            border: 1px solid rgba(226, 0, 26, .32);
+        }
+
+        .ax-num {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-size: clamp(4rem, 9vw, 10rem);
+            line-height: .85;
+            letter-spacing: -.03em;
+            margin-bottom: .5rem;
+        }
+
+        .ax-lbl {
+            font-family: var(--ff-m);
+            font-size: .65rem;
+            color: rgba(240, 235, 227, .38);
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+        }
+
+        .ax-p {
+            font-family: var(--ff-b);
+            font-weight: 300;
+            font-size: .92rem;
+            line-height: 1.67;
+            color: rgba(240, 235, 227, .45);
+        }
+
+        .deriv {
+            font-family: var(--ff-m);
+            font-size: .9rem;
+            background: rgba(0, 0, 0, .3);
+            padding: 1.5rem;
+            border-left: 2px solid var(--accent);
+            margin: 1.25rem 0;
+            line-height: 2.2;
+            color: var(--w1-text);
+        }
+
+        /* ══════════════════════════════════════════════
+   SECTION 8 — MONDAY
+══════════════════════════════════════════════ */
+        #s8 {
+            padding: 10vh 8vw 14vh;
+            background: var(--w3-bg);
+        }
+
+        .split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            margin-top: 3rem;
+        }
+
+        .split-col h3 {
+            font-family: var(--ff-b);
+            font-weight: 500;
+            font-size: .78rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(26, 21, 18, .12);
+            color: var(--w3-text);
+        }
+
+        .split-col.rhs h3 {
+            color: var(--w3-dim);
+            border-color: rgba(26, 21, 18, .07);
+        }
+
+        .act-item,
+        .lim-item {
+            margin-bottom: 2.25rem;
+            font-size: .9rem;
+            line-height: 1.72;
+        }
+
+        .act-item strong {
+            display: block;
+            font-weight: 500;
+            margin-bottom: .35rem;
+            font-size: .88rem;
+        }
+
+        .lim-item strong {
+            display: block;
+            font-weight: 500;
+            margin-bottom: .35rem;
+            font-size: .88rem;
+            color: var(--w3-dim);
+        }
+
+        .act-src {
+            font-family: var(--ff-m);
+            font-size: .62rem;
+            color: var(--w3-dim);
+            margin-top: .45rem;
+            letter-spacing: .05em;
+        }
+
+        .closing {
+            font-family: var(--ff-d);
+            font-weight: 300;
+            font-style: italic;
+            font-size: clamp(1.8rem, 3.5vw, 3rem);
+            text-align: center;
+            max-width: 24ch;
+            margin: 8rem auto 2rem;
+            line-height: 1.32;
+            letter-spacing: -.01em;
+            color: var(--w3-text);
+        }
+
+        .fin-lbl {
+            font-family: var(--ff-m);
+            font-size: .6rem;
+            color: var(--w3-dim);
+            text-align: center;
+            max-width: 52ch;
+            margin: 1.5rem auto;
+            line-height: 1.72;
+            opacity: .55;
+        }
+
+        /* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+        @media (max-width:900px) {
+            #s1 {
+                grid-template-columns: 1fr;
+                align-items: start;
+                padding: 14vh 6vw 10vh;
+            }
+
+            .s1-right {
+                margin-top: 3rem;
+                overflow: visible;
+            }
+
+            .hero-num {
+                font-size: clamp(6rem, 18vw, 16rem);
+                margin-right: 0;
+            }
+
+            .split,
+            .shap-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .pair-mid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .pair-rec {
+                text-align: left;
+            }
+
+            .pair-bot {
+                grid-template-columns: auto 1fr;
+            }
+
+            .pair-exp-col {
+                grid-column: 1/-1;
+                text-align: left;
+            }
+
+            .pair-exp-txt {
+                margin-left: 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="pb"></div>
+    <div id="sc">01 / 08</div>
+
+    <main>
+
+        <!-- ══════════ S1 ══════════ -->
+        <section id="s1" class="w1">
+            <div class="stripe-bg"></div>
+            <div class="ghost-word" style="font-size:clamp(12rem,30vw,38rem);top:5%;left:5%;opacity:.022">SEPHORA</div>
+
+            <div class="s1-left cz">
+                <div>
+                    <p class="t-label" style="color:var(--accent);margin-bottom:1.2rem">Brand Affinity — France 2025</p>
+                    <p
+                        style="font-family:var(--ff-d);font-style:italic;font-weight:300;font-size:clamp(1.3rem,2vw,1.75rem);color:rgba(240,235,227,.62);max-width:26ch;line-height:1.5;letter-spacing:-.01em">
+                        The signal was always in your data. We built the system that reads it.</p>
+                </div>
+                <p class="mono-dim">50,805 loyalty customers · France 2025 · Holdout validated</p>
+            </div>
+
+            <div class="s1-right cz">
+                <div class="hero-num kin" id="heroNum">€583,570</div>
+                <div class="hero-line" id="heroLine"></div>
+                <p class="hero-desc">In incremental basket opportunity · Real Oct–Dec purchase data</p>
+            </div>
+
+            <div class="scroll-cue" id="scrollCue">SCROLL</div>
+        </section>
+
+        <!-- ══════════ S1.5 ══════════ -->
+        <section id="s15" class="w1">
+            <p class="s15-quote kin">Every basket is a conversation. Most never happen.</p>
+            <p class="s15-until" id="s15until">UNTIL NOW</p>
+        </section>
+
+        <!-- ══════════ S2 ══════════ -->
+        <section id="s2" class="w2">
+            <div class="stripe-bg" style="opacity:.25"></div>
+            <div class="cz">
+                <div class="sec-label">The Missed Moment / 01</div>
+                <h2 class="s2-head">The conversation that never happened</h2>
+                <p class="s2-deck">DRUNK ELEPHANT customers are 11.73 times more likely to want FRESH SAS than the
+                    average Sephora customer. That conversation never happened.</p>
+                <div class="bline">11.73× means: if a random customer has a 1% chance of buying FRESH SAS, a DRUNK
+                    ELEPHANT customer has an 11.73% chance. We call this a lift score. This one was never used.</div>
+                <div class="tl">
+                    <div class="tl-step">
+                        <div class="tl-num">01</div>
+                        <div class="tl-text">Visit 1 — Buys DRUNK ELEPHANT Skincare</div>
+                    </div>
+                    <div class="tl-step">
+                        <div class="tl-num">02</div>
+                        <div class="tl-text">Visit 2 — Buys DRUNK ELEPHANT again</div>
+                    </div>
+                    <div class="tl-step">
+                        <div class="tl-num">03</div>
+                        <div class="tl-text">Visit 3 — Walks past FRESH SAS on the shelf</div>
+                    </div>
+                    <div class="tl-step accent">
+                        <div class="tl-num" style="color:rgba(226,0,26,.4)">04</div>
+                        <div class="tl-text">11.73× signal. Nobody said a word.</div>
+                    </div>
+                    <div class="tl-step">
+                        <div class="tl-num">05</div>
+                        <div class="tl-text">She leaves. She comes back less often.</div>
+                    </div>
+                    <div class="tl-rule"></div>
+                    <div class="tl-step note">
+                        <div class="tl-num">06</div>
+                        <div class="tl-text">Pattern observed across customers sharing this exact profile. Data fully
+                            anonymized.</div>
+                    </div>
+                </div>
+                <p class="t-close" style="color:#0A0A0A;margin-top:2rem">We found this signal<br>in 45,446 baskets.</p>
+            </div>
+        </section>
+
+        <!-- ══════════ S3 ══════════ -->
+        <div id="s3-intro" class="w2">
+            <div class="sec-label">The Signal / 02</div>
+            <h2 class="kin t-display" style="color:#0A0A0A;max-width:14ch">What 45,446 baskets are saying</h2>
+            <div class="bline wr" style="margin-top:2rem">Lift measures how much more often two brands appear together
+                versus pure chance. Lift 1.0 = random. Lift 8.0 = customers are 8× more likely to buy both. We only show
+                pairs above 8.0× with verified basket observations.</div>
+        </div>
+
+        <!-- PAIR 1 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">8.52</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 1 of 11</div>
+                <div class="pair-pill">Highest absolute support</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">HOURGLASS</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">MAKEUP BY MARIO</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">8.52<span>×</span></div>
+                <div class="pair-basket">Observed in 31 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Make Up</span>
+                    <p class="pair-exp-txt">Premium artistry philosophy match — not a price coincidence.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 2 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">44.38</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 2 of 11</div>
+                <div class="pair-pill">Highest lift — directional signal</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">HOURGLASS</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">WESTMAN ATELIER</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">44.38<span>×</span></div>
+                <div class="pair-basket">Observed in 10 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Make Up</span>
+                    <p class="pair-exp-txt">Highest lift in the dataset. Directional signal concentrated in a specific
+                        customer type.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 3 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">30.84</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 3 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">PAT MC GRATH</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">PAULA'S CHOICE</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">30.84<span>×</span></div>
+                <div class="pair-basket">Observed in 5 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Make Up → Skincare</span>
+                    <p class="pair-exp-txt">Cross-category: luxury colour buyers crossing into evidence-based skincare.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 4 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">17.45</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 4 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">AMIKA</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">OUAI HAIRCARE</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">17.45<span>×</span></div>
+                <div class="pair-basket">Observed in 7 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Haircare</span>
+                    <p class="pair-exp-txt">Premium haircare as an investment category — a customer identity signal.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 5 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">13.65</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 5 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">ILIA</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">KOSAS</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">13.65<span>×</span></div>
+                <div class="pair-basket">Observed in 10 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Make Up</span>
+                    <p class="pair-exp-txt">Clean beauty routine builders. KOSAS is the natural next step after ILIA.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 6 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">13.40</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 6 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">PAULA'S CHOICE</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">SUPERGOOP</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">13.40<span>×</span></div>
+                <div class="pair-basket">Observed in 5 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Skincare</span>
+                    <p class="pair-exp-txt">Evidence-based skincare to SPF. A science-minded customer cohort.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 7 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">13.08</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 7 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">BY TERRY</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">HOURGLASS</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">13.08<span>×</span></div>
+                <div class="pair-basket">Observed in 7 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Make Up</span>
+                    <p class="pair-exp-txt">Prestige French to prestige American makeup. Luxury without geographic
+                        loyalty.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 8 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">11.73</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 8 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">DRUNK ELEPHANT</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">FRESH SAS</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">11.73<span>×</span></div>
+                <div class="pair-basket">Observed in 5 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Skincare</span>
+                    <p class="pair-exp-txt">The missed conversation from Section 2, confirmed by the data.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 9 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">11.41</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 9 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">CACHAREL</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">DIESEL</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">11.41<span>×</span></div>
+                <div class="pair-basket">Observed in 7 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Fragrance</span>
+                    <p class="pair-exp-txt">Heritage French fragrance to contemporary edge. Identity not confined to one
+                        register.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 10 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">8.79</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 10 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">MAKEUP BY MARIO</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">WESTMAN ATELIER</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">8.79<span>×</span></div>
+                <div class="pair-basket">Observed in 5 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Make Up</span>
+                    <p class="pair-exp-txt">Premium artistry expanding upward into ultra-premium positioning.</p>
+                </div>
+            </div>
+        </div>
+        <div class="pair-div"></div>
+
+        <!-- PAIR 11 -->
+        <div class="pair-viewport w2">
+            <div class="pair-wm">8.42</div>
+            <div class="pair-top cz">
+                <div class="t-label" style="color:var(--accent)">Signal 02 · Pair 11 of 11</div>
+            </div>
+            <div class="pair-mid cz">
+                <div class="pair-anchor">GLOSSIER</div>
+                <div class="pair-arr">→</div>
+                <div class="pair-rec">ILIA</div>
+            </div>
+            <div class="pair-bot cz">
+                <div class="pair-lift-num">8.42<span>×</span></div>
+                <div class="pair-basket">Observed in 6 real baskets</div>
+                <div class="pair-exp-col"><span class="pair-cat">Make Up</span>
+                    <p class="pair-exp-txt">Entry-level clean beauty graduating into a more intentional routine.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="s3-close" class="w2">
+            <p class="t-close" style="color:#0A0A0A">63% of these conversations<br>happen in one visit.<br>The channel
+                is not email.<br>It is the beauty advisor<br>next to the shelf.</p>
+        </div>
+
+        <!-- ══════════ S4 ══════════ -->
+        <section id="s4" class="w3">
+            <div class="cz">
+                <div class="sec-label">The Customer / 03</div>
+                <h2 class="kin t-display" style="margin-bottom:4rem">Who is ready<br>to discover</h2>
+                <p class="t-body wr" style="margin-bottom:6rem">We built 19 behavioral features per customer using only
+                    January–September data. Three produced commercially actionable insights.</p>
+
+                <!-- Finding 1 -->
+                <div class="find-block">
+                    <div class="find-num">0.63</div>
+                    <div class="find-label">Explorer Index · High Frequency · All Generations</div>
+                    <p class="t-body" style="margin-bottom:1.5rem">Any customer visiting every 26 days or fewer scores
+                        above 0.63 — regardless of age. A Baby Boomer at 0.65. A Gen Z at 0.66. The gap is 0.01.</p>
+                    <div class="bline" style="margin-bottom:2rem">Study-wide median: 0.41. High-frequency customers
+                        score 54% above this baseline.</div>
+                    <div class="barchart">
+                        <div class="bcg-label red">Every 26 Days or Fewer</div>
+                        <div class="bc-row">
+                            <div class="bc-lbl">Gen Z</div>
+                            <div class="bc-track">
+                                <div class="bc-fill" style="background:var(--accent)" data-w="66"></div>
+                            </div>
+                            <div class="bc-val">0.66</div>
+                        </div>
+                        <div class="bc-row">
+                            <div class="bc-lbl">Boomer</div>
+                            <div class="bc-track">
+                                <div class="bc-fill" style="background:var(--accent)" data-w="65"></div>
+                            </div>
+                            <div class="bc-val">0.65</div>
+                        </div>
+                        <div class="bc-row">
+                            <div class="bc-lbl">Gen Alpha</div>
+                            <div class="bc-track">
+                                <div class="bc-fill" style="background:var(--accent)" data-w="64"></div>
+                            </div>
+                            <div class="bc-val">0.64</div>
+                        </div>
+                        <div class="bc-row">
+                            <div class="bc-lbl">Gen Y</div>
+                            <div class="bc-track">
+                                <div class="bc-fill" style="background:var(--accent)" data-w="63"></div>
+                            </div>
+                            <div class="bc-val">0.63</div>
+                        </div>
+                        <div class="bc-threshold">
+                            <div class="bc-threshold-line"></div>
+                            <div class="bc-threshold-label">THE 50-DAY THRESHOLD</div>
+                            <div class="bc-threshold-line"></div>
+                        </div>
+                        <div class="bcg-label grey">Every 90+ Days</div>
+                        <div class="bc-row">
+                            <div class="bc-lbl">Gen Z</div>
+                            <div class="bc-track">
+                                <div class="bc-fill" style="background:rgba(26,21,18,.18)" data-w="44"></div>
+                            </div>
+                            <div class="bc-val">0.44</div>
+                        </div>
+                        <div class="bc-row">
+                            <div class="bc-lbl">Boomer</div>
+                            <div class="bc-track">
+                                <div class="bc-fill" style="background:rgba(26,21,18,.18)" data-w="40"></div>
+                            </div>
+                            <div class="bc-val">0.40</div>
+                        </div>
+                        <div class="bc-row">
+                            <div class="bc-lbl">Gen Alpha</div>
+                            <div class="bc-track">
+                                <div class="bc-fill" style="background:rgba(26,21,18,.18)" data-w="42"></div>
+                            </div>
+                            <div class="bc-val">0.42</div>
+                        </div>
+                        <div class="bc-row">
+                            <div class="bc-lbl">Gen Y</div>
+                            <div class="bc-track">
+                                <div class="bc-fill" style="background:rgba(26,21,18,.18)" data-w="39"></div>
+                            </div>
+                            <div class="bc-val">0.39</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finding 2 -->
+                <div class="find-block">
+                    <div class="find-num">6,188</div>
+                    <div class="find-label">Customers Visiting Every 26 Days or Fewer</div>
+                    <p class="t-body" style="margin-bottom:1.5rem">90% of these customers — 5,569 people — are already
+                        in Sephora's CRM system. They are reachable today.</p>
+                    <div class="donut-w">
+                        <div class="donut-r">
+                            <div class="donut-h">
+                                <div class="donut-h-num">5,569</div>
+                                <div class="donut-h-lbl">CRM-eligible</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finding 3 -->
+                <div class="find-block">
+                    <div class="find-num">63%</div>
+                    <div class="find-label">Of Brand Adoptions — Same Visit · Same Day</div>
+                    <p class="t-body" style="margin-bottom:1.5rem">126 of 202 observed adoptions occurred on the exact
+                        same day. The recommendation must happen in the moment — not days later in an inbox.</p>
+                    <div class="daychart">
+                        <div class="day-bar-w" style="flex:3">
+                            <div class="day-bar-top">THE MOMENT</div>
+                            <div class="day-bar-fill" style="height:100%;background:var(--accent)"></div>
+                            <div class="day-bar-lbl">Day 0</div>
+                        </div>
+                        <div class="day-bar-w">
+                            <div class="day-bar-fill" style="height:7%;background:rgba(26,21,18,.15)"></div>
+                            <div class="day-bar-lbl">15d</div>
+                        </div>
+                        <div class="day-bar-w">
+                            <div class="day-bar-fill" style="height:5%;background:rgba(26,21,18,.15)"></div>
+                            <div class="day-bar-lbl">30d</div>
+                        </div>
+                        <div class="day-bar-w">
+                            <div class="day-bar-fill" style="height:9%;background:rgba(26,21,18,.15)"></div>
+                            <div class="day-bar-lbl">45d</div>
+                        </div>
+                        <div class="day-bar-w">
+                            <div class="day-bar-fill" style="height:8%;background:rgba(26,21,18,.15)"></div>
+                            <div class="day-bar-lbl">60d</div>
+                        </div>
+                        <div class="day-bar-w">
+                            <div class="day-bar-fill" style="height:11%;background:rgba(26,21,18,.15)"></div>
+                            <div class="day-bar-lbl">75d</div>
+                        </div>
+                        <div class="day-bar-w">
+                            <div class="day-bar-fill" style="height:7%;background:rgba(26,21,18,.15)"></div>
+                            <div class="day-bar-lbl">90d</div>
+                        </div>
+                        <div class="day-bar-w">
+                            <div class="day-bar-fill" style="height:10%;background:rgba(26,21,18,.15)"></div>
+                            <div class="day-bar-lbl">120d</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════ S5 ══════════ -->
+        <section id="s5" style="background:var(--w1-bg)">
+            <div class="s5-intro">
+                <div class="stripe-bg"></div>
+                <div class="cz">
+                    <div class="sec-label" style="color:var(--accent)">The System / 04</div>
+                    <h2 class="kin t-display" style="color:#fff;margin-bottom:2rem">How the system<br>finds the signal
+                    </h2>
+                    <p class="t-body" style="color:rgba(240,235,227,.5)">12 million possible combinations. 50,805
+                        customers × 239 brands. We scored 2.37 million meaningful ones. Here is how.</p>
+                </div>
+            </div>
+            <div class="horiz-wrap">
+                <div class="horiz-inner">
+                    <div class="h-panel">
+                        <div class="h-ghost">01</div>
+                        <div class="h-panel-num">01 / 04</div>
+                        <h3>Route 1<br>The Basket</h3>
+                        <div class="h-panel-sub">What customers buy together</div>
+                        <p class="h-panel-text">45,446 baskets analyzed. Pairs appearing together 50% more than chance
+                            entered the candidate pool.</p>
+                    </div>
+                    <div class="h-panel">
+                        <div class="h-ghost">02</div>
+                        <div class="h-panel-num">02 / 04</div>
+                        <h3>Route 2<br>The Twin</h3>
+                        <div class="h-panel-sub">Who buys like you</div>
+                        <p class="h-panel-text">50,805 customer profiles compared. Brands bought by your behavioral twin
+                            become your candidates.</p>
+                    </div>
+                    <div class="h-panel">
+                        <div class="h-ghost">03</div>
+                        <div class="h-panel-num">03 / 04</div>
+                        <h3>Route 3<br>The Category</h3>
+                        <div class="h-panel-sub">Where you already spend</div>
+                        <p class="h-panel-text">Every customer has a dominant axis: makeup, skincare, fragrance,
+                            haircare. Unpurchased brands in that axis enter the pool.</p>
+                    </div>
+                    <div class="h-panel">
+                        <div class="h-ghost">04</div>
+                        <div class="h-panel-num">04 / 04</div>
+                        <h3>Route 4<br>The New Arrival</h3>
+                        <div class="h-panel-sub">Brands with no history yet</div>
+                        <p class="h-panel-text">New brands have no basket data. We map them to their closest established
+                            proxy and inherit that proxy's audience.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="s5-results">
+                <div class="stripe-bg"></div>
+                <div class="cz">
+                    <h2 class="kin t-display" style="color:#fff;margin-bottom:2rem">Three systems.<br>One test.</h2>
+                    <div class="bline wr" style="color:rgba(240,235,227,.42);margin-bottom:3rem">We locked away
+                        October–December data. Built everything on January–September only. Then asked three systems to
+                        predict what customers would buy. P@3 = of every 3 recommendations made, how many correct.</div>
+                    <div class="model-bars">
+                        <div>
+                            <div class="mb-head">
+                                <div class="mb-name">Popularity Engine — the floor</div>
+                                <div class="mb-pct">4.02%</div>
+                            </div>
+                            <div class="mb-track">
+                                <div class="mb-fill" style="background:#222" data-w="40.2"></div>
+                            </div>
+                            <p class="mb-desc">Recommends the most-purchased brands for everyone. Any intelligent system
+                                must beat this.</p>
+                        </div>
+                        <div>
+                            <div class="mb-head">
+                                <div class="mb-name">Hybrid Engine — discovery layer</div>
+                                <div class="mb-pct" style="color:rgba(240,235,227,.4)">0.52%</div>
+                            </div>
+                            <div class="mb-track">
+                                <div class="mb-fill" style="background:#3A3A3A" data-w="5.2"></div>
+                            </div>
+                            <p class="mb-desc">Lower raw accuracy by design. Built for discovery, not prediction.
+                                Surfaces brands the ML model would never recommend.</p>
+                        </div>
+                        <div>
+                            <div class="mb-head">
+                                <div class="mb-name" style="color:var(--accent)">ML Model — the predictor</div>
+                                <div class="mb-pct" style="color:var(--accent)">5.26%</div>
+                            </div>
+                            <div class="mb-track">
+                                <div class="mb-fill" style="background:var(--accent)" data-w="52.6"></div>
+                            </div>
+                            <p class="mb-desc">31% more accurate than the popularity baseline. 1.24 percentage points
+                                above the floor.</p>
+                        </div>
+                    </div>
+                    <h3
+                        style="font-family:var(--ff-d);font-style:italic;font-weight:300;font-size:clamp(2rem,4vw,4rem);margin:5rem 0 1.5rem;color:#fff;letter-spacing:-.02em">
+                        What the model learned to look for</h3>
+                    <p class="t-body" style="color:rgba(240,235,227,.45);margin-bottom:2rem">13 of the top predictive
+                        features are ones Sephora can directly influence.</p>
+                    <div class="shap-grid">
+                        <div class="shap-col">
+                            <h4 style="color:var(--accent);border-color:rgba(226,0,26,.25)">Sephora can act on</h4>
+                            <ul>
+                                <li>Customer value tier<span class="t">rfm_segment_snapshot</span></li>
+                                <li>Loyalty programme status<span class="t">loyalty_status_at_snapshot</span></li>
+                                <li>Gen Y brand appeal<span class="t">gen_brand_appeal_geny</span></li>
+                                <li>Basket pair signal<span class="t">has_basket_pair</span></li>
+                                <li>Recruitment channel<span class="t">recruitment_channel</span></li>
+                                <li>Purchase velocity<span class="t">velocity_score</span></li>
+                                <li>Gen Z brand appeal<span class="t">gen_brand_appeal_genz</span></li>
+                                <li>Gen Alpha brand appeal<span class="t">gen_brand_appeal_gena</span></li>
+                                <li>Value trajectory<span class="t">rfm_trajectory</span></li>
+                                <li>Launch readiness<span class="t">launch_readiness_score</span></li>
+                                <li>Explorer vs loyalist<span class="t">loyalist_vs_explorer_index</span></li>
+                                <li>Boomer brand appeal<span class="t">gen_brand_appeal_babyboomers</span></li>
+                                <li>App affinity<span class="t">app_recommendation_affinity_proxy</span></li>
+                            </ul>
+                        </div>
+                        <div class="shap-col">
+                            <h4 style="color:#333;border-color:#1A1A1A">Descriptive only</h4>
+                            <ul>
+                                <li>Brand quantity sold<span class="t">total_brand_qty</span></li>
+                                <li>Brand customer count<span class="t">total_brand_customers</span></li>
+                                <li>Brand spend<span class="t">total_brand_spend</span></li>
+                                <li>Brand transactions<span class="t">total_brand_transactions</span></li>
+                                <li>Brands purchased<span class="t">total_brands</span></li>
+                                <li>Avg basket size<span class="t">avg_basket</span></li>
+                                <li>Total transactions<span class="t">total_transactions</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p
+                        style="font-family:var(--ff-b);font-size:.85rem;color:rgba(240,235,227,.35);margin-top:2rem;line-height:1.65">
+                        Left column: the levers. Right column: the context.<br>The system acts on levers.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ══════════ S6 ══════════ -->
+        <section id="s6" class="w2">
+            <div class="stripe-bg" style="opacity:.2"></div>
+            <div class="cz">
+                <div class="sec-label">The Opportunity / 05</div>
+                <h2 class="kin t-display" style="color:#0A0A0A;margin-bottom:2rem">The internal market<br>nobody had
+                    sized</h2>
+                <div class="bline wr" style="margin-bottom:.5rem">All counts are within our France 2025 study base of
+                    50,805 customers. These are customers whose existing purchase behavior already matches the brand's
+                    buyer profile.</div>
+                <p class="rep-note">Not projected to Sephora's 80M global base. Ratios are statistically robust within
+                    this sample.</p>
+
+                <div class="mkt-brand">
+                    <div class="mb-nm">BOBBI BROWN</div>
+                    <div class="mb-seg">Selective</div>
+                    <div class="mb-cnt" data-count="18180">18,180</div>
+                    <div class="mb-dsc">customers with high-affinity signals who have never purchased this brand</div>
+                    <div class="mb-pct">35.8% of the study base — more than 1 in 3</div>
+                </div>
+                <div class="mkt-brand">
+                    <div class="mb-nm">SUMMER FRIDAYS</div>
+                    <div class="mb-seg">Exclusive</div>
+                    <div class="mb-cnt" data-count="16814">16,814</div>
+                    <div class="mb-dsc">customers with high-affinity signals who have never purchased this brand</div>
+                    <div class="mb-pct">33.1% of the study base — exclusive to Sephora</div>
+                </div>
+                <div class="mkt-brand">
+                    <div class="mb-nm">DRUNK ELEPHANT</div>
+                    <div class="mb-seg">Exclusive</div>
+                    <div class="mb-cnt" data-count="16482">16,482</div>
+                    <div class="mb-dsc">customers with high-affinity signals who have never purchased this brand</div>
+                    <div class="mb-pct">32.4% of the study base — the brand from Section 2</div>
+                </div>
+                <div class="mkt-brand">
+                    <div class="mb-nm">TOM FORD</div>
+                    <div class="mb-seg">Selective</div>
+                    <div class="mb-cnt" data-count="15662">15,662</div>
+                    <div class="mb-dsc">customers with high-affinity signals who have never purchased this brand</div>
+                    <div class="mb-pct">30.8% of the study base</div>
+                </div>
+                <div class="mkt-brand">
+                    <div class="mb-nm">KENZO</div>
+                    <div class="mb-seg">Selective</div>
+                    <div class="mb-cnt" data-count="15662">15,662</div>
+                    <div class="mb-dsc">customers with high-affinity signals who have never purchased this brand</div>
+                    <div class="mb-pct">30.8% of the study base</div>
+                </div>
+
+                <p class="t-close" style="color:#0A0A0A;margin-top:2rem">All five are established brands.<br>The
+                    opportunity is not launching<br>the unknown.<br>It is activating the already-affine.</p>
+            </div>
+        </section>
+
+        <!-- ══════════ S7 ══════════ -->
+        <section id="s7" class="w1">
+            <div class="stripe-bg"></div>
+            <div class="ghost-word" style="font-size:clamp(8rem,18vw,22rem);top:10%;right:5%">GUARDRAIL</div>
+            <div class="cz">
+                <div class="sec-label" style="color:var(--accent)">The Safeguard / 06</div>
+                <h2 class="kin t-display" style="color:#fff;margin-bottom:2rem">Knowing when<br>not to<br>recommend</h2>
+                <p class="t-body" style="color:rgba(240,235,227,.45);margin-bottom:3rem">Every recommendation system
+                    maximizes reward. Ours is the only one in this competition that also formalizes the cost of being
+                    wrong.</p>
+
+                <div class="ax-card ax-dark">
+                    <div class="ax-num" style="color:#fff">15</div>
+                    <div class="ax-lbl">Brand pairs permanently blocked</div>
+                    <p class="ax-p">Margin-dilutive pairings and luxury-mid-range conflicts. Blocked regardless of lift
+                        score.</p>
+                </div>
+
+                <div class="ax-card ax-dark">
+                    <div class="ax-num" style="color:#fff">14</div>
+                    <div class="ax-lbl">Haircare brands suppressed for Baby Boomers</div>
+                    <p class="ax-p">Model accuracy for Baby Boomers in Haircare: 0.81%. Study-wide average: 5.26%. The
+                        gap disqualifies the recommendation.</p>
+                </div>
+
+                <div class="ax-card ax-accent">
+                    <div class="ax-num" style="color:var(--accent)">6,995</div>
+                    <div class="ax-lbl">High-value customers protected</div>
+                    <div class="deriv">6,995 customers<br>× €70.26 average basket
+                        value<br>─────────────────────────────<br><strong style="color:var(--accent)">€491,476 in
+                            relationship equity protected</strong></div>
+                    <p class="ax-p">These customers received no guardrail-violating recommendation in the test window.
+                        Zero.</p>
+                </div>
+
+                <p class="t-close" style="color:#fff;margin-top:2rem">The difference between a model<br>and a deployable
+                    system is knowing<br>the cost of being wrong.</p>
+            </div>
+        </section>
+
+        <!-- ══════════ S8 ══════════ -->
+        <section id="s8" class="w3">
+            <div class="cz">
+                <div class="sec-label">Activation / 07</div>
+                <h2 class="kin t-display" style="margin-bottom:3rem">What happens<br>next</h2>
+                <div class="split">
+                    <div class="split-col">
+                        <h3>Three actions traceable to this data</h3>
+                        <div class="act-item"><strong>For the CRM &amp; App team</strong>Deploy point-of-purchase
+                            recommendations for the 11 validated pairs. 63% of adoptions happen same-day — trigger at
+                            basket add, not days later.<div class="act-src">Source: 63% same-day adoption (126 of 202)
+                            </div>
+                        </div>
+                        <div class="act-item"><strong>For Beauty Advisors</strong>Brief every advisor on the 11
+                            directional pairs. HOURGLASS customer: ask about MAKEUP BY MARIO. 8.52× lift. 31 validated
+                            baskets.<div class="act-src">Source: Lead pair, highest absolute support</div>
+                        </div>
+                        <div class="act-item"><strong>For Brand Managers</strong>BOBBI BROWN: 18,180 warm prospects.
+                            SUMMER FRIDAYS: 16,814. DRUNK ELEPHANT: 16,482. These are customer lists, not projections.
+                            <div class="act-src">Source: brand_addressable_market.csv</div>
+                        </div>
+                    </div>
+                    <div class="split-col rhs">
+                        <h3>Four things we do not yet do</h3>
+                        <div class="lim-item"><strong>Sequential journeys — Horizon 2</strong>We recommend one brand per
+                            occasion. Next: which sequence over three visits maximizes customer lifetime value.</div>
+                        <div class="lim-item"><strong>Consideration set — Horizon 2</strong>Two recommended brands may
+                            compete for the same occasion. Next: occasion-level routing.</div>
+                        <div class="lim-item"><strong>Lapsed customers — Horizon 3</strong>Our model learns from active
+                            customers. High-value lapsed customers are not yet in scope.</div>
+                        <div class="lim-item"><strong>Seasonal regime — Horizon 2</strong>The model was trained on
+                            January–September standard purchase behavior. December gifting mechanics represent a
+                            distinct behavioral pattern requiring a seasonal model variant.</div>
+                    </div>
+                </div>
+                <p class="closing">We did not build a recommendation engine. We built a system that finds the moment —
+                    before it happens — when a customer is about to discover a brand she has never tried. And we made
+                    sure nothing gets in the way of that moment.</p>
+                <p class="fin-lbl">Study base: 50,805 customers, France 2025. All figures sourced from validated project
+                    outputs. No projections beyond stated scope.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* ════════════════════════════════════════
+           1. LENIS FIRST — ALWAYS
+        ════════════════════════════════════════ */
+        const lenis = new Lenis({ duration: 1.4, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add(t => { lenis.raf(t * 1000); });
+        gsap.ticker.lagSmoothing(0);
+
+        /* ════════════════════════════════════════
+           2. PROGRESS BAR
+        ════════════════════════════════════════ */
+        ScrollTrigger.create({
+            trigger: 'main', start: 'top top', end: 'bottom bottom',
+            onUpdate: s => { document.getElementById('pb').style.width = (s.progress * 100) + '%'; }
+        });
+
+        /* ════════════════════════════════════════
+           3. SECTION COUNTER
+        ════════════════════════════════════════ */
+        const scEl = document.getElementById('sc');
+        const secMap = { s1: '#E2001A', s15: '#E2001A', s2: '#0A0A0A', s3: '#0A0A0A', s4: '#7A6E64', s5: '#E2001A', s6: '#0A0A0A', s7: '#E2001A', s8: '#7A6E64' };
+        const secNums = { s1: '01', s15: '01', s2: '02', s3: '03', s4: '04', s5: '05', s6: '06', s7: '07', s8: '08' };
+        Object.keys(secMap).forEach(id => {
+            const el = document.getElementById(id) || document.querySelector('#' + id);
+            if (!el) return;
+            ScrollTrigger.create({
+                trigger: el, start: 'top center', end: 'bottom center',
+                onEnter: () => { scEl.textContent = secNums[id] + ' / 08'; scEl.style.color = secMap[id]; },
+                onEnterBack: () => { scEl.textContent = secNums[id] + ' / 08'; scEl.style.color = secMap[id]; }
+            });
+        });
+
+        /* ════════════════════════════════════════
+           4. KINETIC TYPOGRAPHY
+        ════════════════════════════════════════ */
+        function initKinetic() {
+            document.querySelectorAll('.kin').forEach(el => {
+                Splitting({ target: el, by: 'chars' });
+                const onLoad = el.id === 'heroNum';
+                const chars = el.querySelectorAll('.char');
+                if (onLoad) {
+                    gsap.from(chars, { y: '110%', duration: 1.1, stagger: .04, ease: 'power3.out', delay: .25 });
+                } else {
+                    gsap.from(chars, {
+                        y: '110%', duration: .95, stagger: .03, ease: 'power3.out',
+                        scrollTrigger: { trigger: el, start: 'top 78%', toggleActions: 'play none none none' }
+                    });
+                }
+            });
+        }
+
+        /* ════════════════════════════════════════
+           5. WORD REVEAL
+        ════════════════════════════════════════ */
+        function initWordReveal() {
+            document.querySelectorAll('.wr').forEach(el => {
+                Splitting({ target: el, by: 'words' });
+                const isDark = el.closest('.w1');
+                const isWarm = el.closest('.w3');
+                const end = isDark ? '#F0EBE3' : isWarm ? '#1A1512' : '#0A0A0A';
+                gsap.to(el.querySelectorAll('.word'), {
+                    color: end, stagger: .018,
+                    scrollTrigger: { trigger: el, start: 'top 82%', end: 'top 22%', scrub: true }
+                });
+            });
+        }
+
+        /* ════════════════════════════════════════
+           6. PARALLAX
+        ════════════════════════════════════════ */
+        function initParallax() {
+            document.querySelectorAll('.stripe-bg').forEach(el => {
+                const sec = el.closest('section') || el.parentElement;
+                gsap.to(el, { yPercent: -30, scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
+            });
+            document.querySelectorAll('.ghost-word').forEach(el => {
+                const sec = el.closest('section') || el.parentElement;
+                gsap.to(el, { yPercent: -22, scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } });
+            });
+            document.querySelectorAll('.pair-wm').forEach(el => {
+                gsap.to(el, { yPercent: -20, scrollTrigger: { trigger: el.closest('.pair-viewport'), start: 'top bottom', end: 'bottom top', scrub: true } });
+            });
+        }
+
+        /* ════════════════════════════════════════
+           7. HORIZONTAL SCROLL
+        ════════════════════════════════════════ */
+        function initHoriz() {
+            const wrap = document.querySelector('.horiz-wrap');
+            if (!wrap) return;
+            const inner = wrap.querySelector('.horiz-inner');
+            gsap.to(inner, {
+                x: () => -(inner.scrollWidth - window.innerWidth),
+                ease: 'none',
+                scrollTrigger: { trigger: wrap, pin: true, scrub: 1, end: () => '+=' + (inner.scrollWidth - window.innerWidth), invalidateOnRefresh: true }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initKinetic(); initWordReveal(); initParallax(); initHoriz();
+        });
+
+        /* ════════════════════════════════════════
+           HERO ANIMATIONS
+        ════════════════════════════════════════ */
+        gsap.to('#heroLine', { width: '100%', duration: 2, delay: 1.1, ease: 'power2.out' });
+        gsap.to('#scrollCue', { opacity: 0, delay: 4.5, duration: 1.5 });
+
+        /* Left col fade up */
+        gsap.from('.s1-left', { y: 28, opacity: 0, duration: 1.2, delay: .15, ease: 'power2.out' });
+
+        /* S1.5 pin + until reveal */
+        ScrollTrigger.create({
+            trigger: '#s15', start: 'top top', end: '+=80vh', pin: true
+        });
+        gsap.to('#s15until', {
+            opacity: 1, duration: .8,
+            scrollTrigger: { trigger: '#s15', start: 'top+=40vh top', toggleActions: 'play none none none' }
+        });
+
+        /* ════════════════════════════════════════
+           TIMELINE STEPS
+        ════════════════════════════════════════ */
+        gsap.utils.toArray('.tl-step').forEach(s => {
+            gsap.to(s, { opacity: 1, scrollTrigger: { trigger: s, start: 'top 87%', end: 'top 62%', scrub: 1.2 } });
+        });
+
+        /* ════════════════════════════════════════
+           PAIR ANIMATIONS — per viewport
+        ════════════════════════════════════════ */
+        document.querySelectorAll('.pair-viewport').forEach(pv => {
+            const anchor = pv.querySelector('.pair-anchor');
+            const rec = pv.querySelector('.pair-rec');
+            const arr = pv.querySelector('.pair-arr');
+            if (anchor) gsap.to(anchor, { opacity: 1, x: 0, scrollTrigger: { trigger: pv, start: 'top 80%', end: 'top 40%', scrub: 1 } });
+            if (rec) gsap.to(rec, { opacity: 1, x: 0, scrollTrigger: { trigger: pv, start: 'top 80%', end: 'top 40%', scrub: 1 } });
+            if (arr) gsap.to(arr, { opacity: 1, scale: 1, scrollTrigger: { trigger: pv, start: 'top 75%', end: 'top 40%', scrub: 1 } });
+        });
+
+        /* ════════════════════════════════════════
+           BAR FILLS
+        ════════════════════════════════════════ */
+        gsap.utils.toArray('.bc-fill').forEach(b => {
+            gsap.to(b, { width: b.dataset.w + '%', scrollTrigger: { trigger: b, start: 'top 90%', end: 'top 65%', scrub: 1 } });
+        });
+
+        /* ════════════════════════════════════════
+           FINDING BLOCKS
+        ════════════════════════════════════════ */
+        gsap.utils.toArray('.find-block').forEach(f => {
+            gsap.from(f, { opacity: 0, y: 35, scrollTrigger: { trigger: f, start: 'top 85%', end: 'top 58%', scrub: 1 } });
+        });
+
+        /* ════════════════════════════════════════
+           MODEL BARS
+        ════════════════════════════════════════ */
+        gsap.utils.toArray('.mb-fill').forEach(b => {
+            gsap.to(b, {
+                width: b.dataset.w + '%', duration: 1.2, ease: 'power2.out',
+                scrollTrigger: { trigger: b, start: 'top 90%', toggleActions: 'play none none none', once: true }
+            });
+        });
+
+        /* ════════════════════════════════════════
+           MARKET BRANDS + COUNT-UP
+        ════════════════════════════════════════ */
+        gsap.utils.toArray('.mkt-brand').forEach(c => {
+            gsap.to(c, {
+                opacity: 1, y: 0,
+                scrollTrigger: {
+                    trigger: c, start: 'top 90%', end: 'top 62%', scrub: 1,
+                    onEnter: () => {
+                        const el = c.querySelector('.mb-cnt');
+                        if (el && !el.dataset.done) {
+                            el.dataset.done = '1';
+                            const t = parseInt(el.dataset.count);
+                            let o = { v: 0 };
+                            gsap.to(o, {
+                                v: t, duration: 2, ease: 'power2.out',
+                                onUpdate: () => { el.textContent = Math.floor(o.v).toLocaleString(); }
+                            });
+                        }
+                    }
+                }
+            });
+        });
+
+        /* ════════════════════════════════════════
+           AXIS CARDS
+        ════════════════════════════════════════ */
+        gsap.utils.toArray('.ax-card').forEach(c => {
+            gsap.to(c, { opacity: 1, y: 0, scrollTrigger: { trigger: c, start: 'top 90%', end: 'top 62%', scrub: 1 } });
+        });
+
+        /* ════════════════════════════════════════
+           SPLIT LAYOUT
+        ════════════════════════════════════════ */
+        gsap.from('.split', {
+            opacity: 0, y: 35,
+            scrollTrigger: { trigger: '.split', start: 'top 82%', end: 'top 52%', scrub: 1 }
+        });
+
+        /* ════════════════════════════════════════
+           SECTION COUNTER FOR PAIR VIEWPORTS
+        ════════════════════════════════════════ */
+        document.querySelectorAll('.pair-viewport, #s3-intro, #s3-close').forEach(el => {
+            ScrollTrigger.create({
+                trigger: el, start: 'top center', end: 'bottom center',
+                onEnter: () => { scEl.textContent = '03 / 08'; scEl.style.color = '#0A0A0A'; },
+                onEnterBack: () => { scEl.textContent = '03 / 08'; scEl.style.color = '#0A0A0A'; }
+            });
+        });
+    </script>
+</body>
+
+</html>

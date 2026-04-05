@@ -1,0 +1,1 @@
+﻿['brand', 'market_desc', 'cold_start_flag', 'total_customers_with_high_affinity_never_purchased', 'share_of_base_pct', 'top_generation', 'top_activation_channel', 'top_candidate_route']

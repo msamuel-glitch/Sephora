@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+ 
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+ 
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+ 
+    --primary: 353 100% 44%; /* Sephora Red: #E2001A */
+    --primary-foreground: 210 40% 98%;
+ 
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+ 
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+ 
+    --accent: 353 100% 44%;
+    --accent-foreground: 210 40% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+ 
+    --radius: 0.5rem;
+    
+    --font-sans: 'DM Sans', sans-serif;
+    --font-display: 'Cormorant Garamond', serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+}
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans font-light selection:bg-primary selection:text-white overscroll-none;
+  }
+  
+  /* Text Styles from previous attempt, formalized */
+  .t-display {
+    @apply font-display text-[clamp(4rem,9vw,11rem)] leading-[0.9] tracking-[text-[-0.025em]] italic;
+  }
+  
+  .t-bleed {
+    @apply font-display text-[clamp(9rem,22vw,28rem)] leading-[0.85] tracking-[text-[-0.03em]] text-white;
+  }
+  
+  .t-stat {
+    @apply font-display text-[clamp(9rem,20vw,24rem)] leading-[0.85] tracking-[text-[-0.03em]] text-primary;
+  }
+  
+  .t-label {
+    @apply font-mono text-[0.62rem] tracking-[0.28em] uppercase;
+  }
+  
+  .t-body {
+    @apply font-sans font-light text-[clamp(0.95rem,1.1vw,1.05rem)] leading-[1.82] max-w-[42ch];
+  }
+  
+  .glass-card {
+    @apply bg-white/5 border border-white/10 backdrop-blur-md shadow-2xl;
+  }
+}

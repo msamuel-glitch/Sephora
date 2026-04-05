@@ -1,0 +1,7 @@
+﻿Starting Phase 7.5 ù Suppression and Cost Layer Analysis
+[A] Analyzing High CLV Suppression...
+Warning: dim_brand_pair contains no guardrail columns. Switching to store_brand_pairing_guide.csv.
+[B] Analyzing Generation Mismatch Suppression...
+DEBUG: fact_cand.columns = ['anonymized_card_code', 'candidate_brand', 'candidate_routes', 'has_basket_pair', 'has_lookalike', 'has_axis_market', 'has_cold_start']
+CRITICAL: 'target' column not found in fact_cand!
+DEBUG: Stripped columns = ['anonymized_card_code', 'candidate_brand', 'candidate_routes', 'has_basket_pair', 'has_lookalike', 'has_axis_market', 'has_cold_start']

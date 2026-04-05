@@ -1,0 +1,187 @@
+============================================================
+VALIDATION REPORT — Phase 4 Feature Tables
+============================================================
+
+--- dim_customer ---
+Shape: (50805, 41)
+Columns: ['anonymized_card_code', 'total_spend', 'total_qty', 'total_transactions', 'total_brands', 'total_axes', 'total_markets', 'loyalist_vs_explorer_index', 'cross_axis_discovery_propensity', 'axis_concentration', 'basket_axis_density', 'velocity_score', 'loyalty_concentration', 'market_desc_loyalty', 'brand_family_switch_tolerance', 'age_generation', 'avg_basket', 'gen_basket_index', 'brands_first_3m', 'generation_discovery_gap', 'top_brand_tickets', 'generation_brand_loyalty_index', 'selective_to_exclusive_tradeup_score', 'exclusive_to_sephora_migration_score', 'novelty_receptiveness_score', 'launch_readiness_score', 'high_frequency_flag', 'loyalty_status_at_snapshot', 'loyalty_trajectory', 'rfm_segment_snapshot', 'rfm_trajectory', 'omnichannel_behavior_score', 'click_and_collect_propensity', 'first_purchase_axis_imprint', 'first_purchase_market_imprint', 'recruitment_channel', 'spend_decile', 'app_recommendation_affinity_proxy', 'store_guidance_affinity_proxy', 'crm_push_eligibility_proxy', 'channel_activation_fit_score']
+
+Null counts (non-zero only):
+first_purchase_market_imprint    33542
+first_purchase_axis_imprint      33532
+recruitment_channel              33532
+velocity_score                   26342
+age_generation                   16041
+gen_basket_index                 16041
+loyalty_trajectory               10280
+rfm_trajectory                   10280
+
+loyalist_vs_explorer_index:
+count    50805.000000
+mean         0.347994
+std          0.316505
+min          0.000000
+25%          0.000000
+50%          0.410978
+75%          0.637871
+max          0.958507
+
+generation_discovery_gap:
+count    50805.000000
+mean         0.326582
+std          1.875811
+min         -1.312110
+25%         -1.245429
+50%          0.000000
+75%          1.000000
+max         27.000000
+
+launch_readiness_score:
+count    50805.000000
+mean         0.280120
+std          0.135069
+min          0.090000
+25%          0.210000
+50%          0.288571
+75%          0.365587
+max          0.856312
+
+selective_to_exclusive_tradeup_score:
+count    50805.000000
+mean        -0.003151
+std          0.483443
+min         -1.000000
+25%          0.000000
+50%          0.000000
+75%          0.000000
+max          1.000000
+
+loyalty_trajectory:
+loyalty_trajectory
+-2.0    10562
+ 2.0    10031
+ 0.0     9951
+-3.0     4157
+ 3.0     3627
+ 1.0     1408
+-4.0      360
+-1.0      223
+ 4.0      206
+
+channel_activation_fit_score:
+channel_activation_fit_score
+STORE       35650
+CRM_PUSH    11090
+APP_SITE     4065
+
+high_frequency_flag:
+high_frequency_flag
+0    44617
+1     6188
+
+age_generation:
+age_generation
+genz           10727
+gena            9631
+geny            9461
+babyboomers     4945
+
+loyalty_status_at_snapshot:
+loyalty_status_at_snapshot
+2    32253
+3    16114
+4     2438
+
+rfm_segment_snapshot:
+rfm_segment_snapshot
+7        8772
+4        7677
+2        7440
+6        7393
+8        6677
+3        5929
+1        3740
+5        2829
+9         311
+99999      37
+
+============================================================
+--- dim_brand ---
+Shape: (239, 19)
+Columns: ['brand', 'total_brand_transactions', 'total_brand_spend', 'total_brand_qty', 'total_brand_customers', 'median_price', 'primary_axis', 'primary_market', 'not_just_popularity_penalty', 'brand_volatility_index', 'unique_purchasers', 'brand_history_depth', 'gen_brand_appeal_babyboomers', 'gen_brand_appeal_gena', 'gen_brand_appeal_geny', 'gen_brand_appeal_genz', 'market_priority_margin_first', 'market_priority_balanced_growth', 'market_priority_discovery_first']
+
+brand_history_depth:
+brand_history_depth
+Established    141
+Emerging        98
+
+not_just_popularity_penalty:
+count    239.000000
+mean       0.289429
+std        0.202745
+min        0.092062
+25%        0.165040
+50%        0.212744
+75%        0.319087
+max        0.910239
+
+primary_axis:
+primary_axis
+SKINCARE     90
+FRAGRANCE    70
+MAEK UP      39
+HAIRCARE     32
+OTHERS        4
+MAKE UP       4
+
+primary_market:
+primary_market
+EXCLUSIVE    130
+SELECTIVE    103
+OTHERS         4
+UNKNOWN        1
+SEPHORA        1
+
+============================================================
+--- dim_brand_pair ---
+Shape: (3998, 8)
+Columns: ['brand_a', 'brand_b', 'cooccurrence_count', 'brand_cooccurrence_lift', 'basket_complementarity_score', 'high_price_artifact_flag', 'trivial_association_flag', 'quantity_revenue_divergence']
+
+brand_cooccurrence_lift:
+count    3998.000000
+mean        1.872062
+std         5.367302
+min         0.148100
+25%         0.652325
+50%         0.996250
+75%         1.747300
+max       213.028100
+
+basket_complementarity_score:
+count    3998.000000
+mean        0.670985
+std         0.228676
+min         0.200000
+25%         0.600000
+50%         0.600000
+75%         0.800000
+max         1.200000
+
+Guardrail flags:
+  high_price_artifact_flag=1: 217
+  trivial_association_flag=1: 179
+
+Top 10 pairs by lift (non-flagged):
+              brand_a           brand_b  brand_cooccurrence_lift  basket_complementarity_score
+3260          KLORANE     RENE FURTERER                 213.0281                           0.4
+820          BIODERMA          BIOTHERM                  91.6250                           0.4
+3882            AVENE           KLORANE                  81.1536                           0.4
+3766         111 SKIN  KVD VEGAN BEAUTY                  66.2800                           0.6
+819             AVENE          BIODERMA                  65.4464                           0.4
+1878        BALI BODY  ISLE OF PARADISE                  58.9825                           0.2
+2284        HOURGLASS   WESTMAN ATELIER                  44.3809                           0.6
+2828  DR DENNIS GROSS    PAULA'S CHOICE                  42.6456                           0.2
+3617         BIODANCE            YEPODA                  35.0754                           0.2
+1926        BALI BODY         LANCASTER                  32.2999                           0.2
+
+DONE

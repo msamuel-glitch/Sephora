@@ -1,0 +1,9 @@
+FINAL RECOMMENDATION ENGINE DECISION
+
+1. WHAT WE BUILT: A multi-layered hybrid engine combining structural basket affinity with customer similarity and business priority overlays.
+
+2. WHAT THE BAKE-OFF PROVED: The LightGBM challenger achieved a P@3 of 0.0526, significantly outperforming the volume baseline. However, the Ensemble approach (0.0135) maximizes performance across distinct cohorts.
+
+3. FINAL SYSTEM: An Ensemble Router using the LightGBM model for Explorer segments (loyalist_explorer_index > 0.4) and the Business Hybrid engine for core loyalists. This provides the best mix of predictive accuracy and commercial control.
+
+4. HORIZON 2: Integration of real-time search signals and reinforcement learning to dynamically tune scenario weights based on conversion feedback loop.

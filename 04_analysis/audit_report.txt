@@ -1,0 +1,37 @@
+--- ROW COUNTS ---
+Total rows: 399997
+
+--- NEGATIVE & ZERO VALUES ---
+Negative salesVatEUR: 5210
+Zero salesVatEUR: 8893
+Negative quantity: 4979
+Zero quantity: 6561
+
+--- DISCOUNT ANOMALIES ---
+discountEUR > salesVatEUR: 14571
+
+--- DATE BOUNDARIES ---
+transactionDate range: 2025-01-01 00:00:00 to 2025-12-31 00:00:00
+transactionDate outside 2025: 0
+first_purchase_dt range: 2022-01-02 12:42:00 to 2025-12-31 17:48:00
+
+--- DUPLICATES ---
+Exact row duplicates: 892
+Identical Ticket+Material code lines: 1738
+
+--- HIGH MISSINGNESS ANALYSIS (First Purchase Block) ---
+Rows missing first_purchase_dt: 296274 (74.07%)
+
+--- OTHER NULL CATEGORICALS ---
+brand missing: 6168
+Market_Desc missing: 6346
+age_category missing: 112027
+age_generation missing: 117306
+countryIsoCode missing: 0
+
+--- ID COLUMNS (Preview Data Types) ---
+anonymized_card_code type: float64
+anonymized_Ticket_ID type: float64
+materialCode type: int64
+
+DONE

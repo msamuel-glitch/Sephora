@@ -1,0 +1,64 @@
+--- Candidate Generation Exploratory Analysis ---
+
+Q1: Candidate Set Size per Customer by Generation
+                 count       mean        std  min   25%   50%   75%    max
+age_generation                                                            
+UNKNOWN         5483.0  42.663688  28.305075  1.0  22.0  37.0  59.0  190.0
+babyboomers     4157.0  39.859514  28.322306  1.0  21.0  30.0  54.0  185.0
+gena            8274.0  66.389413  44.963839  1.0  28.0  59.0  94.0  208.0
+genx            8392.0  46.627383  34.908857  1.0  22.0  38.0  63.0  210.0
+geny            8143.0  55.421343  45.277383  1.0  22.0  41.0  73.0  209.0
+genz            9215.0  62.978947  48.227360  1.0  22.0  48.0  94.0  214.0
+
+Q2: Co-occurrence Lift Distribution: Established vs Emerging
+
+Group ('Emerging', 'Emerging'):
+count      1.0000
+mean     213.0281
+std           NaN
+min      213.0281
+25%      213.0281
+50%      213.0281
+75%      213.0281
+max      213.0281
+
+Group ('Emerging', 'Established'):
+count    116.000000
+mean       5.445466
+std       14.574890
+min        0.190400
+25%        0.783675
+50%        1.529750
+75%        4.006050
+max      129.108000
+
+Group ('Established', 'Emerging'):
+count    110.000000
+mean       5.226091
+std       12.389848
+min        0.311600
+25%        1.232450
+50%        1.869100
+75%        3.906025
+max       91.625000
+
+Group ('Established', 'Established'):
+count    3771.000000
+mean        1.608308
+std         2.647047
+min         0.148100
+25%         0.643850
+50%         0.972400
+75%         1.671150
+max        65.446400
+
+Q3: High-Price Artifact Guardrail Verification
+Number of target recommendations generated that triggered high_price_artifact_flag: 262171
+Guardrail confirmed working: The high-price filter must drop these candidate rows.
+
+Q4: CRM_PUSH Segment vs High-Frequency Customers
+Total High-Frequency customers in DB: 6188
+CRM_PUSH segment total size: 11090
+High-frequency customers strictly assigned to CRM_PUSH: 5571
+-> 50.2% of CRM_PUSH candidates are high-frequency.
+-> This single activation path captures 90.0% of all high-frequency customers.

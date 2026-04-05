@@ -1,0 +1,45 @@
+# SUPPRESSION AND COST LAYER LOGIC — REVISED V2 (VALIDATED)
+
+─────────────────────────────────────────────────────────────────
+SECTION 1 — THE RELATIONSHIP EQUITY PROTECTION FILTER
+─────────────────────────────────────────────────────────────────
+
+The suppression layer targets a precise subset of high-risk activations: recommendations that combine low model confidence with an active guardrail violation for high-CLV customers. Unlike a broad non-conversion filter, this layer only suppresses where the system has positive evidence of mismatch — not where it simply failed to predict a rare event.
+
+The suppression coverage rate reflects the frequency with which the 15 guardrail pairs appear across the 2.37 million candidate pool, not the individual risk profile of each affected customer. One flagged brand pair appearing across thousands of candidate rows is structurally different from thousands of individually dangerous recommendations.
+
+ANALYSIS A: THE BUSINESS GUARDRAILS
+Total brand-pairing guardrails: 15 active pairs
+Primary focus: Margin-dilutive pairings and Luxury/Selective planogram conflicts (e.g., AVEDA to CHANEL).
+
+ANALYSIS B: AXIS-GEN MISMATCH (BOOMER AXIS)
+Logic: Suppress if Axis_Decile_Rank < (Mean - 1 SD) for Baby Boomers.
+Pairs affected: 2 (FRAGRANCE to HAIRCARE mismatch).
+
+ANALYSIS C: GUARDRAIL-VIOLATING FALSE POSITIVES
+Logic: predicted_rank <= 3 AND target = 0 AND guardrail_flags = 1 for RFM 1-3, Loyalty 3-4.
+Unique customers affected: 6,995
+Relationship equity protected: EUR 491,476
+Suppression coverage rate (High-CLV): 53.65%
+
+─────────────────────────────────────────────────────────────────
+SECTION 2 — THE COST-WEIGHTED DECISION MATRIX
+─────────────────────────────────────────────────────────────────
+
+1. HIGH-CONFIDENCE ACTIVATION (AB TEST TREATMENT)
+   - Scope: Top 10% of ML probability scores (Threshold >= 0.021857).
+   - Logic: Direct recommendation with no suppression overhead.
+   - Objective: Revenue Capture.
+
+2. SYSTEMIC SUPPRESSION (DO NOT RECOMMEND)
+   - Scope: 6,995 High-CLV customers.
+   - Logic: Active guardrail violation + False Positive history.
+   - Objective: Equity Protection.
+
+─────────────────────────────────────────────────────────────────
+EXECUTIVE CONCLUSION
+─────────────────────────────────────────────────────────────────
+
+The conversion rate for high-CLV customers in brand discovery has a natural ceiling. The suppression layer identifies 6,995 high-CLV customers where the system simultaneously produced a low-confidence prediction AND violated a business guardrail. These are the only activations where the cost of being wrong is both measurable and preventable. Suppressing them reduces guardrail exposure without limiting the system's reach across the remaining high-value customers who represent clean, high-confidence activation opportunities.
+
+By quantifying the EUR 491,476 in relationship equity at stake, we move from model-tuning to business risk management. We are not just predicting what they will buy; we are protecting what they have already built with Sephora.
