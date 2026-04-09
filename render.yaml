@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: sephora-luxury-terminal
+    env: static
+    rootDir: 08_luxury_data_terminal
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
